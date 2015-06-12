@@ -16,6 +16,7 @@
       <main>
         {{ content }}
         <h3>Comments!!! - {{ site.disqusid }}{{ page.url | replace:'index.html','' }}</h3>
+        {{ site.baseurl }}
         {% include comments.html %}
       </main>
 
