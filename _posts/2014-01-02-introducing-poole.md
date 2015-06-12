@@ -1,5 +1,6 @@
 ---
-layout: post
+layout: default
+comments: true
 title: Introducing Poole
 ---
 
