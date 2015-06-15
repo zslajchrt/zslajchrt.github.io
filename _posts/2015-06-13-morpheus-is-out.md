@@ -2,7 +2,7 @@
 layout: default
 title: Morpheus Is In?
 comments: true
-permalink: short-urls-jekyll
+permalink: morpheus-is-out
 ---
 
 It's been 7 months ago when I came up with an idea how to make Scala more dynamic
