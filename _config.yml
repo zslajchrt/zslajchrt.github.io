@@ -8,7 +8,7 @@ relative_permalinks: true
 title:               Poole
 tagline:             The Jekyll Butler
 url:                 http://getpoole.com
-paginate:            3
+paginate:            10
 baseurl:             ""
 
 # Assets
