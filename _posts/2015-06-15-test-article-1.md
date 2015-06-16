@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Test Article 1
+title: &address test-article-1
 comments: true
-permalink: test-article-1
+permalink: *address
 ---
 
 bbbbbbbbbbb
