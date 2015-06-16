@@ -15,10 +15,12 @@ title: Home
     <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date_to_string }}</time>
 
     {{ post.content | truncatewords: 50, '...' }}
-    <br>
-    <a href="{{ site.baseurl }}{{ post.url }}">
+    
+    <div class="readmore">
+      <a href="{{ site.baseurl }}{{ post.url }}">
         Read more
-     </a>
+      </a>
+    </div>
 
   </article>
   {% endfor %}
