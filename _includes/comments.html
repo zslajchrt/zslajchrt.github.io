@@ -4,7 +4,8 @@
     var disqus_shortname = 'zslajchrt';
     //var disqus_url = 'http://zslajchrt.github.io/{{ page.bookmark }}';
     //var disqus_url = 'http://zslajchrt.github.io/{{ page.bookmark }}';
-    alert("{{ site.disqusid }}{{ page.url | replace:'index.html','' }}");
+    var disqus_identifier = "{{ site.disqusid }}{{ page.url | replace:'index.html','' }}";
+    //alert("{{ site.disqusid }}{{ page.url | replace:'index.html','' }}");
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
