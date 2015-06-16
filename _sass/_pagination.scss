@@ -3,6 +3,11 @@
 // Super lightweight (HTML-wise) blog pagination. `span`s are provide for when
 // there are no more previous or next posts to show.
 
+a.rsslink {
+    background: transparent url("//s.w.org/style/images/feedicon10.png") no-repeat scroll left top;
+    padding-left: 14px;
+}
+
 .readmore {
   font-size: 14px
 }
