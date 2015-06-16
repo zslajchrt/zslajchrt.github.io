@@ -33,6 +33,6 @@ For a quick introduction to Morpheus visit the following links:
 
 Currently, Morpheus is built for Scala 11.x only. It will be ported to higher versions later as soon as it gets stable on version 11.
 
-Morpheus could not see the light of day without the following interesting technologie: [Scala compiler plugin API](http://www.scala-lang.org/old/node/140), [Scala macros](http://docs.scala-lang.org/overviews/macros/overview.html), [Shapeless](https://github.com/milessabin/shapeless), [ASM (a bytecode manipulation library)](http://asm.ow2.org), and Java/Scala reflection.
+Morpheus could not see the light of day without the following interesting technologie: [Scala compiler plugin API](http://www.scala-lang.org/old/node/140), [Scala macros](http://docs.scala-lang.org/overviews/macros/overview.html), [Shapeless](https://github.com/milessabin/shapeless), [ASM (a bytecode manipulation library)](http://asm.ow2.org), and [Java/Scala reflection](http://docs.scala-lang.org/overviews/reflection/overview.html).
 
 
