@@ -7,9 +7,9 @@ relative_permalinks: true
 # Setup
 title:               Zbyněk Šlajchrt's Tech Blog
 tagline:             "Articles about Scala, Java, BigData etc..."
-url:                 http://zslajchrt.github.io
+url:                 http://zslajchrt.github.io/
 paginate:            10
-baseurl:             "http://zslajchrt.github.io"
+baseurl:             "http://zslajchrt.github.io/"
 
 markdown: redcarpet
 redcarpet:
