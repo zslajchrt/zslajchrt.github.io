@@ -27,9 +27,9 @@ contact.printContact(out)
 
 Furthermore, morphs can be decomposed and the resulting *fragments* can be used to compose another morph.
 
-the `new` evolution
+For a quick introduction to Morpheus visit the following links:
 
-
+[README](https://github.com/zslajchrt/morpheus) and the [Morpheus tutorial](https://github.com/zslajchrt/morpheus-tutor)
 
 
 
