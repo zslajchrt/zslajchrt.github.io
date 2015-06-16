@@ -6,7 +6,7 @@ relative_permalinks: true
 
 # Setup
 title:               Zbyněk Šlajchrt's Tech Blog
-tagline:             ""
+tagline:             "Articles about Scala, Java, BigData etc..."
 url:                 http://zslajchrt.github.io
 paginate:            10
 baseurl:             "http://zslajchrt.github.io/"
@@ -14,7 +14,7 @@ baseurl:             "http://zslajchrt.github.io/"
 markdown: redcarpet
 redcarpet:
   extensions: ["tables", "fenced_code_blocks"]
-  
+
 # Assets
 #
 # We specify the directory for Jekyll so we can use @imports.
