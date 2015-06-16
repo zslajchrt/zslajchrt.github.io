@@ -3,6 +3,7 @@ layout: default
 title: Morpheus Is Out?
 comments: true
 permalink: morpheus-is-out
+bookmark: morpheus-is-out
 ---
 
 It's been 6 months ago when I came up with an idea how to make Scala more dynamic
