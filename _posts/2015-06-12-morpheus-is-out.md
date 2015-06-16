@@ -14,7 +14,7 @@ In contrast to `new`, which is used to instantiate an object composed of one or 
 
 A *morph* can be further reshaped to another shape from the morph model while preserving its identity, i.e. the reference to the object remains same.
 
-```scala
+```
 // a two-dimensional morph model (Contact, ContactPrinter)
 val contact = compose[(OfflineContact or OnlineContact) with (RawContactPrinter or PrettyContactPrinter)].~
 contact.printContact(out)
