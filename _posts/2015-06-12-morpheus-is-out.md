@@ -16,7 +16,8 @@ A *morph* can be further reshaped to another shape from the morph model while pr
 
 ```scala
 // a two-dimensional morph model (Contact, ContactPrinter)
-val contact = compose[(OfflineContact or OnlineContact) with (RawContactPrinter or PrettyContactPrinter)].~
+val contact = compose[(OfflineContact or OnlineContact) with 
+                    (RawContactPrinter or PrettyContactPrinter)].~
 contact.printContact(out)
 
 val morphStrategy = promote[RawContactPrinter]
