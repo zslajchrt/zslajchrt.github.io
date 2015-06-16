@@ -3,6 +3,10 @@
 // Super lightweight (HTML-wise) blog pagination. `span`s are provide for when
 // there are no more previous or next posts to show.
 
+.readmore {
+  font-size: 80%
+}
+
 .pagination {
   overflow: hidden; // clearfix
   margin: 0 -1.5rem 1rem;
