@@ -9,7 +9,7 @@ title:               Zbyněk Šlajchrt's Tech Blog
 tagline:             ""
 url:                 http://zslajchrt.github.io
 paginate:            10
-baseurl:             ""
+baseurl:             "http://zslajchrt.github.io/"
 
 # Assets
 #
