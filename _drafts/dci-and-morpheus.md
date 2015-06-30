@@ -35,7 +35,7 @@ The context itsels only defines roles and triggers the use-case. The Context and
 
 The paradigmatical example of DCI is a simulation of a **money transfer**. It is simple enough to illustrate the fundamentals of DCI.
 
-The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transfered and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough balance in the source account to perform the transfer.
+The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transfered and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough balance in the source account to perform the transfer. And yet any of these techniques has its own drawbacks and does not fully fit to DCI.
 
 For the sake of simplicity, let us assume that the data model of the bank application is just the list of the end user's accounts. Every account is represented by an object encapsulating some basic properties like the `balance` along with some basic operations like `increaseBalance` and `decreaseBalance`. We can expect that such a data model will be pretty alligned with the end user's mental model.
 
