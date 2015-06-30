@@ -35,7 +35,7 @@ The context itsels only defines roles and triggers the use-case. The Context and
 
 The paradigmatical example of DCI is a simulation of a **money transfer**. It is simple enough to illustrate the fundamentals of DCI.
 
-The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transfered and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough balance in the source account to perform the transfer. And yet any of these techniques has its own drawbacks and does not fully fit to DCI.
+The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transfered and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough balance in the source account to perform the transfer.
 
 For the sake of simplicity, let us assume that the data model of the bank application is just the list of the end user's accounts. Every account is represented by an object encapsulating some basic properties like the `balance` along with some basic operations like `increaseBalance` and `decreaseBalance`. We can expect that such a data model will be pretty alligned with the end user's mental model.
 
@@ -45,7 +45,7 @@ When transferring money the user will intuitively be familiar with the basic ste
 
 ![Transfer Money Use-Case](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-1.png "Transfer Money Use-Case")
 
-In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. This is the moment at which the things are becoming complex. Without modern programming concepts like mixins, traits, aspects or meta-programming we would hardly overcome this point.
+In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. This is the moment at which the things are becoming complex. Without modern programming concepts like mixins, traits, aspects or meta-programming we would hardly overcome this point. And yet any of these techniques has its own drawbacks and does not fully fit to DCI.
 
 See [this article on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction) dealing with various issues, or go [here to learn what *self schizophrenia*](https://en.wikipedia.org/wiki/Schizophrenia_(object-oriented_programming)) is.
 
