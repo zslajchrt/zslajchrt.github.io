@@ -20,7 +20,7 @@ DCI is anchored in object-oriented programming (OOP), however it must cope with 
 
 However, OOP fails to express collaborations between objects. These collaborations we call use cases. An object may appear in several use cases and it may behave quite differently in each use case. Because of the lack of another concept in OOP we are forced to express such a use-case-specific behavior as an operation in a class. And it has several bad consequences:
    1. There is no single file or other artifact dedicated solely to one use case, where we could see all interactions between objects. It makes the orientation in the code and its maintenance pretty difficult.
-   2. The whole behavior of the use case is scattered across the classes of the collaborating objects. It leads us to add a number of unrelated methods to classes with every new use case (causing higher coupling and lower cohesion).
+   2. The whole behavior of the use case is scattered across the classes of the collaborating objects. It leads us to add a number of unrelated methods to classes with every new use case (causing higher coupling and lower cohesion of classes).
    3. It is practically impossible to separate the stable part of the code, i.e. that which captures the data, from the variable part, i.e. the use cases (behavioral part).
 
 See [this article](http://www.sitepoint.com/dci-the-evolution-of-the-object-oriented-paradigm/) by Victor Savkin, which explain nicely the problem of collaboration in OOP.
