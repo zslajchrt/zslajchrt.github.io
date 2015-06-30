@@ -59,6 +59,8 @@ So let us suppose we have managed to get through this difficult step and the obj
 
 ### Using Morpheus
 
+#### Modelling Data
+
 ```scala
 trait Account {
   def Balance: BigDecimal
@@ -92,6 +94,8 @@ class RetiringAccount(initialBalance: BigDecimal) extends AccountBase(initialBal
 }
 ```
 
+#### Modelling Context
+
 ```scala
 trait Context {
   private[moneyTransfer] val Source: Account with Source
@@ -111,6 +115,8 @@ class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) exte
 
 }
 ```
+
+#### Modelling Interactions (Roles)
 
 ```scala
 @fragment
@@ -137,17 +143,6 @@ trait Source {
 ```
 
 ```scala
-object App {
-
-  def main(args: Array[String]): Unit = {
-    val ctx = new ContextImpl(new AccountBase(10), new AccountBase(50), 5)
-    ctx.trans()
-  }
-
-}
-```
-
-```scala
 @fragment
 trait Destination {
   this: Account with Context =>
@@ -155,5 +150,18 @@ trait Destination {
   def deposit(amount: BigDecimal) {
     increaseBalance(amount)
   }
+}
+```
+
+#### Running the Program
+
+```scala
+object App {
+
+  def main(args: Array[String]): Unit = {
+    val ctx = new ContextImpl(new AccountBase(10), new AccountBase(50), 5)
+    ctx.trans()
+  }
+
 }
 ```
