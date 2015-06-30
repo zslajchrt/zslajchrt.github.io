@@ -27,7 +27,11 @@ See [this article](http://www.sitepoint.com/dci-the-evolution-of-the-object-orie
 
 ###Solution
 
+DCI represents every use case by means of the so-called *context*. The context defines *roles* and expresses *interactions* between them. Each role in the context is played by one object (data, entity). The role contains the code that would otherwise reside in the object's class. Thus, roles effectivelly separate the stable part of the code from the unstable.
 
+
+
+###Example
 
 When transferring money the user's head probably *contains* two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
 
