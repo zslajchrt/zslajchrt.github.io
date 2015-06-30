@@ -25,6 +25,9 @@ However, OOP fails to express collaborations between objects. These collaboratio
 
 See [this article](http://www.sitepoint.com/dci-the-evolution-of-the-object-oriented-paradigm/) by Victor Savkin, which explain nicely the problem of collaboration in OOP.
 
+###Solution
+
+
 
 When transferring money the user's head probably *contains* two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
 
