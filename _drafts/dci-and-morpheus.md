@@ -11,7 +11,7 @@ DCI is a software paradigm whose goal is to bring the end user's mental models a
 
 The paradigm was invented by Trygve Reenskaug, who is also the inventor of the MVC pattern. DCI can be seen as its further development.
 
-The acronym means Data-Context-Interactions and it expresses the three fundamental components of the end user's interpretation of computer data. Data itself are nothing more than bits in program memory. Only after the data are put into a context, in which they are subjects to interactions between them, the data can yield some information.
+The acronym means Data-Context-Interactions and it expresses the three fundamental facets of the end user's interpretation of computer data. Data itself are nothing more than bits in program memory. Only after the data are put into a context, in which they are subjects to interactions between them, the data can yield some information.
 
 ###Background
 
