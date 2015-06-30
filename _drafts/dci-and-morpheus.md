@@ -110,7 +110,9 @@ trait Context {
 }
 ```
 
-The context is a simple trait declaring the two roles as values of a composite type `Account with Source`, resp. `Account with Destination`. The types indicate that the members **are** accounts playing the corresponding role in the use case.
+The context is a simple trait declaring the two roles as values of a composite type `Account with Source`, resp. `Account with Destination`. The types indicate that the members **are** accounts playing the corresponding roles in the use case.
+
+The implementation of the context is also pretty simple. It uses the `role` macro that hides some Morpheus boilerplate. The macro accepts three types: the role type, the object type and the context type. The only arguments is the reference to the object.
 
 ```scala
 class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) extends Context {
@@ -125,7 +127,29 @@ class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) exte
 }
 ```
 
-The context and its roles reside in the same file. 
+The following class is the same as the previous one, however, now wihout the `role` macro.
+
+```scala
+class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) extends Context {
+
+  private[moneyTransfer] val Source = {
+    implicit val dataFrag = external[Account](srcAcc)
+    implicit val selfFrag = external[Context](this)
+    singleton[Account with Source with Context].!
+  }
+
+  private[moneyTransfer] val Destination = {
+    implicit val dataFrag = external[Account](dstAcc)
+    implicit val selfFrag = external[Context](this)
+    singleton[Account with Destination with Context].!
+  }
+
+  def trans(): Unit = {
+    Source.transfer
+  }
+
+}
+```
 
 #### Modelling Interactions (Roles)
 
@@ -163,6 +187,8 @@ trait Destination {
   }
 }
 ```
+
+It is important to note that the context and its roles reside in the same file.
 
 #### Running the Program
 
