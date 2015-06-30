@@ -55,7 +55,7 @@ This is the moment at which the things are becoming complex. Without modern prog
 
 See [this article on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction) dealing with various issues, or go [here to learn what *self schizophrenia*](https://en.wikipedia.org/wiki/Schizophrenia_(object-oriented_programming)) is.
 
-So let us suppose we have managed to get through this difficult step and the objects are assigned to their roles. Now the context is ready to transfer the money. The user presses the **Go** button and the command is delegated to the context, which will enact the use case.
+So let us suppose we have managed to get through this difficult step and the objects are assigned to their roles. Now the context is ready to transfer the money. The user presses the **Go** button emitting a command that is delegated to the context, which will enact the use case.
 
 
 
