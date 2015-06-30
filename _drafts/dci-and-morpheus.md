@@ -59,7 +59,11 @@ So let us suppose we have managed to get through this difficult step and the obj
 
 ### Using Morpheus
 
+[Morpheus](https://github.com/zslajchrt/morpheus) is a Scala extension that makes possible for an object to change its *shape* dynamically. Unsurprisingly, it can be used to implement a DCI application.
+
 #### Modelling Data
+
+Let us begin with data modelling. Actually, there is nothing specific to Morpheus. The only thing required is that the entities are traits, not classes.
 
 ```scala
 trait Account {
@@ -100,7 +104,6 @@ class RetiringAccount(initialBalance: BigDecimal) extends AccountBase(initialBal
 trait Context {
   private[moneyTransfer] val Source: Account with Source
   private[moneyTransfer] val Destination: Account with Destination
-  // Amount is both a role and stage prop
   val Amount: BigDecimal
 }
 
