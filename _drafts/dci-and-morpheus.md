@@ -41,7 +41,11 @@ For the sake of simplicity, let us assume that the data model of the bank applic
 
 ![Bank Accounts](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-4.png "Bank Accounts")
 
-When transferring money the user's head probably *contains* two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
+When transferring money the user will intuitively be familiar with the basic steps of the procedure. He or she will know that it is a simple interaction between two accounts, one playing the role of the source account and the other playing the destination account role and that the balance of the source account will be decreased by the amount of the transfered money while the destination's balance will be increased by the same amount.
+
+In DCI it is quite easy to express both the data model and the interactions accordingly to the user's mental model and intuition.
+
+two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
 
 ![Transfer Money Use-Case](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-1.png "Transfer Money Use-Case")
 
