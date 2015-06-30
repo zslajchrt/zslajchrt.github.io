@@ -61,6 +61,9 @@ So let us suppose we have managed to get through this difficult step and the obj
 
 [Morpheus](https://github.com/zslajchrt/morpheus) is a Scala extension that makes possible for an object to change its *shape* dynamically. Unsurprisingly, it can be used to implement a DCI application.
 
+You can consult or check out the source code of this example [here](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/scala/org/cloudio/morpheus/dci).
+
+
 #### Modelling Data
 
 Let us begin with the data model. Actually, there is nothing specific to Morpheus. We are only required to model the entities as traits, not classes.
@@ -151,7 +154,7 @@ class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) exte
 }
 ```
 
-Using the `singleton` macro allows us to join the account object, the role and the context into one instance. 
+Using the `singleton` macro allows us to join the account object, the role and the context into one instance.
 
 Note: The `singleton` macro can do much more things, this is only the most basic functionality.
 
@@ -212,6 +215,7 @@ object App {
 ```
 
 ### Links
+   * [This example](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/scala/org/cloudio/morpheus/dci)
    * [Morpheus](https://github.com/zslajchrt/morpheus)
    * [Morpheus Tutorial](https://github.com/zslajchrt/morpheus-tutor)
    * [DCI Vision](http://www.artima.com/articles/dci_vision.html)
