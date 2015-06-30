@@ -7,7 +7,7 @@ permalink: dci-and-morpheus
 
 ###What is DCI?
 
-DCI is a software paradigm whose goal is to bring the end user's mental models and computer program models closer together. To To put it in a nutshell, the user must feel that he or she directly manipulates the objects in computer memory that correspond to the images in his or her head.
+DCI is a software paradigm whose goal is to bring the end user's mental models and computer program models closer together. To put it in a nutshell, the user must feel that he or she directly manipulates the objects in computer memory that correspond to the images in his or her head.
 
 The paradigm was invented by Trygve Reenskaug, who is also the inventor of the MVC pattern. DCI can be seen as its further development.
 
