@@ -45,7 +45,7 @@ When transferring money the user will intuitively be familiar with the basic ste
 
 ![Transfer Money Use-Case](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-1.png "Transfer Money Use-Case")
 
-In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. This is the moment at which the things are becoming complex. See [this article on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction) dealing with various issues, or go [here](https://en.wikipedia.org/wiki/Schizophrenia_(object-oriented_programming)) to learn what *self schizophrenia* is.
+In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. This is the moment at which the things are becoming complex. See [this article on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction) dealing with various issues, or go [here to learn what *self schizophrenia*](https://en.wikipedia.org/wiki/Schizophrenia_(object-oriented_programming)) is.
 
 ![Chosen Bank Accounts](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-2.png "Chosen Bank Accounts")
 
