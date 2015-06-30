@@ -57,9 +57,103 @@ See [this article on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_
 
 So let us suppose we have managed to get through this difficult step and the objects are assigned to their roles. Now the context is ready to transfer the money. The user presses the **Go** button emitting a command that is delegated to the context, which will enact the use case.
 
-
-
+### Using Morpheus
 
 ```scala
-val x = 1
+trait Account {
+  def Balance: BigDecimal
+
+  def decreaseBalance(amount: BigDecimal): Unit
+
+  def increaseBalance(amount: BigDecimal): Unit
+}
+
+class AccountBase(initialBalance: BigDecimal) extends Account {
+
+  private var balance: BigDecimal = initialBalance
+
+  def Balance = balance
+
+  def decreaseBalance(amount: BigDecimal) = balance -= amount
+
+  def increaseBalance(amount: BigDecimal) = balance += amount
+}
+
+class SavingsAccount(initialBalance: BigDecimal) extends AccountBase(initialBalance) {
+
+}
+
+class CheckingAccount(initialBalance: BigDecimal) extends AccountBase(initialBalance) {
+
+}
+
+class RetiringAccount(initialBalance: BigDecimal) extends AccountBase(initialBalance) {
+
+}
+```
+
+```scala
+trait Context {
+  private[moneyTransfer] val Source: Account with Source
+  private[moneyTransfer] val Destination: Account with Destination
+  // Amount is both a role and stage prop
+  val Amount: BigDecimal
+}
+
+class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) extends Context {
+
+  private[moneyTransfer] val Source = role[Source, Account, Context](srcAcc)
+  private[moneyTransfer] val Destination = role[Destination, Account, Context](dstAcc)
+
+  def trans(): Unit = {
+    Source.transfer
+  }
+
+}
+```
+
+```scala
+@fragment
+trait Source {
+  this: Account with Context =>
+
+  private def withdraw(amount: BigDecimal) {
+    decreaseBalance(amount)
+  }
+
+  def transfer {
+    Console.println("Source balance is: " + Balance)
+    Console.println("Destination balance is: " + Destination.Balance)
+
+    Destination.deposit(Amount)
+    withdraw(Amount)
+
+    Console.println("Source balance is now: " + Balance)
+    Console.println("Destination balance is now: " + Destination.Balance)
+  }
+
+}
+
+```
+
+```scala
+object App {
+
+  def main(args: Array[String]): Unit = {
+    val ctx = new ContextImpl(new AccountBase(10), new AccountBase(50), 5)
+    ctx.trans()
+  }
+
+}
+```
+
+```scala
+@fragment
+trait Destination {
+  this: Account with Context =>
+
+  def deposit(amount: BigDecimal) {
+    increaseBalance(amount)
+  }
+}
 ```
