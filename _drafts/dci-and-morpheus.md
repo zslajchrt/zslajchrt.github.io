@@ -5,10 +5,15 @@ comments: true
 permalink: dci-and-morpheus
 ---
 
-DCI is a software paradigm solving the problem of mapping between the end user's mental model and the computer program model.
-some inherent problems of object-oriented programming. The paradigm was invented by Trygve Reenskaug, who is also the inventor of the MVC pattern. DCI is complementary to MVC.
+###What is DCI?
+
+DCI is a software paradigm whose goal is to bring the end user's mental models and computer program models closer together. Although it is anchored in object-oriented programming it must cope with some inherent flaws of OOP.
+
+The paradigm was invented by Trygve Reenskaug, who is also the inventor of the MVC pattern. DCI can be seen as its further development.
 
 The acronym means Data-Context-Interactions and it expresses the three fundamental components of the end user's interpretation of computer data. Data itself are nothing more than bits in program memory. Only after the data are put into a context, in which they are subjects to interactions between them, the data can yield some information.
+
+###Background
 
 When transferring money the user's head probably *contains* two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
 
