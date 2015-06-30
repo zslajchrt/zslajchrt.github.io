@@ -15,7 +15,7 @@ The acronym means Data-Context-Interactions and it expresses the three fundament
 
 ###Background
 
-Although it is anchored in object-oriented programming it must cope with some inherent flaws of OOP.
+Although it is anchored in object-oriented programming it must cope with some inherent flaws of OOP. 
 
 
 
