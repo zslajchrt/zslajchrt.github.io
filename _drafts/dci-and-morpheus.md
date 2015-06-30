@@ -11,7 +11,7 @@ permalink: dci-and-morpheus
 
 Data, context and interactions are the three fundamental facets of the end user's interpretation of computer data. Data itself are nothing more than bits in program memory. Only after the data are put into a context, in which they are subjects to interactions between them, the data can yield some information.
 
-The paradigm was invented by Trygve Reenskaug, who is also the inventor of the MVC pattern. DCI can be seen as its further development.
+The paradigm was invented by Trygve Reenskaug, who is also the inventor of the MVC pattern. DCI can be seen as its further development. See [this article](http://www.artima.com/articles/dci_vision.html) describing the DCI vision.
 
 
 ###Background
