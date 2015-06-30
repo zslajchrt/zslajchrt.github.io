@@ -110,7 +110,7 @@ trait Context {
 }
 ```
 
-The context is a simple trait declaring the two roles as values of a composite type `Account with Source`, resp. `Account with Destination`. The types indicate that the members **are** accounts playing the corresponding roles in the use case.
+The context is a simple trait declaring the two roles as values of a composite type `Account with Source`, resp. `Account with Destination`. The types indicate that the members **are** accounts playing the corresponding roles in the use case. `Source` and `Destination` are roles defined below.
 
 The implementation of the context is also pretty simple. It uses the `role` macro that hides some Morpheus boilerplate. The macro accepts three types: the role type, the object type and the context type. The only arguments is the reference to the object.
 
@@ -151,7 +151,13 @@ class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) exte
 }
 ```
 
+Using the `singleton` macro allows us to join the account object, the role and the context into one instance. 
+
+Note: The `singleton` macro can do much more things, this is only the most basic functionality.
+
 #### Modelling Interactions (Roles)
+
+The roles are also modelled as traits. Now we have to mark them with the `fragment` annotation. Both the bound account object and the context are available through the self-type `Account with Context`.
 
 ```scala
 @fragment
@@ -192,6 +198,8 @@ It is important to note that the context and its roles reside in the same file.
 
 #### Running the Program
 
+And finally we can run the program.
+
 ```scala
 object App {
 
@@ -202,3 +210,14 @@ object App {
 
 }
 ```
+
+### Links
+   * [Morpheus](https://github.com/zslajchrt/morpheus)
+   * [Morpheus Tutorial](https://github.com/zslajchrt/morpheus-tutor)
+   * [DCI Vision](http://www.artima.com/articles/dci_vision.html)
+   * [DCI in Ruby and nice explanations](http://www.sitepoint.com/dci-the-evolution-of-the-object-oriented-paradigm/)
+   * [DCI on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction)
+   * [The Roots of DCI](http://fulloo.info/Documents/2010DCI-Origin.pdf)
+   * [Squeak Examples](http://fulloo.info/Examples/SqueakExamples/)
+   * [Object Schizophrenia](http://users.jyu.fi/~sakkinen/inhws/papers/Sekharaiah.pdf), [Self Schizophrenia on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction)
+   * [DCI Google Group](https://groups.google.com/forum/#!topic/object-composition/2F6kwUpb0FQ)
