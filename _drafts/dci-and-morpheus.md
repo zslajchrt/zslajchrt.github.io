@@ -45,7 +45,9 @@ When transferring money the user will intuitively be familiar with the basic ste
 
 ![Transfer Money Use-Case](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-1.png "Transfer Money Use-Case")
 
-In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. This is the moment at which the things are becoming complex. Without modern programming concepts like mixins, traits, aspects or meta-programming we would hardly overcome this point. And yet any of these techniques has its own issues and does not perfectly fit to DCI.
+In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. In this use case the goal is to substitute the holes in the rectangle and the triangle by the chosen account objects.
+
+This is the moment at which the things are becoming complex. Without modern programming concepts like mixins, traits, aspects or meta-programming we would hardly overcome this point. And yet any of these techniques has its own issues and does not perfectly fit to DCI.
 
 See [this article on Wikipedia](https://en.wikipedia.org/wiki/Data,_context_and_interaction) dealing with various issues, or go [here to learn what *self schizophrenia*](https://en.wikipedia.org/wiki/Schizophrenia_(object-oriented_programming)) is.
 
