@@ -63,7 +63,7 @@ So let us suppose we have managed to get through this difficult step and the obj
 
 #### Modelling Data
 
-Let us begin with data modelling. Actually, there is nothing specific to Morpheus. The only thing required is that the entities are traits, not classes.
+Let us begin with the data model. Actually, there is nothing specific to Morpheus. We are only required to model the entities as traits, not classes.
 
 ```scala
 trait Account {
@@ -100,13 +100,19 @@ class RetiringAccount(initialBalance: BigDecimal) extends AccountBase(initialBal
 
 #### Modelling Context
 
+The next DCI facet is the context defining the interacting roles. In this case the context defines only two roles: `Source` and `Destination`. The amount of money to be transferred is also included in the context (as a stage prop).
+
 ```scala
 trait Context {
   private[moneyTransfer] val Source: Account with Source
   private[moneyTransfer] val Destination: Account with Destination
   val Amount: BigDecimal
 }
+```
 
+The context is a simple trait declaring the two roles as values of a composite type `Account with Source`, resp. `Account with Destination`. The types indicate that the members **are** accounts playing the corresponding role in the use case.
+
+```scala
 class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) extends Context {
 
   private[moneyTransfer] val Source = role[Source, Account, Context](srcAcc)
@@ -118,6 +124,8 @@ class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) exte
 
 }
 ```
+
+The context and its roles reside in the same file. 
 
 #### Modelling Interactions (Roles)
 
