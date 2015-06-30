@@ -33,9 +33,15 @@ The context itsels only defines roles and triggers the use-case. The Context and
 
 ###Example
 
-When transferring money the user's head probably *contains* two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
+The paradigmatical example of DCI is a simulation of a **money transfer**. It is simple enough to illustrate the fundamentals of DCI.
+
+The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transfered and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough deposit in the source account to perform the transfer.
+
+For the sake of simplicity, let us assume that the data model of the bank application is just the list of the end user's accounts. Every account is represented by an object. We can expect that such a data model will be pretty alligned with the end user's mental model.
 
 ![Bank Accounts](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-4.png "Bank Accounts")
+
+When transferring money the user's head probably *contains* two things: the two accounts selected to take part in the transaction. Besides the two things/objects he or she also knows the roles of each account: one as the source and the other as the destination account.
 
 ![Transfer Money Use-Case](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-1.png "Transfer Money Use-Case")
 
