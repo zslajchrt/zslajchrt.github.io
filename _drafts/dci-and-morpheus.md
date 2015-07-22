@@ -27,7 +27,7 @@ See [this article](http://www.sitepoint.com/dci-the-evolution-of-the-object-orie
 
 ###Solution
 
-DCI represents every use case by means of the so-called *context*. The context defines *roles* performing *interactions* between themselves. Each role in the context is played by one corresponding object (data, entity). The role contains the code that would otherwise reside in the object's class. Thus, roles effectivelly separate the stable part of the code from the unstable.
+DCI represents every use case by means of the so-called *context*. The context defines *roles* performing *interactions* between themselves. Each role in the context is played by one corresponding object (data, entity). The role contains the code that would otherwise reside in the object's class. Thus, roles effectively separate the stable part of the code from the unstable.
 
 The context itsels only defines roles and triggers the use-case. The Context and roles should reside in one dedicated file so that one could easily investigate the interactions.
 
@@ -35,7 +35,7 @@ The context itsels only defines roles and triggers the use-case. The Context and
 
 The paradigmatical example of DCI is a simulation of a **money transfer**. It is simple enough to illustrate the fundamentals of DCI.
 
-The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transfered and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough balance in the source account to perform the transfer.
+The use case scenario is this: the end user uses the bank terminal to transfer money from one account to another. He or she selects the source and the destination accounts from the list of accounts. Then he or she specifies the amount of money to be transferred and starts the transaction. Some exceptions can be raised, of course, for instance as long as there is not enough balance in the source account to perform the transfer.
 
 For the sake of simplicity, let us assume that the data model of the bank application is just the list of the end user's accounts. Every account is represented by an object encapsulating some basic properties like the `balance` along with some basic operations like `increaseBalance` and `decreaseBalance`. We can expect that such a data model will be pretty alligned with the end user's mental model.
 
@@ -151,7 +151,7 @@ class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) exte
 }
 ```
 
-Using the `singleton` macro allows us to join the account object, the role and the context into one instance. 
+Using the `singleton` macro allows us to join the account object, the role and the context into one instance.
 
 Note: The `singleton` macro can do much more things, this is only the most basic functionality.
 
