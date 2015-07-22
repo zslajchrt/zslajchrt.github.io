@@ -45,6 +45,8 @@ When transferring money the user will intuitively be familiar with the basic ste
 
 ![Transfer Money Use-Case](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-1.png "Transfer Money Use-Case")
 
+It is important to note that the roles, i.e. the triangle and the rectangle have no identity. They can be regarded as costumes. It is the object playing the role that carries the identity.
+
 In many object oriented programming languages it is usually pretty easy to express both the data and the abstract context (i.e. using roles that are not bound to the objects yet). What is not that easy, however, is the binding of objects to their respective roles in the context. In this use case the goal is to fill the holes in the rectangle and the triangle by the chosen account objects.
 
 ![Chosen Bank Accounts](https://raw.githubusercontent.com/zslajchrt/morpheus/master/src/main/doc/pict/dci-transfer-money-2.png "Chosen Bank Accounts")
