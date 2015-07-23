@@ -37,7 +37,8 @@ Such an entity is naturally resistant to an all-embracing description.
 Previously, a schema usually came into existence in the framework of a detailed data
 analysis process, i.e. its existence **preceded** that of the data. The resulting schema
 was subject to a very careful change management and the change rate tended to be very low
-because everybody was afraid of it. To wrap up, **the semantics and the syntax precedes the data**.
+because everybody was afraid of it. To wrap up, **the semantics and the syntax precedes the data**,
+which is a consequence of the **top-down** approach of the development.
 
 Contrarily, when collecting large amounts of heterogeneous data, sometimes we have
 a very limited knowledge of the data in the beginning. We may call such data
@@ -53,26 +54,37 @@ specific applications that suit well the needs and expectations of these groups.
 The schema in this concept is a pattern or a template used to select groups of
 associated entities sharing some qualities rather than a rule dictating
 the structure of data. These associations of entities establish contexts within
-which their data yields a specific kind of information.
+which their data yields a specific kind of information. The schema also establishes
+relationships between entities in the context forming so a network of friends,
+colleagues or beer lovers, for instance.
 
 Above that, the same entity may be present in different contexts, thus, its meaning
 depends on the interpretation of the subject that understands the context's domain.
 
-We may conclude that in this scenario **the data precedes a syntax and a semantics**.
+We may conclude that in this scenario **the data precedes a syntax and a semantics**,
+which is a consequence of the **bottom-up** approach.
 
 From what has been described above we can see that such data varies in three
 aspects making it *protean*: shapes/content, forms/format, meanings/contextual
 or subjective interpretation (semantics).
 
+*Note: Relational tables can be viewed as a special kind of context template.
+It is as if a relational table were just a view to a set of entities in our proto-data,
+which follow the rules given by the table schema. In theory we could build a universal
+RDBMS system working within various contexts identified in a NoSQL database. Leaving
+aside possible practical problems with performance, distribution etc., of course.*
+
 ###Protean Behavior
 
-Having started collecting protean data it is still too early to begin to develop
+Having started storing extremely protean data it is still too early to begin to develop
 some meaningful application. Not to mention to develop something what had emerged in
-the heads of "analysts" and "managers" long before we actually started gathering
-the data. Such an approach would clearly lead to a waste of time and resources.
+the heads of "analysts" long before we actually started receiving the stream of data.
+Such an approach would clearly lead to a waste of time and resources. The typical
+reasoning at that time is: We believe that our huge data must be full of gems.
+The problem is that we don't know these gems nor how to retrieve them.
 
 It does not mean that we should not muse about potential uses, but we should
-be prepared to abandon it quickly when new insights, dug from the data, reach us.
+be prepared to abandon them quickly when new insights, dug from the data, reach us.
 
 What we should do, however, is to examine and wring the proto-data as much as
 possible with the goal to discern any glimpse of some "alliances" of entities that
@@ -80,22 +92,32 @@ could be described by some schema and be given some meaning. Such a thing can be
 a fetus of a new insight, which can drive the further development of an application
 utilizing the insight.
 
+Once a well-defined context is available we can build an application for it.
+As indicated above, the context consists of a network of interconnected entities,
+which follow the context rules (schema). The context also defines the semantics of
+such a network.
 
-Previously, the behavior was codified in use-cases developed during the analysis.
-Behavior-first, Schema-first
+To conclude, we do not build applications directly on top of proto-data.
+Instead, firstly we identify subsets of data entities having something in common,
+then we describe it by means of a schema, give it some meaning and establish relationships
+between the entities - a network. The result is the so-called context, which is
+the foundation on top of which we can build some applications.
 
-Data-first, data centric development... Now, it is very difficult to come up with some
-reasonable application even in the early stages of the data collection ... until
-we can discern some contexts ...
+###Technologies
 
-Proto-data -> Contexts (Subjective interpretation of data in associated entites)
--> Context Application
+The tools that we need to build protean systems and applications can be grouped
+to four groups reflecting the stages of the development.
 
-###
+  1. Persistence
+  2. Analytics tools to identify contexts
+  3. Context management, network builders
+  4. Development tools
 
-There is a number of recently developed storage systems, which can handle peta-bytes of
-heterogeneous data, however, often at the expense of the relationships (no joins)
-and metadata (no schema) management, among others.
+####Persistence
+
+There is a number of recently developed storage systems like NoSQL databases,
+which can handle peta-bytes of heterogeneous data, however, often at the expense
+of the relationships (no joins) and metadata (no schema) management, among others.
 
 It means, thus, that these missing tasks must be solved somewhere in the stack of
 application layers. And the lower such a management takes place the better.
@@ -103,7 +125,24 @@ Ideally, it would be the language, or eventually the language platform, which
 would take on this responsibility. In the worst case, it would be done by the application
 itself. Usually it is done by an intermediary big data platform.
 
-....
+####Analytics tools
+
+The big-data analytics has advanced pretty far during last decade. Technologies
+like Hadoop, Spark, Impala and many others may be used to identify contexts in
+proto-data.
+
+The output of the context analysis is a description of the new context. The description
+should allow a straightforward introduction of the new context into the system.
+
+This task may require an experienced data science team, which is supposed to uncover
+numerous categories of complex dynamics of interactions among entities from noisy proto-data.
+
+####Context management
+
+Recognition offline vs. online
+Management of indices
+
+####Development tools
 
 Dynamic languages like Python, Ruby or JavaScript ... , but the refactoring of
 the application written in these languages becomes extremely error-prone. It is
@@ -111,8 +150,11 @@ pretty easy to forget to change, add or remove something somewhere when somethin
 new is being added to the application since the network of mutual
 relationships between entities can be extremely complicated.
 
+In this article I will not be dealing with the technology stack needed for
+the persistence of proto-data nor with analytics tools for context identification.
 
-
+Instead I am focusing on building networks and applications on top of a database of
+users of a popular web application.
 
 ####Case Study Overview
 
