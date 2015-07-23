@@ -127,7 +127,7 @@ itself. Usually it is done by an intermediary big data platform.
 
 ####Analytics tools
 
-The big-data analytics has advanced pretty far during last decade. Technologies
+The big-data analytics has advanced pretty far over the past decade. Technologies
 like Hadoop, Spark, Impala and many others may be used to identify contexts in
 proto-data.
 
@@ -139,41 +139,43 @@ numerous categories of complex dynamics of interactions among entities from nois
 
 ####Context management
 
-Recognition offline vs. online
-Management of indices
+The context management basically solves these tasks:
+  1. Introducing new contexts into the system
+  2. Tracking entities in proto-data and assigning them to existing contexts (online or offline tagging)
+  3. Indexing
+  4. Building networks on top of the entities in a context (relationship management)
+  5. Mediating communication between applications and contexts (connection management, queries etc.)
+
+These tasks may remind a database engine, which de-facto is in a broader sense of the term.
+
+At the time of writing this article I am not aware of any technology that would
+address these requirements optimally.
 
 ####Development tools
 
-Dynamic languages like Python, Ruby or JavaScript ... , but the refactoring of
-the application written in these languages becomes extremely error-prone. It is
-pretty easy to forget to change, add or remove something somewhere when something
-new is being added to the application since the network of mutual
-relationships between entities can be extremely complicated.
+Developing applications on top of contexts should be much easier than doing
+the same thing on top of raw proto-data. The reason is that contexts served
+by the context management contain a lot of functionality that would have to be
+implemented by the application otherwise. Also the contexts should be as much
+domain-specific as possible.
 
-In this article I will not be dealing with the technology stack needed for
-the persistence of proto-data nor with analytics tools for context identification.
+As we will see in the next part of this article, even in a simple application
+built on top a simple network the same entity may assume various roles in dependence
+on the other role with which it has the relationship.
 
+Dynamic languages like Python, Ruby or JavaScript may sound like good candidates,
+however, the refactoring of protean application written in these languages would become
+extremely error-prone. It is pretty easy to forget to change, add or remove
+something somewhere while something new is being added to the application since
+the network of mutual relationships between entities can be very complicated.
+
+##What's Next?
+In the next part of this article I will not be dealing with the technology stack
+needed for the persistence of proto-data nor with analytics tools for context identification.
 Instead I am focusing on building networks and applications on top of a database of
-users of a popular web application.
+users of a fictional popular web application.
 
-####Case Study Overview
-
-####Data Description
-
-####Modeling Protean Data
-
-####Instantiating and Loading
-
-####Protean Behavior (Offline/Online)
-
-####Protean Networks
-
-####Networks Mapper
-
-####Colleagues Network
-
-####Friends Network
-
-####Application of Friends Network
-
-####Simultaneous Networks
+The goal is to show how with Scala and Morpheus we can build protean applications
+while preserving all benefits associated with Scala's strong
+static type systes along with additional type-safe metamorphism of objects
+provided by Morpheus.
