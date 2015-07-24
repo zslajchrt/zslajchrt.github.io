@@ -1,13 +1,88 @@
 ---
 layout: post
-title: Developing Protean Application With Morpheus - Part 1
+title: Developing Protean Application - Part 1
 comments: true
 permalink: developing-protean-applications-part1
 ---
 
-##Developing Protean Applications With Morpheus - Part 1
+##Developing Protean Applications - Part 1
 
-###What Protean Means?
+Having a company, which serves millions of users and is still on rise, is a dream
+of many. Moreover, if the company develops a software product, which is used world-wide,
+most likely it is getting a gift in the form of personal details of its users or
+their activity. Sooner or later the company's managers will inevitably be asking themselves:
+*How could we utilize the large amount of data we have been receiving from our clients for years?*
+The most likely answer will be, however, that they believe there must be something
+important in their data, **unfortunately they do not know what it is**.
+
+Actually, this gift can easily become both blessing and curse at the same time.
+
+To illustrate the point I am going to present a hypothetical company.
+
+The Company started more than a decade ago developing a search engine, which
+quickly became very popular. In the beginning the search engine algorithm was
+neutral in terms of the processing of the search query. In other words it only
+analyzed the keywords and searched for the best matching pages. Then the Company
+realized that the results should reflect the user. To put it bluntly, they
+wanted to scan all its users to obtain as much their personal data as possible
+and to take it into account in the algorithm.
+
+Because the Company had almost no clue who its users are in the beginning,
+it offered users to sign up in the search engine under the pretext that they need
+to improve search results.
+
+- At this point the user entity consists of a few simple attributes like ID, email, name...
+  However the db is populated with hundreds of millions of entities
+- The company starts asking users for private details like the phone number or address
+  under the pretext that they need it to provide users with premium services. The entity contains the private info section.
+- The company starts tracking the activity of users, the entity is extended by hobbies for instance
+- The company unleashes its bots to retrieve additional information about its users from other sites like LinkedIn.
+  The entity now contains professional career data.
+- The company offers registered users with a free email service. The entity contains contacts.
+- Since the company keeps track who is online and knows the contacts of many of its users it can
+  implement a chat service.
+
+There are a couple of explicit personal details and relationships between users,
+like the network of colleagues or contacts, friends etc. Although important,
+such obvious relationships will hardly become the company's market differentiator
+since there are many specialized social networks around already.
+
+However, there should exist many other subtle and implicit personal data and
+relationships that are not evident at first glance.
+
+For instance, such non-trivial personal data could be age, religion, politics,
+sexual orientation, education, health, wage group, important life events like
+marriage, child birth, lottery prize, accidents, death and so on. We anticipate
+that such data could be extracted from personal resources like clickstream,
+keywords, geographical positions, emails, chat rooms etc.
+
+As examples of non-trivial social relationships and interactions can be mentioned:
+family, relatives, lawyer<->client, physician<->patient, teacher<->student,
+creditor<->debtor, aversions, membership in various institutions and boards,
+attending the same cultural or other events. We can assume that these social
+interactions could primarily be spotted in and retrieved from the data produced
+by the services like email or chat. Of course, the clickstream and keywords
+could be helpful as well.
+
+The company believes that having such types of information about its users and their interactions
+would make it different on the market. But, there is a big question mark. The managers
+must again ask themselves: **Does our data contain such information at all? And if so, how reliable would it be?**
+
+It would be foolish to begin with musing about business models, designing user
+interfaces and planing milestones and releases. At this stage it would be nothing
+else than building castles in the air.
+
+We have to abandon quickly this top-down approach and start thinking in a **bottom-up**
+way, in other words to begin with what we have - plentiful and abundant data.
+
+The precondition of such an approach is that we have already been accumulating
+as much varied data as possible for some time and the amount of the data is significant
+enough to start playing and experimenting with it.
+
+In the following paragraphs I will be dealing with rather technical aspects of
+the development of such applications, which I call **protean**.
+
+###So What Protean Means?
 
 The word actually refers to Proteus, a god of sea and rivers in Greek mythology,
 also called the god of "elusive sea change". [The Free Dictonary](http://www.thefreedictionary.com/protean)
@@ -28,7 +103,6 @@ since any normalization would lead to some loss of information, for instance.
 In extreme case a data entity can be so *protean* that the only attribute, which is
 always present, is the entity's identity, while all other attributes or
 groups of attributes are more or less arbitrary or specific to a group of entities only.
-For example a group of users in a social network having something in common.
 
 In such a case it does not make much sense to try to describe such a data
 structure by means of any schema, no matter how bushy the schema would be.
