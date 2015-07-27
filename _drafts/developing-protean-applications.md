@@ -168,7 +168,7 @@ is often like walking on quicksand, I call this breed of applications **protean*
 
 The word actually refers to Proteus, a god of sea and rivers in Greek mythology,
 also called the god of "elusive sea change". [The Free Dictonary](http://www.thefreedictionary.com/protean)
-defines *protean* as follows: *Readily taking on varied shapes, forms, or meanings.*. And this
+defines *protean* as follows: *Readily taking on varied shapes, forms, or meanings*. And this
 definition fits exactly the character of both data and behavior found in many
 today's big-data applications.
 
