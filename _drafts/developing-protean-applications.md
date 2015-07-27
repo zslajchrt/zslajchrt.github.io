@@ -45,7 +45,7 @@ At this point the Company's database already contains petabytes of personal data
 of its users, their email and chat communication plus individual clickstreams
 and data gleaned from other social networks.
 
-It is also the moment when the managers asks the above-mentioned question about
+It is also the moment when the managers ask the above-mentioned question about
 some utilization of the data.
 
 Having look at their data they see user records containing a couple of
