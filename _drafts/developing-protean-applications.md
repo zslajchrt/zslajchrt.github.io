@@ -329,10 +329,9 @@ the network of mutual relationships between entities can be very complicated.
 ##What's Next?
 In the next part of this article I will not be dealing with the technology stack
 needed for the persistence of protodata nor with analytics tools for domain identification.
-Instead I am focusing on building networks and applications on top of a database of
-users of a fictional popular web application.
+Instead I am focusing on building applications on top of a domain.
 
-The goal is to show how with Scala and (Morpheus)[https://github.com/zslajchrt/morpheus]
+The goal is to show how with (Morpheus)[https://github.com/zslajchrt/morpheus] and Scala
 we can build protean applications while preserving all benefits associated with Scala's strong
 static type system along with additional type-safe metamorphism of objects
 provided by Morpheus.
