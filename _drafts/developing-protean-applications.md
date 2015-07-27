@@ -82,7 +82,7 @@ else than building castles in the air.
 Without a good knowledge of the data it is practically **impossible** to follow
 the traditional **top-down** approach of application development, in which **use-cases
 define data**. Before going to more technical aspects let me briefly analyze
-(the knowledge matrix)[https://en.wikipedia.org/wiki/There_are_known_knowns] summarizing
+[the knowledge matrix](https://en.wikipedia.org/wiki/There_are_known_knowns) summarizing
 our ability to identify some information versus our ability to asses its value.
 
 1. **We know it is there and we know its value** (*Known knowns*): Precisely identified
@@ -106,8 +106,8 @@ it would have an indisputable value. Sadly, its presence is far from obvious
 in contrast to the previous cases. Such insights might come, for instance, from the
 field of marketing, such as the ability to predict customers behavior, or from
 the health field, such as warning users of upcoming possible health deterioration
-((bipolar)[http://www.ncbi.nlm.nih.gov/pubmed/25827034],
-(schizophrenia)[https://epianalysis.wordpress.com/2013/04/23/dataminementalhealth/], epilepsy).
+([bipolar](http://www.ncbi.nlm.nih.gov/pubmed/25827034),
+[schizophrenia](https://epianalysis.wordpress.com/2013/04/23/dataminementalhealth/), epilepsy).
 
 4. **There may be something which is out of scope of our imagination now and even
 when brought to light, it may not be clear if it is worth of anything** (*Unknown unknowns*) -
@@ -154,7 +154,7 @@ If not, the Company had better to concentrate on the development of its flag-shi
 application and using the data to improve it.
 
 If so, the company should assess the proportions of the 'unknown-known' and 'unknown-unknown'
-research teams. Perhaps, applying (Pareto's 80-20 rule)[https://en.wikipedia.org/wiki/Pareto_principle]
+research teams. Perhaps, applying [Pareto's 80-20 rule](https://en.wikipedia.org/wiki/Pareto_principle)
 might be a good starting point. The proportions of effort invested into the individual
 knowledge categories might then be adjusted as follows:
 Known-Known 0%, Known-Unknown 0-10%, Unknown-Known 80%, Unknown-Unknown 10-20%.
