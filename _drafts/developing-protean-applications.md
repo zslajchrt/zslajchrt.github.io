@@ -153,7 +153,7 @@ whether it is willing to invest into the research or not.
 If not, the Company had better concentrate on the development of its flag-ship
 application and use the data to improve it.
 
-If so, the company should assess the proportions of the 'unknown-known' and 'unknown-unknown'
+If so, the Company should assess the proportions of the *Unknown-Known* and *Unknown-Unknown*
 research teams. Perhaps, applying [Pareto's 80-20 rule](https://en.wikipedia.org/wiki/Pareto_principle)
 might be a good starting point. The proportions of effort invested into the individual
 knowledge categories might then be adjusted as follows:
