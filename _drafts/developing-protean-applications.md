@@ -211,7 +211,7 @@ The schema in this concept is a pattern or a template used to select groups of
 associated entities sharing some qualities rather than a rule dictating
 the structure of data. These associations of entities establish *domains* within
 which their data yields a specific kind of information. The schema also establishes
-relationships between entities in the context forming so a network of friends,
+relationships between entities in the domain forming so a network of friends,
 colleagues or beer lovers, for instance.
 
 Above that, the same entity may be present in different domains, thus, its meaning
@@ -265,8 +265,8 @@ The tools that we need to build protean systems and applications can be grouped
 to four groups reflecting the stages of the development.
 
   1. Persistence
-  2. Analytics tools to identify contexts
-  3. Context management, network builders
+  2. Analytics tools to identify domains
+  3. Domain management, network builders
   4. Development tools
 
 ####Persistence
