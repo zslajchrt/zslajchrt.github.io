@@ -240,7 +240,8 @@ reasoning at that time is: *We believe that our huge data must be full of gems.
 The problem is that we don't know these gems nor how to retrieve them.*
 
 It does not mean that we should not muse about potential uses, but we should
-be prepared to abandon them quickly when new insights, dug from the data, reach us.
+be prepared to abandon them quickly and change the course when new insights,
+dug from the data, reach us.
 
 What we should do, however, is to examine and wring the protodata as much as
 possible with the goal to discern any glimpse of some "alliances" of entities that
