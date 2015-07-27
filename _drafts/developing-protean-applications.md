@@ -142,7 +142,7 @@ will require a small, dedicated team of the most talented guys in the Company.
 Let me summarize the key characteristics of the four epistemological categories:
 
 1. Known-Known: too dull and unexciting
-2. Known-Unknown: too risky, it's not much about research, rather about business strategy
+2. Known-Unknown: too risky, it's not much about research, rather about business strategy (and the stomach)
 3. Unknown-Known: promising, a short-term research, a feasibility study as the first deliverable
 4. Unknown-Unknown: a terra incognita, it may or may not yield something groundbreaking,
 requiring a long-term research by a small team
