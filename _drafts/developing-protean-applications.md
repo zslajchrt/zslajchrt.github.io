@@ -56,7 +56,6 @@ specialized social networks around already.
 
 They believe, however, that there must exist plenty of subtle and extremely
 valuable data and relationships, which are not evident at first glance.
- also sensitive personal and
 
 For instance, such non-trivial personal data could be age, religion, politics,
 sexual preference, education, health, wage group, important life events like
