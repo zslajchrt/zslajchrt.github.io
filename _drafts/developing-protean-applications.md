@@ -150,7 +150,7 @@ requiring a long-term research by a small team
 In any event, the Company must make the important decision as early as possible,
 whether it is willing to invest into the research or not.
 
-If not, the Company had better to concentrate on the development of its flag-ship
+If not, the Company had better concentrate on the development of its flag-ship
 application and using the data to improve it.
 
 If so, the company should assess the proportions of the 'unknown-known' and 'unknown-unknown'
