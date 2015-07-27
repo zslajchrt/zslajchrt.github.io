@@ -18,7 +18,7 @@ of extraordinary importance in their data, **unfortunately they do not know what
 Actually, this gift can easily become both blessing and curse at the same time.
 To illustrate the point let me present a fictional company.
 
-__A decade ago the Company launches a search engine, which quickly becomes very popular.
+**A decade ago the Company launches a search engine, which quickly becomes very popular.
 In the beginning the search engine algorithm is neutral in terms of the processing
 of the search query. In other words it only analyzes the keywords and searches for
 the best matching pages. Then the Company realizes that results should reflect
@@ -74,7 +74,7 @@ could be helpful as well.
 
 The company believes that having such types of information about its users and their interactions
 would make it different on the market. But, there is a big question mark. The managers
-must again ask themselves: **Does our data contain such information at all? And if so, how reliable, sensitive and valuable would it really be?**__
+must again ask themselves: Does our data contain such information at all? And if so, how reliable, sensitive and valuable would it really be?**
 
 It would be foolish to begin with musing about business models, designing user
 interfaces and planing milestones and releases at this stage. It would be nothing
