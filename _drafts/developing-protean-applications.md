@@ -225,7 +225,7 @@ aspects making it *protean*: shapes/content, forms/format, meanings/domain-speci
 or subjective interpretation (semantics).
 
 *Note: Relational tables can be viewed as a special kind of domain templates.
-It is as if a relational table were just a view to a set of entities in our proto-data,
+It is as if a relational table were just a view to a set of entities in our protodata,
 which follow the rules given by the table schema. In theory we could build a universal
 RDBMS system working within various domains identified in a NoSQL database. Leaving
 aside possible practical problems with performance, distribution etc., of course.*
@@ -297,7 +297,7 @@ numerous categories of complex dynamics of interactions among entities from nois
 
 The domain management basically solves these tasks:
   1. Introducing new domains into the system
-  2. Tracking entities in proto-data and assigning them to existing domains (online or offline tagging)
+  2. Tracking entities in protodata and assigning them to existing domains (online or offline tagging)
   3. Indexing
   4. Building networks on top of the entities in a domain (relationship management)
   5. Mediating communication between applications and domain (connection management, queries etc.)
@@ -327,7 +327,7 @@ the network of mutual relationships between entities can be very complicated.
 
 ##What's Next?
 In the next part of this article I will not be dealing with the technology stack
-needed for the persistence of proto-data nor with analytics tools for domain identification.
+needed for the persistence of protodata nor with analytics tools for domain identification.
 Instead I am focusing on building networks and applications on top of a database of
 users of a fictional popular web application.
 
