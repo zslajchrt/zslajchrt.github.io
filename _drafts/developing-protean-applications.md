@@ -331,7 +331,7 @@ In the next part of this article I will not be dealing with the technology stack
 needed for the persistence of protodata nor with analytics tools for domain identification.
 Instead I am focusing on building applications on top of a domain.
 
-The goal is to show how with (Morpheus)[https://github.com/zslajchrt/morpheus] and Scala
+The goal is to show how with [Morpheus](https://github.com/zslajchrt/morpheus) and Scala
 we can build protean applications while preserving all benefits associated with Scala's strong
 static type system along with additional type-safe metamorphism of objects
 provided by Morpheus.
