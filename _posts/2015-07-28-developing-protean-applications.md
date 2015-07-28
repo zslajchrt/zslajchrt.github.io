@@ -133,7 +133,7 @@ defined vision parameters should allow the analysts and managers to specify goal
 branch of research.
 
 On the other hand, the research in the *uknown-unknown* case should be considered
-a **long-term** activity with hazy goals, a terra incognita. An ignorance of the potential beneficial findings
+a **long-term** activity with hazy goals, terra incognita. An ignorance of the potential beneficial findings
 precludes any attempt to specify both goals and criteria for abandoning the research.
 Researchers should be highly creative, rather eclectic, combining various methods and tools,
 stimulating imagination during brainstorming sessions, seeking inspiration and
