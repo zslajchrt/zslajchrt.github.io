@@ -10,8 +10,8 @@ permalink: developing-protean-applications-part1
 Having a company, which serves millions of users and is still on the rise, is a dream
 of many. Moreover, if the company develops a software product, which is used world-wide,
 most likely it is getting a gift in the form of the personal details of its users or
-their activity. Sooner or later the company's managers will inevitably ask themselves:
-How they can utilize the large amount of data they have been receiving from their customers
+their activity. Sooner or later the company's managers will inevitably ask themselves,
+how they can utilize the large amount of data they have been receiving from their customers
 for years. There must be something of extraordinary importance in the data,
 *unfortunately they do not know what it is*.
 
