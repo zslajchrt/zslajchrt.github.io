@@ -28,41 +28,35 @@ groups of attributes are more or less arbitrary or specific to a group of entiti
 
 In such a case it does not make much sense to try to describe such a data
 structure by means of any schema, no matter how bushy the schema would be.
-Such an entity is naturally resistant to an all-embracing description.
+Such an entity is naturally resistant to an all-embracing description, i.e. *metadata*.
 
-Previously, a schema usually came into existence in the framework of a detailed data
-analysis process, i.e. its existence **preceded** that of the data. The resulting schema
+Previously, metadata usually came into existence in the framework of a detailed data
+analysis process, i.e. its existence **preceded** that of the data. The resulting metadata
 was subject to a very careful change management and the change rate tended to be very low
-because everybody was afraid of it. To wrap up, **the semantics and the syntax precedes the data**,
-which is a consequence of the **top-down** approach of the development.
+because everybody was afraid of it. To wrap up, **the metadata precedes the data**.
 
-Contrarily, when collecting large amounts of heterogeneous data, sometimes we have
+On the other hand, when collecting large amounts of heterogeneous data, sometimes we have
 a very limited knowledge of the data in the beginning. We may call such data
 collected in the early stages as *protodata*, since it has a very limited applicability
 and only with the arrival of more data we can expect, or hope at least, that some
-schema or schemas along with some semantics will emerge.
+metadata will emerge.
 
-As an example we can take the above-mentioned groups of users in a social network,
-which may emerge unpredictably and the social network provider may
-react by coming up with some ideas on the utilization of such groups by developing
-specific applications that suit well the needs and expectations of these groups.
+We may conclude that in this situation **the data precedes the metadata**.
+Furthermore, there may emerge other alternative metadata describing the same data.
 
-The schema in this concept is a pattern or a template used to select groups of
+The metadata in this concept can be seen as a pattern or a template used to select groups of
 associated entities sharing some qualities rather than a rule dictating
-the structure of data. These associations of entities establish *domains* within
-which their data yields a specific kind of information. The schema also establishes
+the structure of the data. These associations of entities establish *domains* within
+which their data yields a specific kind of information. The metadata also establishes
 relationships between entities in the domain forming so a network of friends,
 colleagues or beer lovers, for instance.
 
 Above that, the same entity may be present in different domains, thus, its meaning
 depends on the interpretation of the subject that understands the domain.
 
-We may conclude that in this scenario **the data precedes a syntax and a semantics**,
-which is a consequence of the **bottom-up** approach.
-
 From what has been described above we can see that such data varies in three
 aspects making it *protean*: shapes/content, forms/format, meanings/domain-specific
-or subjective interpretation (semantics).
+or subjective interpretation (metadata).
 
 *Note: Relational tables can be viewed as a special kind of domain templates.
 It is as if a relational table were just a view to a set of entities in our protodata,
@@ -89,15 +83,14 @@ could be described by some schema and be given some meaning. Such a thing can be
 a fetus of a new insight, which can drive the further development of an application
 utilizing the insight.
 
-Once a well-defined domain is available we can build an application for it.
-As indicated above, domains consist of a network of interconnected entities,
-which follow the domain rules (schema). The domain also defines the semantics of
-such a network.
+Once a well-defined domain is available (i.e. metadata), we can build
+an application for it. As indicated above, domains consist of a network of
+interconnected entities, which follow the domain rules anchored in the metadata.
 
 To conclude, we do not build applications directly on top of protodata.
 Instead, firstly we identify domains, i.e. subsets of data entities having
-something in common, then we describe it by means of a schema, give it some
-meaning and establish relationships between the entities - a network.
+something in common, then we describe it by means of metadata giving it some
+meaning and establishing relationships between the entities (network).
 The resulting domain is the foundation on top of which we can build some applications.
 
 ###Technologies
@@ -125,7 +118,7 @@ itself. Usually it is done by an intermediary big data platform.
 ####Analytics tools
 
 The big-data analytics has advanced pretty far over the past decade. Technologies
-like Hadoop, Spark, Impala and many others may be used to identify domains in
+like Hadoop, Spark, Impala, Splunk and many others may be used to identify domains in
 protodata.
 
 The output of the domain analysis is a description of the new domain. The description
@@ -137,26 +130,32 @@ numerous categories of complex dynamics of interactions among entities from nois
 ####Domain management
 
 The domain management basically solves these tasks:
-  1. Introducing new domains into the system
+
+  1. Introducing new domains (metadata) into the system
   2. Tracking entities in protodata and assigning them to existing domains (online or offline tagging)
   3. Indexing
   4. Building networks on top of the entities in a domain (relationship management)
-  5. Mediating communication between applications and domain (connection management, queries etc.)
+  5. Mediating the communication between applications and domain (connection management, queries etc.)
 
 These tasks may remind a database engine, which de-facto is in a broader sense of the term.
-
-The domain management should avoid any shuffling or copying of data. There is
-always only one instance of a data entity stored in the protodata, even if
-the entity may belong to several domains. These domains may represent the
-entity in different shapes so as to make its usage easier for applications,
-however, under the hood, it is always the same entity instance playing various
-roles only. This is important in order to avoid the so-called object schizophrenia,
-which is often a result of the layered architecture.
-
 At the time of writing this article I am not aware of any technology that would
 address these requirements optimally.
 
-TODO: Avoiding Object Schizophrenia
+The domain management should avoid any shuffling or copying of data. There is
+always only one instance of a data entity in the protodata, even if
+the entity may belong to several domains. These domains may represent the
+entity in different shapes so as to make its usage easier for domain applications,
+however, under the hood, it is always the same entity instance playing various
+roles only.
+
+The domain also *animates* its entities by attaching characteristic behavior to them.
+For instance, if the domain consists of pictures, every picture entity would
+be enhanced by methods for editing, such as resizing, rotating, applying various effect
+filters etc. It is important to emphasize, that this enhancement is restricted to the scope of
+the picture domain only. So if an entity belonging to domain `A` belongs also
+to domain B, the enhancements of the entity made in `A` are not seen in `B`
+and vice versa. And of course, this does not guarantee that changes of the entity's state
+made in `A` through its enhancement are not seen in `B`.
 
 
 ####Development tools
@@ -178,7 +177,7 @@ something somewhere while something new is being added to the application since
 the network of mutual relationships between entities can be very complicated.
 
 ##What's Next?
-In the next part of this article I will not be dealing with the technology stack
+In the next part I will not be dealing with the technology stack
 needed for the persistence of protodata nor with analytics tools for domain identification.
 Instead I am focusing on building applications on top of a domain.
 
@@ -186,40 +185,3 @@ The goal is to show how with [Morpheus](https://github.com/zslajchrt/morpheus) a
 we can build protean applications while preserving all benefits associated with Scala's strong
 static type system along with additional **type-safe metamorphism** of objects
 provided by Morpheus.
-
-####Case Study Overview
-
- - A popular web site like a search engine
- - In the beginning it has no clue about its users
- - Registration of users to improve search results and targeting ads
- - At this point the user entity consists of a few simple attributes like ID, email, name...
-   However the db is populated with hundreds of millions of entities
- - The company starts asking users for private details like the phone number or address
-   under the pretext that they needed to provide users with premium services. The entity contains the private info section.
- - The company starts tracking the activity of users, the entity is extended by hobbies for instance
- - The company unleashes its bots to retrieve additional information about its users from other sites like LinkedIn.
-   The entity now contains professional career data.
- - The company offers registered users with a free email service. The entity contains contacts.
- - Since the company keeps track who is online and knows the contacts of many of its users it can
-   implement a chat service.
-
-
-####Data Description
-
-####Modeling Protean Data
-
-####Instantiating and Loading
-
-####Protean Behavior (Offline/Online)
-
-####Protean Networks
-
-####Networks Mapper
-
-####Colleagues Network
-
-####Friends Network
-
-####Application of Friends Network
-
-####Simultaneous Networks
