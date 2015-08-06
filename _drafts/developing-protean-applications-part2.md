@@ -22,6 +22,8 @@ Besides its abundance, the heterogeneity of data is a key factor in the struggle
 harness *big data*. We often have to keep the data as it is, i.e. heterogeneous,
 since any normalization would lead to some loss of information, for instance.
 
+TODO: The entity may be scattered across various databases ....
+
 In extreme case a data entity can be so *protean* that the only attribute, which is
 always present, is the entity's identity, while all other attributes or
 groups of attributes are more or less arbitrary or specific to a group of entities only.
