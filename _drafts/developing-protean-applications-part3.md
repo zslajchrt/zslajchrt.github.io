@@ -5,13 +5,109 @@ comments: true
 permalink: developing-protean-applications-part3
 ---
 
+###Primary Protodata
+
+A by-product of the company's flagship service.
+
+There are two event streams: search queries and visits. The search query stream
+contains all search queries issued by the search engine users. The visits
+stream contains URLs visited through the links returned by the search engine.
+Both streams are kept in a storage for a certain period of time. The records in
+the two streams may be correlated by means of the `searchId` attribute.
+
+```json
+{
+  "searchId": 80989080940,
+  "userId": "COOKIE-789987987439",
+  "time": "2013-05-23T00:00:00Z",
+  "country": "US",
+  "keywords": ["prague", "beer", "pubs"]
+}
+```
+
+```json
+{
+  "searchId": 80989080940,
+  "userId": "COOKIE-789987987439",
+  "time": "2013-05-23T00:00:10Z",
+  "country": "US",
+  "visitedUrl": "http://www.praguebeergarden.com"
+}
+```
+
+###Preprocessed Protodata
+
+The company can easily perform some preprocessing of the protodata such as
+search sessions or keyword frequency data sets. The results of this preprocessing,
+which can be performed online or offline, is stored in a separate storage.
+
+####Search Sessions
+
+```json
+{
+  "searchId": 80989080940,
+  "userId": "COOKIE-789987987439",
+  "time": "2013-05-23T00:00:00Z",
+  "country": "US",
+  "keywords": ["prague", "beer", "pubs"],
+  "visitedUrls": [
+    "http://www.praguebeergarden.com",
+    "http://www.ratebeer.com/places/city/prague/0/56/",
+    "http://www.praguebeermuseum.com/en"
+  ]
+}
+```
+
+####Keyword Frequency
+
+```json
+{
+  "userId": "COOKIE-789987987439",
+  "time": "2013-05-23T00:00:10Z",
+  "keywords": [
+    {
+      "keyword": "beer",
+      "freq": 9
+    },
+    {
+      "keyword": "news",
+      "freq": 5
+    },
+    {
+      "keyword": "tv",
+      "freq": 1
+    }
+  ]
+}
+```
+
+He or she might be a beer lover.
+
+We wish we knew more about the person hidden behind the `cookieId`.
+
+URLs are also protodata.
+
+###Identifying Users
+
+The GigaMail service is only available for those who are registered or are
+employee of the Big Company.
+
+A user visiting the service is requested to sign in or register. An employee
+is not required to register since his or her profile is retrieved from the
+company's internal database.
+
+After signed in, the user is associated with his or her profile, which can
+have two forms: the registered user's profile or the employee's profile.
+
 ```json
 {
   "public": {
     "nick": "joe4",
     "firstName": "Joe4",
     "lastName": "Doe4",
-    "email": "joe4@gmail.com"
+    "email": "joe4@gmail.com",
+    "male": true,
+    "birthDate": "1971-02-21T00:00:00Z"
   },
   "license": {
     "premium": true,
@@ -20,6 +116,8 @@ permalink: developing-protean-applications-part3
   }
 }
 ```
+
+This is an employee's record from the Big Company's internal database.
 
 ```json
 {
@@ -37,16 +135,18 @@ permalink: developing-protean-applications-part3
 }
 ```
 
+###Modeling User Profiles
+
 ```scala
-case class RegisteredUserPublic(nick: String, firstName: String, lastName: String, email: Option[String])
+case class RegisteredUserPublic(nick: String, firstName: String, lastName: String, email: Option[String], male: Option[Boolean], birthDate: Option[Date])
 
-case class RegisteredUserLicense(isPremium: Boolean, validFrom: Date, validTo: Date)
+case class RegisteredUserLicense(premium: Boolean, validFrom: Date, validTo: Date)
 
-case class RegisteredUser(publicData: RegisteredUserPublic, license: Option[RegisteredUserLicense])
+case class RegisteredUser(`public`: RegisteredUserPublic, license: Option[RegisteredUserLicense])
 ```
 
 ```scala
-case class EmployeePersonalData(firstName: String, middleName: Option[String], lastName: String, title: String)
+case class EmployeePersonalData(firstName: String, middleName: Option[String], lastName: String, title: String, isMale: Boolean, birth: Date)
 
 case class Employee(employeeCode: String, position: String, department: String, personalData: EmployeePersonalData)
 ```
@@ -70,8 +170,18 @@ trait EmployeeEntity {
 ```
 
 ```scala
+val regUserKernel = singleton[RegisteredUserEntity]
+println(regUserKernel.~.registeredUser) // prints null
+
+val empKernel = singleton[EmployeeEntity]
+println(empKernel.~.employee) // prints null
+```
+
+####Loading Profiles
+
+```scala
 @dimension
-trait UserProtodata {
+trait UserDatasources {
 
   def registeredUserJson: JValue
 
@@ -86,7 +196,7 @@ import org.morpheus.FragmentValidator._
 
 @fragment
 trait RegisteredUserLoader {
-  this: UserProtodata with RegisteredUserEntity =>
+  this: UserDatasources with RegisteredUserEntity =>
 
   def load: ValidationResult[RegisteredUserEntity] = {
     implicit val formats = DefaultFormats
@@ -102,16 +212,11 @@ trait RegisteredUserLoader {
 ```
 
 ```scala
-val regUserKernel = singleton[RegisteredUserEntity]
-println(regUserKernel.~.registeredUser) // prints null
+val regUserLoaderRef: &[$[RegisteredUserLoader with UserDatasourcesMock]] = regUserKernel
+val regUserLoaderKernel = *(regUserLoaderRef, single[RegisteredUserLoader], single[UserDatasourcesMock])
 ```
 
-```scala
-val regUserLoaderRef: &[$[RegisteredUserLoader with UserProtodataMock]] = regUserKernel
-val regUserLoaderKernel = *(regUserLoaderRef, single[RegisteredUserLoader], single[UserProtodataMock])
-```
-
-TODO: include the link to the source code of UserProtodataMock
+TODO: include the link to the source code of UserDatasourcesMock
 
 ```scala
 regUserLoaderKernel.~.initSources("4")
@@ -126,179 +231,6 @@ regUserLoaderKernel.~.load match {
 
 ```scala
 val empKernel = singleton[EmployeeEntity]
-val empLoaderRef: &[$[EmployeeLoader with UserProtodataMock]] = empKernel
+val empLoaderRef: &[$[EmployeeLoader with UserDatasourcesMock]] = empKernel
 // analogous to the previous code
 ```
-
-```scala
-import org.morpheus.FragmentValidator._
-
-@dimension
-trait FragmentLoader[F] {
-
-  def load: ValidationResult[F]
-}
-
-@fragment
-trait RegisteredUserLoader extends FragmentLoader[RegisteredUserEntity]
-
-@fragment
-trait EmployeeLoader extends FragmentLoader[EmployeeEntity]
-```
-
-```scala
-val regUserOrEmpKernel = singleton[RegisteredUserEntity or EmployeeEntity]
-val regUserOrEmpLoaderRef: &[$[(RegisteredUserLoader or EmployeeLoader) with UserProtodataMock]] = regUserOrEmpKernel
-val regUserOrEmpLoaderKernel = *(regUserOrEmpLoaderRef, single[RegisteredUserLoader], single[EmployeeLoader],
-  single[UserProtodataMock])
-```
-
-```scala
-regUserOrEmpLoaderKernel.~.initSources("5") // 4 = a registered user, 5 = an employee
-```
-
-```scala
-for (loader <- regUserOrEmpLoaderKernel) {
-  println(loader.myAlternative)
-  loader.load
-}
-```
-
-```scala
-List(org.cloudio.morpheus.dci.socnet.objects.RegisteredUserLoader, org.cloudio.morpheus.dci.socnet.objects.UserProtodataMock, org.cloudio.morpheus.dci.socnet.objects.RegisteredUserEntity)
-List(org.cloudio.morpheus.dci.socnet.objects.EmployeeLoader, org.cloudio.morpheus.dci.socnet.objects.UserProtodataMock, org.cloudio.morpheus.dci.socnet.objects.EmployeeEntity)
-```
-
-```scala
-val regUserEnt = asMorphOf[RegisteredUserEntity](regUserOrEmpKernel)
-println(regUserEnt.registeredUser)
-val empEnt = asMorphOf[EmployeeEntity](regUserOrEmpKernel)
-println(empEnt.employee)
-```
-
-```scala
-val regUserOrEmpModel = parse[RegisteredUserEntity or EmployeeEntity](true)
-var failedFragments: Option[Set[Int]] = None
-val morphStrategy = MaskExplicitStrategy(rootStrategy(regUserOrEmpModel), true, () => failedFragments)
-val regUserOrEmpKernel = singleton(regUserOrEmpModel, morphStrategy)
-```
-
-```scala
-failedFragments = Some((for (loader <- regUserOrEmpLoaderKernel;
-                             loaderResult = loader.load
-                             if !loaderResult.succeeded;
-                             frag <- loaderResult.fragment) yield frag.index).toSet)
-```
-
-```scala
-val regUserEnt = asMorphOf[RegisteredUserEntity](regUserOrEmpKernel)
-val empEnt = asMorphOf[EmployeeEntity](regUserOrEmpKernel)
-```
-
-```
-Exception in thread "main" org.morpheus.AlternativeNotAvailableException
-	at org.morpheus.BridgeAlternativeComposer.convertToHolders(MorphingStrategy.scala:446)
-	at org.morpheus.Morpher.makeFragHolders$1(Morpher.scala:27)
-	at org.morpheus.Morpher.morph(Morpher.scala:43)
-	at org.morpheus.Morpher$.morph(Morpher.scala:116)
-	at org.morpheus.Morpher$.morph(Morpher.scala:112)
-	at org.morpheus.MorphKernel.make(MorphKernel.scala:91)
-	at org.cloudio.morpheus.dci.socnet.objects.PersonSample$.main(Loaders.scala:329)
-	at org.cloudio.morpheus.dci.socnet.objects.PersonSample.main(Loaders.scala)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:606)
-	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:140)
-```
-
-```scala
-regUserOrEmpKernel.~.remorph
-select[RegisteredUserEntity](regUserOrEmpKernel.~) match {
-  case Some(regUserEnt) =>
-    println(regUserEnt.registeredUser)
-  case None =>
-    select[EmployeeEntity](regUserOrEmpKernel.~) match {
-      case Some(empEnt) => println(empEnt.employee)
-      case None => require(false)
-    }
-}
-```
-
-```
-Exception in thread "main" org.morpheus.NoAlternativeChosenException
-	at org.morpheus.Morpher.makeFragHolders$1(Morpher.scala:25)
-	at org.morpheus.Morpher.morph(Morpher.scala:43)
-	at org.morpheus.Morpher$.morph(Morpher.scala:116)
-	at org.morpheus.MorphKernel$$anon$2.morph(MorphKernel.scala:110)
-	at org.morpheus.MutableMorphContext.proxy$lzycompute(MorphContext.scala:297)
-	at org.morpheus.MutableMorphContext.proxy(MorphContext.scala:288)
-	at org.morpheus.MorphKernel.mutableProxy_(MorphKernel.scala:114)
-	at org.morpheus.MorphKernel.make_$tilde(MorphKernel.scala:96)
-	at org.morpheus.MorphKernel.$tilde$lzycompute(MorphKernel.scala:84)
-	at org.morpheus.MorphKernel.$tilde(MorphKernel.scala:84)
-	at org.cloudio.morpheus.dci.socnet.objects.PersonSample$.main(Loaders.scala:333)
-	at org.cloudio.morpheus.dci.socnet.objects.PersonSample.main(Loaders.scala)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:606)
-	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:140)
-```
-
-```scala
-try {
-  regUserOrEmpKernel.~.remorph
-  select[RegisteredUserEntity](regUserOrEmpKernel.~) match {
-    case Some(regUserEnt) =>
-      println(regUserEnt.registeredUser)
-    case None =>
-      select[EmployeeEntity](regUserOrEmpKernel.~) match {
-        case Some(empEnt) => println(empEnt.employee)
-        case None => require(false)
-      }
-  }
-}
-catch {
-  case ae: NoViableAlternativeException =>
-    println("Cannot load registered user or employee")
-}
-```
-
-
-####Case Study Overview
-
- - A popular web site like a search engine
- - In the beginning it has no clue about its users
- - Registration of users to improve search results and targeting ads
- - At this point the user entity consists of a few simple attributes like ID, email, name...
-   However the db is populated with hundreds of millions of entities
- - The company starts asking users for private details like the phone number or address
-   under the pretext that they needed to provide users with premium services. The entity contains the private info section.
- - The company starts tracking the activity of users, the entity is extended by hobbies for instance
- - The company unleashes its bots to retrieve additional information about its users from other sites like LinkedIn.
-   The entity now contains professional career data.
- - The company offers registered users with a free email service. The entity contains contacts.
- - Since the company keeps track who is online and knows the contacts of many of its users it can
-   implement a chat service.
-
-
-####Data Description
-
-####Modeling Protean Data
-
-####Instantiating and Loading
-
-####Protean Behavior (Offline/Online)
-
-####Protean Networks
-
-####Networks Mapper
-
-####Colleagues Network
-
-####Friends Network
-
-####Application of Friends Network
-
-####Simultaneous Networks
