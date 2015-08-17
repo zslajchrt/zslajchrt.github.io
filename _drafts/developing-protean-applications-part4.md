@@ -18,17 +18,22 @@ trait FragmentLoader[F] {
 
 @fragment
 trait RegisteredUserLoader extends FragmentLoader[RegisteredUserEntity] {
+  this: UserDatasources with RegisteredUserEntity =>
   ...
 }
 
 @fragment
 trait EmployeeLoader extends FragmentLoader[EmployeeEntity] {
+  this: UserDatasources with EmployeeEntity =>
   ...
 }
 ```
 
 ```scala
 val regUserOrEmpKernel = singleton[RegisteredUserEntity or EmployeeEntity]
+```
+
+```scala
 val regUserOrEmpLoaderRef: &[$[(RegisteredUserLoader or EmployeeLoader) with UserDatasources]] = regUserOrEmpKernel
 val regUserOrEmpLoaderKernel = *(regUserOrEmpLoaderRef, single[RegisteredUserLoader], single[EmployeeLoader],
   single[UserDatasourcesMock])

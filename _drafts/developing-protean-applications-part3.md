@@ -5,87 +5,88 @@ comments: true
 permalink: developing-protean-applications-part3
 ---
 
-###Primary Protodata
+protean data => data instances (objects) differ on the syntax (physical) level (data level), however, they carry
+the same kind of information.
 
-A by-product of the company's flagship service.
+The same protean data can carry more kinds of information.
 
-There are two event streams: search queries and visits. The search query stream
-contains all search queries issued by the search engine users. The visits
-stream contains URLs visited through the links returned by the search engine.
-Both streams are kept in a storage for a certain period of time. The records in
-the two streams may be correlated by means of the `searchId` attribute.
+carrying the same information => ability to play a role in an interaction
 
-```json
-{
-  "searchId": 80989080940,
-  "userId": "COOKIE-789987987439",
-  "time": "2013-05-23T00:00:00Z",
-  "country": "US",
-  "keywords": ["prague", "beer", "pubs"]
-}
-```
+The contents of a wallet - banknotes, coins, vouchers, paychecks, receipts, tickets, business cards, credit cards, notes.
+What can they be used for?
 
-```json
-{
-  "searchId": 80989080940,
-  "userId": "COOKIE-789987987439",
-  "time": "2013-05-23T00:00:10Z",
-  "country": "US",
-  "visitedUrl": "http://www.praguebeergarden.com"
-}
-```
+I need to pay for something: {banknotes, coins, vouchers, paychecks, credit cards}
+Evaluated attributes: {value/balance, currency}
+Possible targets: {whole range of goods, services, fines etc.}
 
-###Preprocessed Protodata
+I need to make a quick note on something: {vouchers, banknotes, receipts, tickets, notes}.
+Evaluated attributes: {empty white space, surface}
+Possible targets: {a phone number, a rhyme, an idea}
 
-The company can easily perform some preprocessing of the protodata such as
-search sessions or keyword frequency data sets. The results of this preprocessing,
-which can be performed online or offline, is stored in a separate storage.
+I need to open something: {coins, credit cards, business cards}
+Evaluated attributes: {thickness, hardness}
+Possible targets: {mobile, bolt, can ...}
 
-####Search Sessions
+I need to find the phone number: {receipts, business cards, notes, tickets}
+Evaluated attributes: {phone, label}
+Possible targets: {taxi, friend, theatre, office, shop, police ...}
 
-```json
-{
-  "searchId": 80989080940,
-  "userId": "COOKIE-789987987439",
-  "time": "2013-05-23T00:00:00Z",
-  "country": "US",
-  "keywords": ["prague", "beer", "pubs"],
-  "visitedUrls": [
-    "http://www.praguebeergarden.com",
-    "http://www.ratebeer.com/places/city/prague/0/56/",
-    "http://www.praguebeermuseum.com/en"
-  ]
-}
-```
+The actual behavior in each scenario depends on objects in the wallet as well as
+on the concrete purpose, i.e. the target. For instance, if I am going to pay for a cup of coffee (the target)
+I will use rather coins or smaller banknotes, if I have any, than big banknotes or paychecks.
 
-####Keyword Frequency
+In each example there are two sources of behavioral mutability: the diversity of the wallet
+objects and that of the targets.
 
-```json
-{
-  "userId": "COOKIE-789987987439",
-  "time": "2013-05-23T00:00:10Z",
-  "keywords": [
-    {
-      "keyword": "beer",
-      "freq": 9
-    },
-    {
-      "keyword": "news",
-      "freq": 5
-    },
-    {
-      "keyword": "tv",
-      "freq": 1
-    }
-  ]
-}
-```
+Of course, there may exist scenarios with more sources of mutability
+such as the context of the scenario (I will not use the coins to pay for the coffee
+since I have to use them to purchase a tram ticket at a ticket machine).
 
-He or she might be a beer lover.
+####Commonalities vs. Distinctions
 
-We wish we knew more about the person hidden behind the `cookieId`.
+All objects eligible for a scenario must be able to yield the same kind
+of information required by the scenario. All objects may provide such information
+through different attributes whose values may be encoded in distinct formats.
 
-URLs are also protodata.
+The shared information amount is indirectly proportional to the number of
+eligible object types, the so-called **domain size**. The bigger the domain
+size, the less shared information, however the better applicability of
+the **default behavior**.
+
+The default behavior handles all eligible objects in the same way and ignores
+their specifics, i.e. it works only with the **shared attributes**.
+
+Further, the amount of the shared information among the objects positively
+influences the **fitness** of the default behavior of the scenario. The smaller
+the domain, the more shared information and the fitter default behavior.
+Unfortunately, it results in worse applicability.
+
+Obviously, banknotes and coins have more in common than banknotes, coins and credit cards.
+The default payment procedure for banknotes and coins only can theoretically take
+into account the physical properties of the currency in order to organize
+the weight and space in the wallet. Such properties make no sense for
+credit cards, since they remain in the wallet after the payment.
+
+It may happen, however, that the customer will not be able to pay for the goods since
+his 'perfect' space-optimizing payment default behavior does not know how to use
+a credit card.
+
+Since the to maximize the applicability of the
+
+composition, adaptive behavior
+
+The less the domain size,
+the bigger the information share, the fewer exceptions and the fitter the default behavior.
+
+Conclusion: The fitness of the default behavior and the domain size of a scenario
+are contradictory qualities.
+
+sharing the same information = commonality
+
+"stupid" behavior
+
+the behavior should reflect the actual objects
+
 
 ###Identifying Users
 
