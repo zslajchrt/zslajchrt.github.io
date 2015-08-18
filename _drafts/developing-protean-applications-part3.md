@@ -5,12 +5,86 @@ comments: true
 permalink: developing-protean-applications-part3
 ---
 
-protean data => data instances (objects) differ on the syntax (physical) level (data level), however, they carry
-the same kind of information.
+###Protodata
 
-The same protean data can carry more kinds of information.
+Protodata can be described as a collection of diverse data objects having no immediate
+and meaningful use.
 
-carrying the same information => ability to play a role in an interaction
+Applying the above-mentioned knowledge matrix, the level of the data owner's
+knowledge at this stage would correspond to categories *Known-Knowns* or *Known-Unknowns*,
+when the known values are insignificant or there is considerable risk embedded
+in the attempt to sell delicate data.
+
+The lack of a usage means that there is no context within which the data objects
+could yield some information. The objects can be treated only as bare wrappers of
+intrinsic properties, i.e. properties that an object has of itself, independently
+of other objects, including its context. [1-WIKI]
+
+Only a small subset of the properties, if any, may be present in all
+data objects. It follows that the data objects cannot be classified or
+the classification would be rather trivial. Moreover, a new object may carry
+a new property, which can disrupt the current classification. Such problems
+suggest that classes may not be a suitable tool for the description of protodata.
+
+
+###Protodata -> Data + Context -> Information
+
+Trying to find
+1. Something valuable
+2. Anything valuable
+
+Evaluating as many various contexts as possible.
+1. Existing (known) contexts
+2. New (unknown) contexts
+
+Having a context it excludes some objects and adds some extrinsic properties
+to data objects, such as currency value. These new extrinsic properties
+reflect the fact that ...
+
+. Combining intrinsic and extrinsic properties
+will allow unifying formerly distinct properties and thus reducing
+the dimensionality.
+
+The context should reduce the number of dimensions as much as possible. Then,
+all eligible (included) objects will be presented as uniform entities to any
+behavior in the framework of the context.
+
+This uniformity of eligible objects is represented by a single class containing
+one or more properties, either the extrinsic properties, such as the currency value,
+or some original intrinsic properties, if found useful or necessary.
+
+Traits... fine-tuning
+
+The contents of a wallet. It is essentially impossible to classify the items
+in the wallet into a hierarchy.
+
+Typically, the owner of protodata has currently no use of it.
+
+The God Must Be Crazy
+
+intrinsic properties: shape, material, size, weight ...
+
+```
+              Shape
+    Circle   Rectangle  Other
+```
+
+```
+             Material
+    Plastic      Paper     Metal
+```
+
+```
+            Polymer
+  PVC  Polystyrene Polypropylene ...
+```
+
+```
+        Plastics Classification
+  Thermoset   Thermoplastic   Elastomers
+```
+
+ without having some intention of using them.
 
 The contents of a wallet - banknotes, coins, vouchers, paychecks, receipts, tickets, business cards, credit cards, notes.
 What can they be used for?
@@ -27,7 +101,7 @@ I need to open something: {coins, credit cards, business cards}
 Evaluated attributes: {thickness, hardness}
 Possible targets: {mobile, bolt, can ...}
 
-I need to find the phone number: {receipts, business cards, notes, tickets}
+I need to find a phone number: {receipts, business cards, notes, tickets}
 Evaluated attributes: {phone, label}
 Possible targets: {taxi, friend, theatre, office, shop, police ...}
 
@@ -41,6 +115,16 @@ objects and that of the targets.
 Of course, there may exist scenarios with more sources of mutability
 such as the context of the scenario (I will not use the coins to pay for the coffee
 since I have to use them to purchase a tram ticket at a ticket machine).
+
+There is no apparent hierarchy (tree). The hierarchy emerges only after we know
+for what we want to use it.
+
+data instances (objects) differ on the syntax (physical) level (data level), however,
+they carry the same kind of information.
+
+The same protean data can carry more kinds of information.
+
+carrying the same information => ability to play a role in an interaction
 
 ####Commonalities vs. Distinctions
 
