@@ -109,9 +109,7 @@ forensic purposes.
 
 A major limitation of the scanner is that it is able to classify baggage items
 only by their geometrical properties and material. The recognized item is described
-as a geometrical object with some information about its material. The item
-also contain some metadata such as the time of the scan and the scanner and
-baggage identifier.
+as a plain geometrical object and not as a wallet, shaver etc.
 
 The contract itself does not forbid the company to use the scanner data commercially
 under the condition that such a usage reveals no private and sensitive information.
@@ -128,18 +126,131 @@ virtually of no use.
 But before such a context is discovered and applied, an overview of the scanner
 protodata should be given.
 
-#####Scanner Protodata
+#####Scanner Protodata Overview
 
-Proto-domain overview
-- multifaceted
+The scan event consists of two parts: metadata and data. The metadata contains
+the time of the scan, the serial number of the scanner and the id of the
+baggage. The data part consists of a list of items recognized in the baggage.
+Each item contains space coordinates relative to the baggage and geometrical
+and material properties. A sample of a scan event is on Figure 1.
 
-The new context description
+/// Figure 1: JSON samples
 
-The new datasource
+The sample suggests that the structure of the scanned item has two degrees of freedom:
+shape and material. These two dimensions can be described as traits of the scanned item.
+
+Using term *trait* seems quite adequate since some programming languages, such as
+Scala, implement the concept of trait (or mixin), which perfectly suits to modeling
+multidimensional objects.
+
+The following diagram depicts the classes and traits involved in the protodata
+domain.
+
+/// Figure 2: 2-dimensional diagram
+
+Modeling in multidimensional objects in languages, which do not include traits
+or similar concepts, may become rather difficult and the resulting model may not
+appropriately grasp the reality. For example in Java, which has no equivalent
+to traits, we would have to substitute traits with interfaces and delegation.
+
+/// Figure 3: No-traits diagram
+
+Considering this model, a new item can be created as follows.
+
+```java
+  Item item = new Item(10.1, 20.4, 3.1, new Metal(), new Cylinder(0.3, 10.32))
+```
+
+However, this substitution comes with some serious design flaws. According to
+the model, every item is an instance of `Thing` and two types `Shape`
+and `Metal`. In Java, if one needs to know what an object is, (s)he uses
+the `instanceof` operator. For example, if an instance of `Item` is tested
+whether it is `Thing` or `Material` by this operator, the result will always be true.
+On the other hand, testing the item for being `Baggage` will never be true.
+
+```java
+  boolean isThing = item instaceof Thing       // always true
+  boolean isMaterial = item instaceof Material // always true
+  boolean isBaggage = item instaceof Baggage   // always false
+```
+
+A problem arises when one wishes to check whether the item is metal. The following
+statement will always be false regardless of the possibility that the item may
+be, or rather represent, a metal item.
+
+```java
+  val isMetal = item instaceof Metal // always false, even if the item is metal
+```
+
+By using `instanceof` we cannot find out more details about the real character
+of the item.
+
+The problem is rooted in the model itself. The item's real character is not
+completely carried by the item itself, but also by the wrapped instances.
+It looks as if the item suffers from some kind of schizophrenia, since its
+identity is scattered across three instances: the item itself, and the metal and
+shape delegatees.
+
+Actually, this is just one of more problems arising when models use delegation
+and similar patterns such as decorator, adapter, state, strategy, proxy, bridge.
+[LINK: Patterns]
+
+The problem of object schizophrenia is discussed in more detail here [LINK: Object schizophrenia].
+
+On the other hand, let us see how the model looks if the language offers traits.
+In contrast to the no-trait model, here the `Thing` type and the two dimensions
+are separated. The composition is deferred until the moment of the creation of a new
+item.
+
+/// Figure 4: Traits diagram
+
+The following code shows how such a creation with the deferred composition can
+look like.
+
+```scala
+  val item = new Thing with Metal with Cylinder {
+    val x = 10.1
+    val y = 20.4
+    val z = 3.1
+    val height = 0.3
+    val radius = 10.32
+  }
+```
+
+Then the item can be tested with `isInstaceOf`, which is analogous to Java's
+`instanceof`.
+
+```scala
+  val isMetal = item.isInstaceOf[Metal]         // true
+  val isCylinder = item.isInstaceOf[Cylinder]   // true
+```
+
+Now, it is possible to determine the exact type, i.e. what the object exactly is. The reason
+is that the identity is no longer scattered among more instances but the item only.
+
+Furthermore, one can use composite types to test instances like in the following code:
+
+```scala
+  val isMetal = item.isInstaceOf[Metal with Cylinder] // true or false
+```
+
+
+
+The absence of traits makes the mapping based on types (nay type-safe) almost impossible.
+
+TODO: Discuss the problem of object schizophrenia
+
+The new context description and the new datasource
+
+/// Figure 5: The context domain diagram
 
 The context domain overview
 
 Mapping the context domain on the proto-domain
+
+/// Figure 6: Mapping context domain to proto-domain diagram
+
+////////////////////////////////////////////////////////
 
 Traits... fine-tuning
 
