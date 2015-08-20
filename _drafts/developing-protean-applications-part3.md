@@ -47,9 +47,11 @@ category, since the owner knows the value of the information he would like to re
 from the protodata, however, it is still unknown, it there is such information.
 
 The second way is significantly more difficult, since its goal is to
-invent a new and original context, which would would become the market differentiator.
+invent a new and original context, which would become a market differentiator.
 This approach usually requires a longer research, while the results are highly uncertain.
-The knowledge category in this case corresponds to *Unknown-Unknowns*.
+The knowledge category in this case corresponds to *Unknown-Unknowns*, since
+not only does the owner not know if there is something unusually interesting, but
+even if there were something interesting he would not know its value.
 
 In any case, if some vital context is found it also comes with a new domain model.
 Although protodata may be accompanied by some metadata, i.e. having its own
