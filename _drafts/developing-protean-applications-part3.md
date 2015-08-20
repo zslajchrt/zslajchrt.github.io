@@ -122,9 +122,13 @@ possible infringement of the contract by selling it in the raw form to another
 subject, which could combine it with its own data and possibly misuse the insights
 by revealing sensitive information.
 
+The owner realizes that without discovering a new context the scanner data is
+virtually of no use.
 
+But before such a context is discovered and applied, an overview of the scanner
+protodata should be given.
 
-
+#####Scanner Protodata
 
 Proto-domain overview
 - multifaceted
