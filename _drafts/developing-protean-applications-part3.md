@@ -157,9 +157,11 @@ to traits, we would have to substitute traits with interfaces and delegation.
 
 Considering this model, a new item can be created as follows.
 
+///Code 1
 ```java
-  Item item = new Item(10.1, 20.4, 3.1, new Metal(), new Cylinder(0.3, 10.32))
+  Item item = new Item(10.1, 20.4, 3.1, new Metal(), new Cylinder(0.3, 10.32));
 ```
+
 
 However, this substitution comes with some serious design flaws. According to
 the model, every item is an instance of `Thing` and two types `Shape`
@@ -168,18 +170,20 @@ the `instanceof` operator. For example, if an instance of `Item` is tested
 whether it is `Thing` or `Material` by this operator, the result will always be true.
 On the other hand, testing the item for being `Baggage` will never be true.
 
+///Code 2
 ```java
-  boolean isThing = item instaceof Thing       // always true
-  boolean isMaterial = item instaceof Material // always true
-  boolean isBaggage = item instaceof Baggage   // always false
+  boolean isThing = item instaceof Thing;       // always true
+  boolean isMaterial = item instaceof Material; // always true
+  boolean isBaggage = item instaceof Baggage;   // always false
 ```
 
 A problem arises when one wishes to check whether the item is metal. The following
 statement will always be false regardless of the possibility that the item may
 be, or rather represent, a metal item.
 
+///Code 3
 ```java
-  val isMetal = item instaceof Metal // always false, even if the item is metal
+  val isMetal = item instaceof Metal; // always false, even if the item is metal
 ```
 
 By using `instanceof` we cannot find out more details about the real character
@@ -207,6 +211,7 @@ item.
 The following code shows how such a creation with the deferred composition can
 look like.
 
+///Code 4
 ```scala
   val item = new Thing with Metal with Cylinder {
     val x = 10.1
@@ -220,6 +225,7 @@ look like.
 Then the item can be tested with `isInstaceOf`, which is analogous to Java's
 `instanceof`.
 
+///Code 5
 ```scala
   val isMetal = item.isInstaceOf[Metal]         // true
   val isCylinder = item.isInstaceOf[Cylinder]   // true
@@ -230,15 +236,93 @@ is that the identity is no longer scattered among more instances but the item on
 
 Furthermore, one can use composite types to test instances like in the following code:
 
+///Code 6
 ```scala
   val isMetal = item.isInstaceOf[Metal with Cylinder] // true or false
 ```
 
+The absence of the object schizophrenia in models is the key feature when
+the direct mapping between two distinct multidimensional domain models, as
+shown later in this text [WHERE].
 
+The absence of traits makes the multidimensional mapping based on types almost impossible.
+Intuitively, the mapping subsystem must be able to recognize the individual concrete
+types in all dimensions of objects in the target domain (proto-domain) to map
+correctly the objects from the source domain (context domain).
 
-The absence of traits makes the mapping based on types (nay type-safe) almost impossible.
+Before going further, we should closer examine how actually a new multidimensional
+instance is created from external data in Scala.
 
-TODO: Discuss the problem of object schizophrenia
+Let us assume that the external data for the item is stored in a dictionary-like
+object `event`. In order to create a new item then for every
+`(material, shape)` combination there must be a dedicated test in the creation code,
+as shown in the following snippet.
+
+///Code 7
+```scala
+  val x = event.get("thing").get("x")
+  val y = event.get("thing").get("y")
+  val z = event.get("thing").get("z")
+  val item = if (event.contains("metal") && event.contains("cylinder")) {
+    new Thing(x, y, z) with Metal with Cylinder {
+      val height = event.get("cylinder").get("height")
+      val radius = event.get("cylinder").get("height")
+    }
+  } else if (event.contains("metal") && event.contains("rectangle")) {
+    new Thing(x, y, z) with Metal with Cylinder {
+      val width = event.get("rectangle").get("width")
+      val height = event.get("rectangle").get("height")
+    }
+  } else if (event.contains("paper") && event.contains("cylinder")) {
+    new Thing(x, y, z) with Metal with Cylinder {
+      val height = event.get("cylinder").get("height")
+      val radius = event.get("cylinder").get("height")
+    }
+  } else if (event.contains("paper") && event.contains("rectangle")) {
+    new Thing(x, y, z) with Metal with Cylinder {
+      val width = event.get("rectangle").get("width")
+      val height = event.get("rectangle").get("height")
+    }
+  }
+```
+
+It is obvious that such an instantiation is unsustainable since the number
+of lines grows exponentially with the number of dimensions. Unfortunately,
+there is currently no practical solution in Scala to cope with this
+problem. The vector of used component types must be specified after the `new`
+keyword.
+
+```
+  new X[0] with Y[0] with Z[0]
+  new X[1] with Y[0] with Z[0]
+  new X[0] with Y[1] with Z[0]
+  new X[1] with Y[1] with Z[0]
+  new X[0] with Y[0] with Z[1]
+  new X[1] with Y[0] with Z[1]
+  new X[0] with Y[1] with Z[1]
+  new X[1] with Y[1] with Z[1]
+```
+
+This problem is a tax for the Scala's strong static type system. The compiler
+guarantees the type-safety of the program, i.e. that the code always processes
+proper objects only.
+
+This problem may be a reason to try another language, like Python or Ruby,
+which are dynamic and allows modifying the type system at runtime.
+
+However, in contrast to Scala, these languages perform type system operations
+at runtime. It can a significant downside especially in the case of complex
+multidimensional domain mapping applications where the fact that the compiler
+checks that everything fits together is a substantial benefit.
+
+The solution of this pr
+type-safe runtime object composition, which is also the foundation for the
+type-based multidimensional domain mapping.
+
+```
+  new (X[0] or X[1] or ...) with (Y[0] or Y[1] or ...) with (Z[0] or Z[1] or ...)
+```
+
 
 The new context description and the new datasource
 
