@@ -68,7 +68,7 @@ It follows that during such processes some information, which could be potential
 used in a future development of the application, will be inevitably lost. In
 such a case, the processes will have to be redesigned to provide the required
 additional data and the protodata will have to re-processed. And it can, of course,
-consume a lot resources and time.
+consume a lot of resources and time.
 
 Second, if the protodata has character of a stream of events then any additional
 pre-processing could be a source of undesired delays.
@@ -81,12 +81,61 @@ may not be possible because of the diverse nature of contexts and their domain m
 Fourth, in the course of time when more contexts are implemented the system of
 processes will tend to become unmaintainable and resistant to refactoring.
 
-It seems that the only way to avoid the above-mentioned issues is to try to
-map the context domain onto the proto-domain, regardless of the diverse character
-of the two domains.
+It seems that the only way to bypass the above-mentioned issues is to try to
+directly map the context domain onto the proto-domain, regardless of the diverse character
+of the two domains, and avoid any intermediary processing.
 
-In the following paragraph I will present an example on which I would like to illustrate
-the problem as well as to sketch its solution.
+In the following paragraph I will present an example on which I would like
+to illustrate the described problem as well as to sketch its solution.
+The protodata in the example is data collected from a fictional airport scanner,
+which is able to recognize objects in baggage.
+
+####Utilizing Airport Scanner Logs
+
+For the sake of simplicity and clarity let us assume this fictional narrative:
+
+An airport outsources its security check procedure to a company operating
+high-tech scanners, which are able to recognize three and two-dimensional objects
+in baggage. After each scan the scanner creates a record describing the recognized
+objects in a baggage. The record is provided with some metadata and sent to
+a server at the mother company's premises through a wide-area network connection.
+
+The company's server receives a potent stream of such events from a number of
+installations at several airports. The event in the stream is stored into a clustered
+database, where it remains for one year. The stored events are not processed in
+any way, the only reason for storing the events follows from the contract with
+the airports, which obliges the company to keep the record for one year due to
+forensic purposes.
+
+A major limitation of the scanner is that it is able to classify baggage items
+only by their geometrical properties and material. The recognized item is described
+as a geometrical object with some information about its material. The item
+also contain some metadata such as the time of the scan and the scanner and
+baggage identifier.
+
+The contract itself does not forbid the company to use the scanner data commercially
+under the condition that such a usage reveals no private and sensitive information.
+
+Such data is a typical example of protodata. The owning company comes to a conclusion
+that the data cannot be easily utilized as such due its primitive character and
+possible infringement of the contract by selling it in the raw form to another
+subject, which could combine it with its own data and possibly misuse the insights
+by revealing sensitive information.
+
+
+
+
+
+Proto-domain overview
+- multifaceted
+
+The new context description
+
+The new datasource
+
+The context domain overview
+
+Mapping the context domain on the proto-domain
 
 Traits... fine-tuning
 
