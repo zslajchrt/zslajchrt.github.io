@@ -8,55 +8,85 @@ permalink: developing-protean-applications-part3
 ###Protodata
 
 Protodata can be described as a collection of diverse data objects having no immediate
-and meaningful use.
+and meaningful commercial use or value.
 
-Applying the above-mentioned knowledge matrix, the level of the data owner's
+It comes into existence usually as a by-product of some business activity,
+such as journal logs, but it may also be leftover of some shut down project or
+data acquired as part of some acquisition.
+
+Protodata may also be deliberately gathered for a longer period of time without
+any specific vision of its future use besides the owner's hope that such a large
+amount of data may become a gold-mine in the future.
+
+Applying the knowledge matrix introduced in the previous chapter, the level of the data owner's
 knowledge at this stage would correspond to categories *Known-Knowns* or *Known-Unknowns*,
-when the known values are insignificant or there is considerable risk embedded
-in the attempt to sell delicate data.
+when the known value is insignificant or there is considerable risk embedded
+in the attempt to sell data possibly containing delicate information.
 
-The lack of a usage means that there is no context within which the data objects
-could yield some information. The objects can be treated only as bare wrappers of
-intrinsic properties, i.e. properties that an object has of itself, independently
-of other objects, including its context. [1-WIKI]
+The lack of a usage means that there is **no context** within which the data objects
+in the protodata would yield some commercially or otherwise valuable information.
+The objects can be treated only as bare wrappers of intrinsic properties (i.e.
+properties that an object has of itself, independently of other objects,
+including its context. [1-WIKI])
 
-Only a small subset of the properties, if any, may be present in all
-data objects. It follows that the data objects cannot be classified or
-the classification would be rather trivial. Moreover, a new object may carry
-a new property, which can disrupt the current classification. Such problems
-suggest that classes may not be a suitable tool for the description of protodata.
+In order to utilize the protodata, it must be put into a novel context. It can
+be achieved, for instance, by combining the protodata with other, often apparently
+unrelated, data or with newly emerged information services.
 
+The owner's effort to find a new context for his protodata can go in two directions:
+To try to find
+1. something valuable
+2. anything valuable
 
-###Protodata -> Data + Context -> Information
+The first way is less difficult, since it evaluates existing contexts against the protodata.
+For example, a competition has developed a successful service using data that is
+somehow similar to ours. So we will examine our protodata whether it is able to
+yield similar, or possibly better, information if combined with other available
+data sources. This situation corresponds to the *Unknown-Knowns* epistemological
+category, since the owner knows the value of the information he would like to retrieve
+from the protodata.
 
-Trying to find
-1. Something valuable
-2. Anything valuable
+The second way is significantly more difficult, since its goal is to
+invent a new and original context, which would would become the market differentiator.
+This approach usually requires a longer research, while the results are highly uncertain.
+The knowledge category in this case corresponds to *Unknown-Unknowns*.
 
-Evaluating as many various contexts as possible.
-1. Existing (known) contexts
-2. New (unknown) contexts
+In any case, if some vital context is found it also comes with a new domain model.
+Although protodata may be accompanied by some metadata, i.e. having its own
+domain model - *proto-domain*, the context domain model may be so structurally
+and semantically different from the proto-domain that a direct mapping from
+the proto-domain to the context domain can be extremely difficult.
 
-Having a context it excludes some objects and adds some extrinsic properties
-to data objects, such as currency value. These new extrinsic properties
-reflect the fact that ...
+If such a situation occurs, the usual solution is to transform and normalize
+the protodata in such a way that the mapping will be easier. However, this
+approach has several drawbacks.
 
-. Combining intrinsic and extrinsic properties
-will allow unifying formerly distinct properties and thus reducing
-the dimensionality.
+First, transformations and normalizations are lossy processes by its nature.
+It follows that during such processes some information, which could be potentially
+used in a future development of the application, will be inevitably lost. In
+such a case, the processes will have to be redesigned to provide the required
+additional data and the protodata will have to re-processed. And it can, of course,
+consume a lot resources and time.
 
-The context should reduce the number of dimensions as much as possible. Then,
-all eligible (included) objects will be presented as uniform entities to any
-behavior in the framework of the context.
+Second, if the protodata has character of a stream of events then any additional
+pre-processing could be a source of undesired delays.
 
-This uniformity of eligible objects is represented by a single class containing
-one or more properties, either the extrinsic properties, such as the currency value,
-or some original intrinsic properties, if found useful or necessary.
+Third, when another useful context is found, new transforming routes will have
+to be established, which will put another burden on the infrastructure.
+Moreover, reusing the processes already established for the existing contexts,
+may not be possible because of the diverse nature of contexts and their domain models.
+
+Fourth, in the course of time when more contexts are implemented the system of
+processes will tend to become unmaintainable and resistant to refactoring.
+
+It seems that the only way to avoid the above-mentioned issues is to try to
+map the context domain onto the proto-domain, regardless of the diverse character
+of the two domains.
+
+In the following paragraph I will present an example on which I would like to illustrate
+the problem as well as to sketch its solution.
 
 Traits... fine-tuning
-
-The contents of a wallet. It is essentially impossible to classify the items
-in the wallet into a hierarchy.
 
 Typically, the owner of protodata has currently no use of it.
 
