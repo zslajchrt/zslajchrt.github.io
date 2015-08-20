@@ -44,7 +44,7 @@ somehow similar to ours. So we will examine our protodata whether it is able to
 yield similar, or possibly better, information if combined with other available
 data sources. This situation corresponds to the *Unknown-Knowns* epistemological
 category, since the owner knows the value of the information he would like to retrieve
-from the protodata.
+from the protodata, however, it is still unknown, it there is such information.
 
 The second way is significantly more difficult, since its goal is to
 invent a new and original context, which would would become the market differentiator.
