@@ -444,8 +444,20 @@ The previous type expresses in one line all combinations of forms that an item
 can assume. Adding a new dimension or a new type in an existing dimension does
 not cause a code explosion.
 
+To support such a kind of expression in applications, there must be some extension
+in the language platform, especially in the compiler and type system sections.
+
+There must also be an extension enabling the alternative instantiation described
+above. This requirement follows from the procedure instantiating one of the
+possible alternatives. This procedure first determines the proper alternative
+in cooperation with the so-called *morphing strategy*. Then for each fragment
+constituting the selected alternative is obtained its instance. These instances
+are then composed into the final object. It is important to keep the fragment
+instances individually since the object can be *remorphed* to another one reusing
+some fragments, of which the original object is composed.
+
 The following code shows how such a complex type could be used to instantiate
-an item:
+an item (the code uses the real *Morpheus* code):
 
 ```scala
   val itemKernel = compose[Thing with (Paper or Metal) with (Rectangle or Cylinder)]
@@ -458,6 +470,7 @@ an item:
 
 Without delving too much into the details, the program flow can be described
 this way:
+
 First, the `compose` operator creates the so-called kernel for the type specified
 in the brackets. The kernel 'knows' all the alternative forms which an item
 can assume. It also holds factories for instantiating individual fragments, of
