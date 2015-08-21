@@ -82,7 +82,7 @@ Fourth, in the course of time when more contexts are implemented the system of
 processes will tend to become unmaintainable and resistant to refactoring.
 
 It seems that the only way to bypass the above-mentioned issues is to try to
-directly map the context domain onto the proto-domain, regardless of the diverse character
+**map directly** the context domain onto the proto-domain, regardless of the diverse character
 of the two domains, and avoid any intermediary processing.
 
 In the following paragraph I will present an example on which I would like
@@ -201,7 +201,7 @@ and similar patterns such as decorator, adapter, state, strategy, proxy, bridge.
 
 The problem of object schizophrenia is discussed in more detail here [LINK: Object schizophrenia].
 
-On the other hand, let us see how the model looks if the language offers traits.
+On the other hand, let us see how the model looks if the language offers traits [LINK].
 In contrast to the no-trait model, here the `Thing` type and the two dimensions
 are separated. The composition is deferred until the moment of the creation of a new
 item.
@@ -234,7 +234,7 @@ Then the item can be tested with `isInstaceOf`, which is analogous to Java's
 Now, it is possible to determine the exact type, i.e. what the object exactly is. The reason
 is that the identity is no longer scattered among more instances but the item only.
 
-Furthermore, one can use composite types to test instances like in the following code:
+Furthermore, one can also use composite types to test instances:
 
 ///Code 6
 ```scala
@@ -245,10 +245,40 @@ The absence of the object schizophrenia in models is the key feature when
 the direct mapping between two distinct multidimensional domain models, as
 shown later in this text [WHERE].
 
-The absence of traits makes the multidimensional mapping based on types almost impossible.
-Intuitively, the mapping subsystem must be able to recognize the individual concrete
-types in all dimensions of objects in the target domain (proto-domain) to map
-correctly the objects from the source domain (context domain).
+The next two pieces of code illustrate the problem. Both determine
+whether the item represents a rectangular paper. If so, the banknote database
+is requested to try to find the corresponding banknote.
+
+```java
+  if ((item.material instanceof Paper) && (item.shape instanceof Rectangle)) {
+    return banknotesDb.findBanknote((Rectangle)item.shape);
+  }
+```
+
+```scala
+  item match {
+    case prItem: Paper with Rectangle =>
+      banknotesDb.findBanknote(prItem)
+    case _ => None  
+  }
+```
+
+The Java mapper must evaluate the types of the two item's attributes `material` and
+`shape` in order to determine the "type" of the item itself. Thus, this mapper
+must inevitably understand the structure of the item.
+
+On the other hand, the Scala mapper makes do with the item itself and does not
+need any knowledge of the item's internal structure. Since `prItem` is an instance
+of `Paper with Rectangle` it is possible to pass it to `findBanknote`, which
+accepts instances of `Rectangle`.
+
+The difference becomes very important when building a tool for domain mapping.
+Ideally, all information about what the objects in the domains **are** should
+be retrieved from the **type system** of the language only with no evaluation
+of the objects' state at all. In such a case the mapper can be considered an
+extension of the language's type system (and the compiler). It would have a
+important consequence that domain mapping schemas could be type-checked for
+correctness and type safety at compile-time.
 
 Before going further, we should closer examine how actually a new multidimensional
 instance is created from external data in Scala.
@@ -287,44 +317,167 @@ as shown in the following snippet.
 ```
 
 It is obvious that such an instantiation is unsustainable since the number
-of lines grows exponentially with the number of dimensions. Unfortunately,
+of lines (boilerplate) grows exponentially with the number of dimensions. Unfortunately,
 there is currently no practical solution in Scala to cope with this
-problem. The vector of used component types must be specified after the `new`
-keyword.
+problem. It is, after all, a phenomenon tightly connected with static
+type systems.
 
-```
-  new X[0] with Y[0] with Z[0]
-  new X[1] with Y[0] with Z[0]
-  new X[0] with Y[1] with Z[0]
-  new X[1] with Y[1] with Z[0]
-  new X[0] with Y[0] with Z[1]
-  new X[1] with Y[0] with Z[1]
-  new X[0] with Y[1] with Z[1]
-  new X[1] with Y[1] with Z[1]
-```
+Let us have a closer look at this problem. It is required that every item
+must provide information about what it is through the type system only and
+not from the item's state. In other words this information must be encoded
+in the class of which the item is an instance. It follows that there must be
+as many classes in the system as the number of all possible forms which
+an item can assume.
 
-This problem is a tax for the Scala's strong static type system. The compiler
-guarantees the type-safety of the program, i.e. that the code always processes
-proper objects only.
+Next, there are only two ways to define a class. Either it is compiled from its
+definition in the source code, or it is generated. Application developers normally
+use the former way only, while the latter is there for framework developers.
 
-This problem may be a reason to try another language, like Python or Ruby,
-which are dynamic and allows modifying the type system at runtime.
+If we momentarily forget the possibility to generate classes then the source
+code must inevitably contain all possible composite class declarations allowed
+by the domain model. Such explicit declarations can assume basically two forms.
+The concrete one:
 
-However, in contrast to Scala, these languages perform type system operations
-at runtime. It can a significant downside especially in the case of complex
-multidimensional domain mapping applications where the fact that the compiler
-checks that everything fits together is a substantial benefit.
-
-The solution of this pr
-type-safe runtime object composition, which is also the foundation for the
-type-based multidimensional domain mapping.
-
-```
-  new (X[0] or X[1] or ...) with (Y[0] or Y[1] or ...) with (Z[0] or Z[1] or ...)
+```scala
+class ThingPaperRectangle extends Thing with Paper with Rectangle
 ```
 
+or an anonymous one, which is a part of the initialization statement:
 
-The new context description and the new datasource
+```scala
+new Thing with Paper with Rectangle
+```
+
+In any case, for all coordinates in the multidimensional space there is exactly
+one distinct composite class declarations.
+
+On one hand we need composite classes since their instances carry complete information about
+themselves (what they are). On the other hand, using the standard means of statically
+typed languages leads to the excessive amount of boilerplate and large number
+of classes.
+
+In order to find a solution it is necessary not only to take into account
+the generation, but also to rethink how instances are created from classes.
+
+The traditional approach in all class-oriented languages follows this instantiation
+schema:
+
+```
+   class -> class instance
+```
+
+In other words, the class precedes its instances, which sounds logical.
+
+However, it is possible to consider other, a more general schema, which introduces
+the concept of *fragment*. The fragment can be seen as a weaker version of
+the class. It may or may not be concrete, however, even if it is abstract, it can
+be instantiated in contrast to an abstract class. Such abstract fragment instances
+can have state but cannot be used independently.
+
+The alternative instantiation schema employs fragments and is expressed in the following
+causal chain:
+
+```
+   fragments -> fragment instances -> composite class -> composite class instance
+```
+
+The schema can interpreted as follows: Fragments and possibly also their
+instances exist in the system even before there exists any class. All classes
+in the system are compositions of one or more fragments and all instances of
+such classes are compositions of corresponding fragment instances.
+
+Let us examine the behavior of the proposed mechanism in the simplest case:
+
+```
+   x = instantiate X("Hello")
+```
+
+The `instantiate` procedure starts with looking for fragment `X` in the system. The system
+responds by returning a factory for obtaining an instance of `X`, otherwise an exception
+is raised. Then the factory returns the instance, which is immediately returned as
+the result of the procedure. The procedure assumes that the compiler has already
+done all necessary checks so that it can simply return the fragment instance.
+In this case there is no need for generating a composite class since there is
+only one fragment involved in the instantiation.
+
+Let us examine now a more complex example.
+
+```
+  xy = instantiate X("Hello"), Y
+```
+
+Now the procedure starts looking for fragments `X` and `Y` and obtains their instances.
+Since now the target class is a composition of `X` and `Y`, the class loader is asked
+to load and possibly generate the class. Then an instance of this class is composed
+from the instances of fragments `X` and `Y`. Since there is no constructor argument
+list specified for Y it can be interpreted as a signal to not create a new instance
+and instead to use a cached fragment instance (e.g. a singleton).
+
+Note: Fragments should be considered having no identity until after the instantiation
+procedure finishes.
+
+Now when the alternative concept of instantiation has been introduced, it can
+be used to solve the problem of the exponential growth of code.
+
+The solution stems from the idea to express the multidimensionality of a domain
+object as a type. It is actually an extension of the traditional way of expressing
+object types. For example the following expression refers to a simple type:
+
+```scala
+  Thing
+```
+
+and this expression refers to a composition of three type.
+
+```scala
+  Thing with Paper with Cylinder
+```
+
+It would be nice if another type expression could be constructed to refer to a type
+containing alternatives (a sort of union).
+
+```scala
+  Thing with (Paper or Metal) with (Rectangle or Cylinder)
+```
+
+The previous type expresses in one line all combinations of forms that an item
+can assume. Adding a new dimension or a new type in an existing dimension does
+not cause a code explosion.
+
+The following code shows how such a complex type could be used to instantiate
+an item:
+
+```scala
+  val itemKernel = compose[Thing with (Paper or Metal) with (Rectangle or Cylinder)]
+  val item = itemKernel.morph(new ItemBuilder(scanEvent)) // ItemBuilder determines the final form of the item
+
+  assert(true, item.isInstaceOf[Thing with Material with Shape])
+
+  val maybeBanknote = item.isInstaceOf[Paper with Rectangle] // true or false
+```
+
+Without delving too much into the details, the program flow can be described
+this way:
+First, the `compose` operator creates the so-called kernel for the type specified
+in the brackets. The kernel 'knows' all the alternative forms which an item
+can assume. It also holds factories for instantiating individual fragments, of
+which the type is composed.
+
+Second, the item is instantiated by invoking `morph` method on the kernel.
+Since there are a number of possible alternatives, the kernel needs a companion,
+which helps him to determine the rigth alterantive. The `ItemBuilder` is such
+a companion which selects the correct alternative according to the `scanEvent`
+passed as the argument to its constructor.
+
+Third, the returned object is always an instance of type `Thing with Material with Shape`,
+which is the lowest common ancestor type of all alternative types.
+
+Fourth, the item can be checked whether it is a certain combination of
+concrete types by means of `isInstanceOf` method as usual.
+
+The complete code including the initialization is discussed later.
+
+#####New Context Domain For Protodata
 
 /// Figure 5: The context domain diagram
 
