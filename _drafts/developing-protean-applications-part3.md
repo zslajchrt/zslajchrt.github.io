@@ -173,7 +173,9 @@ The following diagram depicts the classes and traits involved in the protodata
 domain.
 
 /// Figure 2: Protodata sample model
+<div>
 <img src="http://zslajchrt.github.io/resources/scannerModel.png" width="560" />
+</div>
 
 Modeling in multidimensional objects in languages, which do not include traits
 or similar concepts, may become rather difficult and the resulting model may not
@@ -181,7 +183,9 @@ appropriately grasp the reality. For example in Java, which has no equivalent
 to traits, we would have to substitute traits with interfaces and delegation.
 
 /// Figure 3: No-traits diagram
+<div>
 <img src="http://zslajchrt.github.io/resources/itemNoTraits.png" width="560" />
+</div>
 
 Considering this model, a new item can be created as follows.
 
@@ -235,7 +239,9 @@ are separated. The composition is deferred until the moment of the creation of a
 item.
 
 /// Figure 4: Traits diagram
+<div>
 <img src="http://zslajchrt.github.io/resources/itemTraits.png" width="560" />
+</div>
 
 The following code shows how such a creation with the deferred composition can
 look like.
@@ -477,7 +483,9 @@ historical world currencies including physical properties.
 The domain model of the new context is depicted on the following diagram:
 
 /// Figure 5: The context domain diagram
-<img src="http://zslajchrt.github.io/resources/currencyModel.png" width="560" />
+<div>
+<img src="http://zslajchrt.github.io/resources/currencyModel.png" width="400" />
+</div>
 
 The basic logic of the currency flow analysis is very simple. It scans a segment
 of the protodata corresponding to the selected time period and it attempts to
@@ -506,7 +514,9 @@ luggage items and records in the currency database.
 The mapping between the currency and luggage items domain is sketched on the following diagram.
 
 /// Figure 6: Mapping context domain to proto-domain diagram
-<img src="http://zslajchrt.github.io/resources/itemCurrencyMap.png" width="560" />
+<div>
+<img src="http://zslajchrt.github.io/resources/itemCurrencyMap.png" width="450" />
+</div>
 
 Each concrete type in the target domain is mapped to a subset of source domain
 concrete types. Moreover, this mapping is *orthogonal* since all these
