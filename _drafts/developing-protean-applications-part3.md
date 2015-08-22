@@ -184,7 +184,7 @@ to traits, we would have to substitute traits with interfaces and delegation.
 
 /// Figure 3: No-traits diagram
 <div>
-<img src="http://zslajchrt.github.io/resources/itemNoTraits.png" width="560" />
+<img src="http://zslajchrt.github.io/resources/itemNoTraits.png" width="500" />
 </div>
 
 Considering this model, a new item can be created as follows.
