@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part3
 ---
 
-<img src="http://zslajchrt.github.io/resources/itemTraits.png" width="200" height="200" />
+<img src="http://zslajchrt.github.io/resources/itemTraits.png" width="320" />
 
 ###Protodata
 
