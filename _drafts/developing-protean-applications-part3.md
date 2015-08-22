@@ -484,7 +484,7 @@ The domain model of the new context is depicted on the following diagram:
 
 /// Figure 5: The context domain diagram
 <div>
-<img src="http://zslajchrt.github.io/resources/currencyModel.png" width="400" />
+<img src="http://zslajchrt.github.io/resources/currencyModel.png" width="350" />
 </div>
 
 The basic logic of the currency flow analysis is very simple. It scans a segment
