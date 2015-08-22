@@ -363,7 +363,7 @@ If we momentarily forget the possibility to generate classes then the source
 code must inevitably contain all possible composite class declarations allowed
 by the domain model. Such explicit declarations can assume basically two forms.
 
-The concrete one:
+The concrete one (using Scala notation):
 
 ```scala
 class ThingPaperRectangle extends Thing with Paper with Rectangle

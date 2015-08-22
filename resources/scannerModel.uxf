@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>170</y>
+      <w>210</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>item0
+--
+id = 0
+shape = cylinder
+material = metal
+x = 234.87
+y = 133.4
+z = 12.94
+diameter = 13.45
+height = 0.45
+reflexivity = 0.8
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>170</y>
+      <w>210</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>item1
+--
+id= 1
+shape = rectangle
+material = paper
+x = 673.87
+y = 394.4
+z = 132.93
+width = 13.45
+height = 0.45
+reflexivity = 0.2
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>570</x>
+      <y>170</y>
+      <w>210</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>item2
+--
+id= 2
+shape = rectangle
+material = metal
+x = 294.87
+y = 123.4
+z = 10.93
+width = 23.45
+height = 22.45
+reflexivity = 0.9
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>370</x>
+      <y>50</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>luggage
+--
+id = 8488484</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>90</y>
+      <w>260</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>240.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>90</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>90</y>
+      <w>290</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;270.0;80.0</additional_attributes>
+  </element>
+</diagram>
