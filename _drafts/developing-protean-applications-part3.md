@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part3
 ---
 
-![My helpful screenshot]({{ site.url }}/resources/itemTraits.png)
+![My helpful screenshot]({{ url }}/resources/itemTraits.png)
 
 ###Protodata
 
