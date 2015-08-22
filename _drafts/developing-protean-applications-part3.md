@@ -57,7 +57,7 @@ In any case, if some vital context is found it also comes with a new domain mode
 Although protodata may be accompanied by some metadata, i.e. having its own
 domain model - *proto-domain*, the context domain model may be so structurally
 and semantically different from the proto-domain that a direct mapping from
-the proto-domain to the context domain can be extremely difficult.
+the proto-domain to the context domain can be difficult.
 
 If such a situation occurs, the usual solution is to transform and normalize
 the protodata in such a way that the mapping will be easier. However, this
@@ -84,6 +84,32 @@ processes will tend to become unmaintainable and resistant to refactoring.
 It seems that the only way to bypass the above-mentioned issues is to try to
 **map directly** the context domain onto the proto-domain, regardless of the diverse character
 of the two domains, and avoid any intermediary processing.
+
+Furthermore, since the type systems of advanced programming languages are
+powerful enough to grasp the complex nature of domain objects, domain models
+should model the objects by type as much as possible and not by state.
+
+If domain objects are modeled by state then the objects' character,
+i.e. what the objects are, is retrieved from the properties of the objects. For
+example in Java, more complex objects with multidimensional character must
+be modeled by means of delegation, which is de-facto a modeling by state, as shown
+in the next paragraph.
+
+If domain objects are modeled by type then the objects' character is retrieved
+from their type. This approach has many benefits, since a lot of responsibilities
+can be delegated on the type system. Additionally, if the language is static,
+many possible errors can be discovered at compile-time.
+
+Languages like Scala or Groovy [LINK] come with the concept of trait, which
+is very useful to model diverse nature of complex objects by type.
+
+The main goal of this work (Morpheus) is to prove that it is possible to construct
+a domain mapper as an extension of the language platform. In other words, the mapper
+becomes integrated with the language itself in contrast to other mapping tools [LINK],
+which are built on top the language. It will also be shown that such a mapper
+inherits the nice properties of static and statically typed languages such as
+type-safety and early discovery of errors, i.e. the mapping schemas are validated
+at compile-time.
 
 In the following paragraph I will present an example on which I would like
 to illustrate the described problem as well as to sketch its solution.
@@ -336,6 +362,7 @@ use the former way only, while the latter is there for framework developers.
 If we momentarily forget the possibility to generate classes then the source
 code must inevitably contain all possible composite class declarations allowed
 by the domain model. Such explicit declarations can assume basically two forms.
+
 The concrete one:
 
 ```scala
@@ -356,8 +383,193 @@ themselves (what they are). On the other hand, using the standard means of stati
 typed languages leads to the excessive amount of boilerplate and large number
 of classes.
 
-In order to find a solution it is necessary not only to take into account
-the generation, but also to rethink how instances are created from classes.
+In order to find a solution we must not only take into account
+the generation, but also consider some extension of the type system.
+
+The solution stems from the idea to express the multidimensionality of a domain
+object as a type. It is actually an extension of the traditional way of expressing
+object types. For example the following expression refers to a simple type:
+
+```scala
+  Thing
+```
+
+and this expression refers to a composition of three type.
+
+```scala
+  Thing with Paper with Cylinder
+```
+
+It would be nice if another type expression could be constructed to refer to a type
+containing alternatives (a sort of union).
+
+```scala
+  Thing with (Paper or Metal) with (Rectangle or Cylinder)
+```
+
+The previous type expresses in one line all combinations of forms that an item
+can assume. Adding a new dimension or a new type to an existing dimension does
+not cause a code explosion.
+
+To support such a kind of expression in applications, there must be some extension
+in the language platform, especially in the compiler and type system sections.
+
+The following code shows how such a complex type could be used to instantiate
+an item (the code uses the real *Morpheus* code):
+
+```scala
+  val itemKernel = compose[Thing with (Paper or Metal) with (Rectangle or Cylinder)]
+  val item = itemKernel.morph(new ItemBuilder(scanEvent)) // ItemBuilder determines the final form of the item
+
+  assert(true, item.isInstaceOf[Thing with Material with Shape])
+
+  val maybeBanknote = item.isInstaceOf[Paper with Rectangle] // true or false
+```
+
+Without delving too much into the details, the program flow can be described
+this way:
+
+First, the `compose` operator creates the so-called kernel for the type specified
+in the brackets. The kernel 'knows' all the alternative forms which an item
+can assume. It also holds factories for instantiating individual fragments, of
+which the type is composed.
+
+Second, the item is instantiated by invoking `morph` method on the kernel.
+Since there are a number of possible alternatives, the kernel needs a companion,
+which helps him to determine the right alternative. The `ItemBuilder` is such
+a companion which selects the correct alternative according to the `scanEvent`
+passed as the argument to its constructor.
+
+Third, the returned object is always an instance of type `Thing with Material with Shape`,
+which is the lowest common ancestor type of all alternative types.
+
+Fourth, the item can be checked whether it is a certain combination of
+concrete types by means of `isInstanceOf` method as usual.
+
+The complete code including the initialization is discussed later.
+
+For the sake of further analysis let us assume that at this stage the multidimensional
+protodata can be modeled by means of the extended system system sketched above.
+
+#####New Context Domain For Protodata
+
+Now we turn our attention back to the airport scanner protodata and the effort
+to find some use for it.
+
+Let us assume that someone comes up with an idea to build an application performing
+some analytics of the luggage contents and publishing the insights via a web portal
+to customers, which could be for example the statistics bureau, economic chambers
+or customs.
+
+As the first analysis the application will publish the aggregate amount of cash
+detected in luggage per some time period.
+
+Such a task requires that the application be able to recognize coins and banknotes
+among luggage items. Considering the scanner protodata contains information
+about the shape and material only, it seems inevitable to use other source to
+detect reliably coins and banknotes. Such a source can be a database of
+international currencies containing comprehensive information about current and
+historical world currencies including physical properties.
+
+The domain model of the new context is depicted on the following diagram:
+
+/// Figure 5: The context domain diagram
+
+The basic logic of the currency flow analysis is very simple. It scans a segment
+of the protodata corresponding to the selected time period and it attempts to
+convert each luggage item into a currency. Such a set of currency objects is then
+aggregated into a statistical report and published on the portal.
+
+The only missing part is now the conversion of the item to a currency object. This
+task is analyzed in the next paragraph.
+
+#####Mapping the context domain on the proto-domain
+
+The goal of the mapping is to bind the objects from the target domain to
+the objects from the source domain in order to avoid any intermediary processes
+normalizing and transforming the source domains objects into the target domain ones.
+
+Furthermore, since the type systems of advanced programming languages are
+powerful enough to grasp the complex nature of domain objects, domain models
+should use primarily the type system to model the objects.
+
+Here, the source domains are the scanner protodata and the currency database, while
+the target domain is the currency context. The mapping declares how an object
+from the target domain can be bound to objects from the source domains. Particularly,
+the mapping in this example contains rules for mapping coins and banknotes to
+luggage items and records in the currency database.
+
+The mapping between the currency and luggage items domain is sketched on the following diagram.
+
+/// Figure 6: Mapping context domain to proto-domain diagram
+
+Each concrete type in the target domain is mapped to a subset of source domain
+concrete types. Moreover, this mapping is *orthogonal* since all these
+subsets do not overlap with one another.
+
+Since the mapping should utilize primarily the capabilities of the underlying
+type system, the rules should be declared by means of type expressions
+composed of the trait types defined in the source and target domains.
+
+Let us try to formally declare the mapping rules for coins and banknotes:
+
+```
+  Coin -> {Metal, Cylinder}
+  Banknote -> {Paper, Rectangle}
+```
+
+In other words, these rules say that a coin is a metal cylinder and a banknote
+is a paper rectangle. Of course, such definitions are far from complete. Not
+every metal cylinder is a coin.
+
+This is the moment, when the auxiliary currency database is used to complete the missing
+parts in the definitions.
+
+We can declare that a metal cylinder is a coin if the currency database contains
+a coin record, whose physical properties correspond to that of the metal cylinder,
+of course, within some predefined margin of error.
+
+To reflect these additional constraints the Coin mapping rule can be completed as follows:
+
+```
+  Coin -> {m: Metal, c: Cylinder, ce: CoinExemplar(radius = c.diameter/2, thickness = c.height)}
+```
+
+The rule for Coin is now a composition of three components and can be seen as
+a template for valid Coin instances demanding existence of the three constituting
+components.
+
+If an item being mapped to a coin is a metal cylinder, then the existence of
+the first two components is fulfilled automatically. However, the existence of
+the third component must be confirmed by a lookup in the currency database.
+
+Every component is annotated with an identifier, which can be used in expressions
+constraining property values in other components such as `radius` and `thickness` in
+CoinExemplar.
+
+*Note: Since the resulting object is a composition of three existing object from the source
+domains there is no lost of information, even if the target object exposes only
+some of it. The complete information is encapsulated in the target object and
+some future minor changes in the domain code can make accessible.*
+
+Once the existence of all components is confirmed, the new object can be made
+up of its components. The constituting components are deprived of their identity
+in behalf of the newly composed entity. It is necessary in order to prevent
+the object schizophrenia.
+
+Unfortunately, the described process of object identity deprivation is impossible
+or very difficult to carry out, especially in statically typed languages. [LINKS, DCI etc.]
+Once an object is instantiated it keeps its identity until its destruction. There
+is no concept of 'identity deprivation' or 'getting rid of identity'.
+The only way to compose an object of other already existing objects is to use
+delegation, which immediately leads to object schizophrenia and thus to the inability
+to determine the object's character from its type.
+
+Therefore, to make the direct mapping based on type modeling feasible it is
+necessary to rethink the process of instantiation in programming languages and
+and come up with some alternative.
+
+#####Alternative Instantiation Process
 
 The traditional approach in all class-oriented languages follows this instantiation
 schema:
@@ -415,353 +627,3 @@ and instead to use a cached fragment instance (e.g. a singleton).
 
 Note: Fragments should be considered having no identity until after the instantiation
 procedure finishes.
-
-Now when the alternative concept of instantiation has been introduced, it can
-be used to solve the problem of the exponential growth of code.
-
-The solution stems from the idea to express the multidimensionality of a domain
-object as a type. It is actually an extension of the traditional way of expressing
-object types. For example the following expression refers to a simple type:
-
-```scala
-  Thing
-```
-
-and this expression refers to a composition of three type.
-
-```scala
-  Thing with Paper with Cylinder
-```
-
-It would be nice if another type expression could be constructed to refer to a type
-containing alternatives (a sort of union).
-
-```scala
-  Thing with (Paper or Metal) with (Rectangle or Cylinder)
-```
-
-The previous type expresses in one line all combinations of forms that an item
-can assume. Adding a new dimension or a new type in an existing dimension does
-not cause a code explosion.
-
-To support such a kind of expression in applications, there must be some extension
-in the language platform, especially in the compiler and type system sections.
-
-There must also be an extension enabling the alternative instantiation described
-above. This requirement follows from the procedure instantiating one of the
-possible alternatives. This procedure first determines the proper alternative
-in cooperation with the so-called *morphing strategy*. Then for each fragment
-constituting the selected alternative is obtained its instance. These instances
-are then composed into the final object. It is important to keep the fragment
-instances individually since the object can be *remorphed* to another one reusing
-some fragments, of which the original object is composed.
-
-The following code shows how such a complex type could be used to instantiate
-an item (the code uses the real *Morpheus* code):
-
-```scala
-  val itemKernel = compose[Thing with (Paper or Metal) with (Rectangle or Cylinder)]
-  val item = itemKernel.morph(new ItemBuilder(scanEvent)) // ItemBuilder determines the final form of the item
-
-  assert(true, item.isInstaceOf[Thing with Material with Shape])
-
-  val maybeBanknote = item.isInstaceOf[Paper with Rectangle] // true or false
-```
-
-Without delving too much into the details, the program flow can be described
-this way:
-
-First, the `compose` operator creates the so-called kernel for the type specified
-in the brackets. The kernel 'knows' all the alternative forms which an item
-can assume. It also holds factories for instantiating individual fragments, of
-which the type is composed.
-
-Second, the item is instantiated by invoking `morph` method on the kernel.
-Since there are a number of possible alternatives, the kernel needs a companion,
-which helps him to determine the rigth alterantive. The `ItemBuilder` is such
-a companion which selects the correct alternative according to the `scanEvent`
-passed as the argument to its constructor.
-
-Third, the returned object is always an instance of type `Thing with Material with Shape`,
-which is the lowest common ancestor type of all alternative types.
-
-Fourth, the item can be checked whether it is a certain combination of
-concrete types by means of `isInstanceOf` method as usual.
-
-The complete code including the initialization is discussed later.
-
-#####New Context Domain For Protodata
-
-/// Figure 5: The context domain diagram
-
-The context domain overview
-
-Mapping the context domain on the proto-domain
-
-/// Figure 6: Mapping context domain to proto-domain diagram
-
-////////////////////////////////////////////////////////
-
-Traits... fine-tuning
-
-Typically, the owner of protodata has currently no use of it.
-
-The God Must Be Crazy
-
-intrinsic properties: shape, material, size, weight ...
-
-```
-              Shape
-    Circle   Rectangle  Other
-```
-
-```
-             Material
-    Plastic      Paper     Metal
-```
-
-```
-            Polymer
-  PVC  Polystyrene Polypropylene ...
-```
-
-```
-        Plastics Classification
-  Thermoset   Thermoplastic   Elastomers
-```
-
- without having some intention of using them.
-
-The contents of a wallet - banknotes, coins, vouchers, paychecks, receipts, tickets, business cards, credit cards, notes.
-What can they be used for?
-
-I need to pay for something: {banknotes, coins, vouchers, paychecks, credit cards}
-Evaluated attributes: {value/balance, currency}
-Possible targets: {whole range of goods, services, fines etc.}
-
-I need to make a quick note on something: {vouchers, banknotes, receipts, tickets, notes}.
-Evaluated attributes: {empty white space, surface}
-Possible targets: {a phone number, a rhyme, an idea}
-
-I need to open something: {coins, credit cards, business cards}
-Evaluated attributes: {thickness, hardness}
-Possible targets: {mobile, bolt, can ...}
-
-I need to find a phone number: {receipts, business cards, notes, tickets}
-Evaluated attributes: {phone, label}
-Possible targets: {taxi, friend, theatre, office, shop, police ...}
-
-The actual behavior in each scenario depends on objects in the wallet as well as
-on the concrete purpose, i.e. the target. For instance, if I am going to pay for a cup of coffee (the target)
-I will use rather coins or smaller banknotes, if I have any, than big banknotes or paychecks.
-
-In each example there are two sources of behavioral mutability: the diversity of the wallet
-objects and that of the targets.
-
-Of course, there may exist scenarios with more sources of mutability
-such as the context of the scenario (I will not use the coins to pay for the coffee
-since I have to use them to purchase a tram ticket at a ticket machine).
-
-There is no apparent hierarchy (tree). The hierarchy emerges only after we know
-for what we want to use it.
-
-data instances (objects) differ on the syntax (physical) level (data level), however,
-they carry the same kind of information.
-
-The same protean data can carry more kinds of information.
-
-carrying the same information => ability to play a role in an interaction
-
-####Commonalities vs. Distinctions
-
-All objects eligible for a scenario must be able to yield the same kind
-of information required by the scenario. All objects may provide such information
-through different attributes whose values may be encoded in distinct formats.
-
-The shared information amount is indirectly proportional to the number of
-eligible object types, the so-called **domain size**. The bigger the domain
-size, the less shared information, however the better applicability of
-the **default behavior**.
-
-The default behavior handles all eligible objects in the same way and ignores
-their specifics, i.e. it works only with the **shared attributes**.
-
-Further, the amount of the shared information among the objects positively
-influences the **fitness** of the default behavior of the scenario. The smaller
-the domain, the more shared information and the fitter default behavior.
-Unfortunately, it results in worse applicability.
-
-Obviously, banknotes and coins have more in common than banknotes, coins and credit cards.
-The default payment procedure for banknotes and coins only can theoretically take
-into account the physical properties of the currency in order to organize
-the weight and space in the wallet. Such properties make no sense for
-credit cards, since they remain in the wallet after the payment.
-
-It may happen, however, that the customer will not be able to pay for the goods since
-his 'perfect' space-optimizing payment default behavior does not know how to use
-a credit card.
-
-Since the to maximize the applicability of the
-
-composition, adaptive behavior
-
-The less the domain size,
-the bigger the information share, the fewer exceptions and the fitter the default behavior.
-
-Conclusion: The fitness of the default behavior and the domain size of a scenario
-are contradictory qualities.
-
-sharing the same information = commonality
-
-"stupid" behavior
-
-the behavior should reflect the actual objects
-
-
-###Identifying Users
-
-The GigaMail service is only available for those who are registered or are
-employee of the Big Company.
-
-A user visiting the service is requested to sign in or register. An employee
-is not required to register since his or her profile is retrieved from the
-company's internal database.
-
-After signed in, the user is associated with his or her profile, which can
-have two forms: the registered user's profile or the employee's profile.
-
-```json
-{
-  "public": {
-    "nick": "joe4",
-    "firstName": "Joe4",
-    "lastName": "Doe4",
-    "email": "joe4@gmail.com",
-    "male": true,
-    "birthDate": "1971-02-21T00:00:00Z"
-  },
-  "license": {
-    "premium": true,
-    "validFrom": "2015-02-21T00:00:00Z",
-    "validTo": "2016-02-21T00:00:00Z"
-  }
-}
-```
-
-This is an employee's record from the Big Company's internal database.
-
-```json
-{
-  "employee": {
-      "employeeCode": "xyz9000",
-      "position": "Developer",
-      "department": "R&D",
-      "personalData": {
-        "firstName": "Joe1",
-        "middleName": "D.",
-        "lastName": "Doe1",
-        "title": "Mr."
-      }
-    }
-}
-```
-
-###Modeling User Profiles
-
-```scala
-case class RegisteredUserPublic(nick: String, firstName: String, lastName: String, email: Option[String], male: Option[Boolean], birthDate: Option[Date])
-
-case class RegisteredUserLicense(premium: Boolean, validFrom: Date, validTo: Date)
-
-case class RegisteredUser(`public`: RegisteredUserPublic, license: Option[RegisteredUserLicense])
-```
-
-```scala
-case class EmployeePersonalData(firstName: String, middleName: Option[String], lastName: String, title: String, isMale: Boolean, birth: Date)
-
-case class Employee(employeeCode: String, position: String, department: String, personalData: EmployeePersonalData)
-```
-
-```scala
-@fragment
-trait RegisteredUserEntity {
-
-  protected var regUser: RegisteredUser = _
-
-  def registeredUser = regUser
-}
-
-@fragment
-trait EmployeeEntity {
-
-  protected var emp: Employee = _
-
-  def employee = emp
-}
-```
-
-```scala
-val regUserKernel = singleton[RegisteredUserEntity]
-println(regUserKernel.~.registeredUser) // prints null
-
-val empKernel = singleton[EmployeeEntity]
-println(empKernel.~.employee) // prints null
-```
-
-####Loading Profiles
-
-```scala
-@dimension
-trait UserDatasources {
-
-  def registeredUserJson: JValue
-
-  def employeeJson: JValue
-
-  def initSources(userId: String)
-}
-```
-
-```scala
-import org.morpheus.FragmentValidator._
-
-@fragment
-trait RegisteredUserLoader {
-  this: UserDatasources with RegisteredUserEntity =>
-
-  def load: ValidationResult[RegisteredUserEntity] = {
-    implicit val formats = DefaultFormats
-    this.registeredUserJson.extractOpt[RegisteredUser] match {
-      case Some(ru) =>
-        this.regUser = ru
-        success[RegisteredUserEntity]
-      case None =>
-        failure[RegisteredUserEntity]("invalid content")
-    }
-  }
-}
-```
-
-```scala
-val regUserLoaderRef: &[$[RegisteredUserLoader with UserDatasourcesMock]] = regUserKernel
-val regUserLoaderKernel = *(regUserLoaderRef, single[RegisteredUserLoader], single[UserDatasourcesMock])
-```
-
-TODO: include the link to the source code of UserDatasourcesMock
-
-```scala
-regUserLoaderKernel.~.initSources("4")
-regUserLoaderKernel.~.load match {
-  case Failure(_, reason) =>
-    sys.error(s"Cannot load registered user: $reason")
-  case Success(_) =>
-    println(regUserKernel.~.registeredUser)
-
-}
-```
-
-```scala
-val empKernel = singleton[EmployeeEntity]
-val empLoaderRef: &[$[EmployeeLoader with UserDatasourcesMock]] = empKernel
-// analogous to the previous code
-```
