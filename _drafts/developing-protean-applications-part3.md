@@ -5,6 +5,8 @@ comments: true
 permalink: developing-protean-applications-part3
 ---
 
+![My helpful screenshot]({{ site.url }}/resources/itemTraits.png)
+
 ###Protodata
 
 Protodata can be described as a collection of diverse data objects having no immediate
