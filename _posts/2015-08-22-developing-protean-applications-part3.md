@@ -123,9 +123,9 @@ whether it is `Thing` or `Material` by this operator, the result will always be 
 On the other hand, testing the item for being `Baggage` will never be true.
 
 ```java
-  boolean isThing = item instaceof Thing;       // always true
-  boolean isMaterial = item instaceof Material; // always true
-  boolean isBaggage = item instaceof Baggage;   // always false
+  boolean isThing = item instanceof Thing;       // always true
+  boolean isMaterial = item instanceof Material; // always true
+  boolean isBaggage = item instanceof Baggage;   // always false
 ```
 
 A problem arises when one wishes to check whether the item is metal. The following
@@ -133,7 +133,7 @@ statement will always be false regardless of the possibility that the item may
 be, or rather represent, a metal item.
 
 ```java
-  boolean isMetal = item instaceof Metal; // always false, even if the item is metal
+  boolean isMetal = item instanceof Metal; // always false, even if the item is metal
 ```
 
 By using `instanceof` we cannot find out more details about the real character
@@ -173,12 +173,12 @@ look like.
   }
 ```
 
-Then the item can be tested with `isInstaceOf`, which is analogous to Java's
+Then the item can be tested with `isInstanceOf`, which is analogous to Java's
 `instanceof`.
 
 ```scala
-  val isMetal = item.isInstaceOf[Metal]         // true
-  val isCylinder = item.isInstaceOf[Cylinder]   // true
+  val isMetal = item.isInstanceOf[Metal]         // true
+  val isCylinder = item.isInstanceOf[Cylinder]   // true
 ```
 
 Now, it is possible to determine the exact type, i.e. what the object exactly is. The reason
@@ -187,7 +187,7 @@ is that the identity is no longer scattered among more instances but the item on
 Furthermore, one can also use composite types to test instances:
 
 ```scala
-  val isMetal = item.isInstaceOf[Metal with Cylinder] // true or false
+  val isMetal = item.isInstanceOf[Metal with Cylinder] // true or false
 ```
 
 The absence of the object schizophrenia in models is the key feature when
@@ -343,9 +343,9 @@ an item (the code uses the real *Morpheus* code):
   val itemKernel = compose[Thing with (Paper or Metal) with (Rectangle or Cylinder)]
   val item = itemKernel.morph(new ItemBuilder(scanEvent)) // ItemBuilder determines the final form of the item
 
-  assert(true, item.isInstaceOf[Thing with Material with Shape])
+  assert(true, item.isInstanceOf[Thing with Material with Shape])
 
-  val maybeBanknote = item.isInstaceOf[Paper with Rectangle] // true or false
+  val maybeBanknote = item.isInstanceOf[Paper with Rectangle] // true or false
 ```
 
 Without delving too much into the details, the program flow can be described
