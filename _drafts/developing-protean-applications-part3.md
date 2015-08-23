@@ -27,7 +27,7 @@ The lack of a usage means that there is **no context** within which the data obj
 in the protodata would yield some commercially or otherwise valuable information.
 The objects can be treated only as bare wrappers of intrinsic properties (i.e.
 properties that an object has of itself, independently of other objects,
-including its context. [1-WIKI])
+including its context. [1](https://en.wikipedia.org/wiki/Intrinsic_and_extrinsic_properties))
 
 In order to utilize the protodata, it must be put into a novel context. It can
 be achieved, for instance, by combining the protodata with other, often apparently
@@ -653,14 +653,14 @@ is equivalent to a cartesian product of the so-called dimensions. A dimension
 represents an abstract trait of the object and consists of types implementing
 this trait.
 
-The new context is often found by evaluating the protodata against a new data source - the auxiliary data
+The new context may found by evaluating the protodata against a new data source - the auxiliary data
 
 The domain of the new context and the proto-domain can be structurally very
-distant, possibly orthogonal
+distant, possibly orthogonal.
 
 The protodata and the auxiliary data must be somehow adapted for the new context domain
 
-Transformation and normalization are lossy processes, thus it removes data which
+Transformation and normalization are lossy processes, thus they remove data, which
 the application could use in the future. Next, such a processing may cause delays
 and put additional burden on the infrastructure. In the course of time the transforming
 processes tend to become unmaintainable.
@@ -685,8 +685,8 @@ There more reasons for it:
    It can detect missing parts and makes the mapping schema robust against changes
    in the domain models.
    * **Early error discovery** - If a static language is used then the consistency
-   check and the verifications are carried out at the compile-time. This may
-   be instrumental in early discovering of possible inconsistencies in the mapping.
+   check and the verifications are carried out at compile-time. It follows that
+   possible errors and inconsistencies in the mapping may be caught early.
 
 Java's type system does not provide sufficient means to express the real character
 of objects by type. Therefore, designers must resort to the modeling of the object
