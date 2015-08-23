@@ -642,3 +642,71 @@ and instead to use a cached fragment instance (e.g. a singleton).
 
 Note: Fragments should be considered having no identity until after the instantiation
 procedure finishes.
+
+#####Summary
+
+A new context must be discovered in order for "useless" protodata to yield some value
+
+The data objects in the protodata may manifest the so-called *multidimensional polymorphism*.
+Multidimensional polymorphism means that the set of all forms, which an object can assume,
+is equivalent to a cartesian product of the so-called dimensions. A dimension
+represents an abstract trait of the object and consists of types implementing
+this trait.
+
+The new context is often found by evaluating the protodata against a new data source - the auxiliary data
+
+The domain of the new context and the proto-domain can be structurally very
+distant, possibly orthogonal
+
+The protodata and the auxiliary data must be somehow adapted for the new context domain
+
+Transformation and normalization are lossy processes, thus it removes data which
+the application could use in the future. Next, such a processing may cause delays
+and put additional burden on the infrastructure. In the course of time the transforming
+processes tend to become unmaintainable.
+
+The solution is to map the new context domain directly to the source domains and
+to compose the target domain objects of the objects from the source domains.
+
+The mapping and composition should be the task for the so-called mapper.
+
+The mapper should be domain-agnostic, i.e. its functionality should
+not be principally driven by the knowledge of the participating domains.
+In other words, the mapper should be able to map one domain onto another only
+by means of the underlying language platform, especially the type-system.
+
+There more reasons for it:
+   * **Stability** - The character or meaning of domain entities is more stable than the structure
+   of individual entities. It follows that if the meaning and character is expressed
+   by types and not by state, then possible structural changes in the domain model
+   should not affect the mapping schema.
+   * **Type safety** - The type system verifies the consistency of the mapping rules,
+   i.e. that the types involved in the mapping can be mapped and composed as intended.
+   It can detect missing parts and makes the mapping schema robust against changes
+   in the domain models.
+   * **Early error discovery** - If a static language is used then the consistency
+   check and the verifications are carried out at the compile-time. This may
+   be instrumental in early discovering of possible inconsistencies in the mapping.
+
+Java's type system does not provide sufficient means to express the real character
+of objects by type. Therefore, designers must resort to the modeling of the object
+character by state (e.g. delegation) whereby they incorporate object schizophrenia
+into the model.
+
+The concept of traits as implemented in Scala or Groovy fits very well to
+the needs of such a mapper.
+
+However, using traits to express multidimensional objects leads to the explosion
+of class declarations and boilerplate code.
+
+This problem can be resolved by extending the type system so that the multidimensional
+space of all possible object forms can be grasped by a special type expression.
+
+The result of a mapping is a new target domain object composed of the source domains
+objects. In order to avoid object schizophrenia the source objects must be
+deprived of their identity in behalf of the new target domain object.
+
+It is practically impossible to carry out the identity deprivation in the
+current statically typed languages. Therefore an alternative object instantiation
+procedure, which generalizes the current one, must be incorporated to the
+used language platform.
