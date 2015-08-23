@@ -133,7 +133,7 @@ statement will always be false regardless of the possibility that the item may
 be, or rather represent, a metal item.
 
 ```java
-  val isMetal = item instaceof Metal; // always false, even if the item is metal
+  boolean isMetal = item instaceof Metal; // always false, even if the item is metal
 ```
 
 By using `instanceof` we cannot find out more details about the real character
