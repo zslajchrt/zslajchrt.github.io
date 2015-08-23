@@ -27,7 +27,7 @@ The lack of a usage means that there is **no context** within which the data obj
 in the protodata would yield some commercially or otherwise valuable information.
 The objects can be treated only as bare wrappers of intrinsic properties (i.e.
 properties that an object has of itself, independently of other objects,
-including its context. [1](https://en.wikipedia.org/wiki/Intrinsic_and_extrinsic_properties))
+including its context. [[1]](https://en.wikipedia.org/wiki/Intrinsic_and_extrinsic_properties))
 
 In order to utilize the protodata, it must be put into a novel context. It can
 be achieved, for instance, by combining the protodata with other, often apparently
