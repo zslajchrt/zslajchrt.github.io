@@ -40,7 +40,7 @@ x = 673.87
 y = 394.4
 z = 132.93
 width = 13.45
-height = 0.45
+height = 8.21
 reflexivity = 0.2
 
 </panel_attributes>
@@ -72,47 +72,50 @@ reflexivity = 0.9
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>370</x>
-      <y>50</y>
-      <w>110</w>
-      <h>50</h>
+      <x>280</x>
+      <y>40</y>
+      <w>280</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>luggage
 --
-id = 8488484</panel_attributes>
+id = 8488484
+scanTime = "2013-05-23T00:00:00Z",
+scannerId = 78700
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>180</x>
-      <y>90</y>
+      <y>110</y>
       <w>260</w>
-      <h>100</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>240.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>240.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>410</x>
-      <y>90</y>
+      <y>110</y>
       <w>30</w>
-      <h>100</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>410</x>
-      <y>90</y>
+      <y>110</y>
       <w>290</w>
-      <h>100</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;270.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;270.0;60.0</additional_attributes>
   </element>
 </diagram>
