@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Developing Protean Application With Morpheus - Part 5
+title: Developing Protean Application With Morpheus - Part 4
 comments: true
-permalink: developing-protean-applications-part5
+permalink: developing-protean-applications-part4
 ---
 
 ###New Context Domain For Protodata
