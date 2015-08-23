@@ -50,7 +50,8 @@ Each item contains space coordinates relative to the baggage and geometrical
 and material properties. A sample of a scan event is on Figure 1.
 
 Figure 1: JSON samples
-```
+
+```json
 {
   "id": 8488484,
   "scanTime": "2013-05-23T00:00:00Z",
