@@ -100,12 +100,13 @@ from their type. This approach has many benefits, since a lot of responsibilitie
 can be delegated on the type system. Additionally, if the language is static,
 many possible errors can be discovered at compile-time.
 
-Languages like Scala or Groovy [LINK] come with the concept of trait, which
+Languages like Scala or Groovy come with the concept of trait, which
 is very useful to model diverse nature of complex objects by type.
 
 The main goal of this work (Morpheus) is to prove that it is possible to construct
 a domain mapper as an extension of the language platform. In other words, the mapper
-becomes integrated with the language itself in contrast to other mapping tools [LINK],
+becomes integrated with the language itself in contrast to other mapping tools
+([list of object-object mappers](http://stackoverflow.com/questions/1432764/any-tool-for-java-object-to-object-mapping)),
 which are built on top the language. It will also be shown that such a mapper
 inherits the nice properties of static and statically typed languages such as
 type-safety and early discovery of errors, i.e. the mapping schemas are validated
@@ -260,11 +261,10 @@ shape delegatees.
 
 Actually, this is just one of more problems arising when models use delegation
 and similar patterns such as decorator, adapter, state, strategy, proxy, bridge.
-[LINK: Patterns]
 
-The problem of object schizophrenia is discussed in more detail here [LINK: Object schizophrenia].
+The problem of object schizophrenia is discussed in more detail [here](http://users.jyu.fi/~sakkinen/inhws/papers/Sekharaiah.pdf).
 
-On the other hand, let us see how the model looks if the language offers traits [LINK].
+On the other hand, let us see how the model looks if the language offers traits ([Groovy](http://docs.groovy-lang.org/latest/html/documentation/core-traits.html), [Scala](http://www.scala-lang.org/old/node/126)).
 In contrast to the no-trait model, here the `Thing` type and the two dimensions
 are separated. The composition is deferred until the moment of the creation of a new
 item.
@@ -309,7 +309,7 @@ Furthermore, one can also use composite types to test instances:
 
 The absence of the object schizophrenia in models is the key feature when
 the direct mapping between two distinct multidimensional domain models, as
-shown later in this text [WHERE].
+shown later in this text.
 
 The next two pieces of code illustrate the problem. Both determine
 whether the item represents a rectangular paper. If so, the banknote database
@@ -604,7 +604,7 @@ in behalf of the newly composed entity. It is necessary in order to prevent
 the object schizophrenia.
 
 Unfortunately, the described process of object identity deprivation is impossible
-or very difficult to carry out, especially in statically typed languages. [LINKS, DCI etc.]
+or very difficult to carry out, especially in statically typed languages ([here]((http://www.artima.com/articles/dci_vision.html)) or [here](http://www.sitepoint.com/dci-the-evolution-of-the-object-oriented-paradigm/)).
 Once an object is instantiated it keeps its identity until its destruction. There
 is no concept of 'identity deprivation' or 'getting rid of identity'.
 The only way to compose an object of other already existing objects is to use
