@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part1
 ---
 
-##Introduction
+###Introduction
 
 Having a company, which serves millions of users and is still on the rise, is a dream
 of many. Moreover, if the company develops a software product, which is used world-wide,
