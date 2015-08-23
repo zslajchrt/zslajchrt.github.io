@@ -27,7 +27,7 @@ The lack of a usage means that there is **no context** within which the data obj
 in the protodata would yield some commercially or otherwise valuable information.
 The objects can be treated only as bare wrappers of intrinsic properties (i.e.
 properties that an object has of itself, independently of other objects,
-including its context. [[1]](https://en.wikipedia.org/wiki/Intrinsic_and_extrinsic_properties))
+including its context. [here](https://en.wikipedia.org/wiki/Intrinsic_and_extrinsic_properties))
 
 In order to utilize the protodata, it must be put into a novel context. It can
 be achieved, for instance, by combining the protodata with other, often apparently
@@ -161,7 +161,7 @@ baggage. The data part consists of a list of items recognized in the baggage.
 Each item contains space coordinates relative to the baggage and geometrical
 and material properties. A sample of a scan event is on Figure 1.
 
-/// Figure 1: JSON samples
+Figure 1: JSON samples
 ```json
 {
   "id": 8488484,
@@ -204,7 +204,7 @@ multidimensional objects.
 The following diagram depicts the classes and traits involved in the protodata
 domain.
 
-/// Figure 2: Protodata sample model
+Figure 2: Protodata sample model
 <div>
 <img src="http://zslajchrt.github.io/resources/scannerModel.png" width="560" />
 </div>
@@ -214,14 +214,13 @@ or similar concepts, may become rather difficult and the resulting model may not
 appropriately grasp the reality. For example in Java, which has no equivalent
 to traits, we would have to substitute traits with interfaces and delegation.
 
-/// Figure 3: No-traits diagram
+Figure 3: No-traits diagram
 <div>
 <img src="http://zslajchrt.github.io/resources/itemNoTraits.png" width="500" />
 </div>
 
 Considering this model, a new item can be created as follows.
 
-///Code 1
 ```java
   Item item = new Item(10.1, 20.4, 3.1, new Metal(), new Cylinder(0.3, 10.32));
 ```
@@ -234,7 +233,6 @@ the `instanceof` operator. For example, if an instance of `Item` is tested
 whether it is `Thing` or `Material` by this operator, the result will always be true.
 On the other hand, testing the item for being `Baggage` will never be true.
 
-///Code 2
 ```java
   boolean isThing = item instaceof Thing;       // always true
   boolean isMaterial = item instaceof Material; // always true
@@ -245,7 +243,6 @@ A problem arises when one wishes to check whether the item is metal. The followi
 statement will always be false regardless of the possibility that the item may
 be, or rather represent, a metal item.
 
-///Code 3
 ```java
   val isMetal = item instaceof Metal; // always false, even if the item is metal
 ```
@@ -269,7 +266,7 @@ In contrast to the no-trait model, here the `Thing` type and the two dimensions
 are separated. The composition is deferred until the moment of the creation of a new
 item.
 
-/// Figure 4: Traits diagram
+Figure 4: Traits diagram
 <div>
 <img src="http://zslajchrt.github.io/resources/itemTraits.png" width="560" />
 </div>
@@ -277,7 +274,6 @@ item.
 The following code shows how such a creation with the deferred composition can
 look like.
 
-///Code 4
 ```scala
   val item = new Thing with Metal with Cylinder {
     val x = 10.1
@@ -291,7 +287,6 @@ look like.
 Then the item can be tested with `isInstaceOf`, which is analogous to Java's
 `instanceof`.
 
-///Code 5
 ```scala
   val isMetal = item.isInstaceOf[Metal]         // true
   val isCylinder = item.isInstaceOf[Cylinder]   // true
@@ -302,7 +297,6 @@ is that the identity is no longer scattered among more instances but the item on
 
 Furthermore, one can also use composite types to test instances:
 
-///Code 6
 ```scala
   val isMetal = item.isInstaceOf[Metal with Cylinder] // true or false
 ```
@@ -354,7 +348,6 @@ object `event`. In order to create a new item then for every
 `(material, shape)` combination there must be a dedicated test in the creation code,
 as shown in the following snippet.
 
-///Code 7
 ```scala
   val x = event.get("thing").get("x")
   val y = event.get("thing").get("y")
@@ -513,7 +506,7 @@ historical world currencies including physical properties.
 
 The domain model of the new context is depicted on the following diagram:
 
-/// Figure 5: The context domain diagram
+Figure 5: The context domain diagram
 <div>
 <img src="http://zslajchrt.github.io/resources/currencyModel.png" width="280" />
 </div>
@@ -544,7 +537,7 @@ luggage items and records in the currency database.
 
 The mapping between the currency and luggage items domain is sketched on the following diagram.
 
-/// Figure 6: Mapping context domain to proto-domain diagram
+Figure 6: Mapping context domain to proto-domain diagram
 <div>
 <img src="http://zslajchrt.github.io/resources/itemCurrencyMap.png" width="450" />
 </div>
