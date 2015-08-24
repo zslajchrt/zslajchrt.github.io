@@ -256,3 +256,9 @@ It is practically impossible to carry out the identity deprivation in the
 current statically typed languages. Therefore an alternative object instantiation
 procedure, which generalizes the current one, must be incorporated to the
 used language platform.
+
+#####Source Code
+
+The following [link](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/scala/org/cloudio/morpheus/scanner)
+refers to a source code containing a runnable implementation of the Scaner protodata
+case study developed by means [Morpheus](https://github.com/zslajchrt/morpheus).
