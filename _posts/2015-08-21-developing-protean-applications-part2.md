@@ -34,8 +34,9 @@ unrelated, data or with newly emerged information services.
 
 The owner's effort to find a new context for his protodata can go in two directions:
 To try to find
-   1. something valuable
-   2. anything valuable
+
+1. something valuable
+2. anything valuable
 
 The first way is less difficult, since it evaluates existing contexts against the protodata.
 For example, a competitor has developed a successful service using data that is
