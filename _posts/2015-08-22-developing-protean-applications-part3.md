@@ -12,14 +12,14 @@ For the sake of simplicity and clarity let us assume this fictional narrative:
 An airport outsources its security check procedure to a company operating
 high-tech scanners, which are able to recognize three and two-dimensional
 objects in baggage. After each scan the scanner creates a record describing the recognized
-objects in a baggage. The record is provided with some metadata and sent to
+objects in a piece of baggage. The record is provided with some metadata and sent to
 a server at the mother company's premises through a wide-area network connection.
 
 The company's server receives a potent stream of such events from a number of
-installations at several airports. The event in the stream is stored into a clustered
-database, where it remains for one year. The stored events are not processed in
+installations at several airports. The events in the stream are stored in a clustered
+database, where they remain for one year. The stored events are not processed in
 any way, the only reason for storing the events follows from the contract with
-the airports, which obliges the company to keep the record for one year due to
+the airports, which obliges the company to keep the records for one year due to
 forensic purposes.
 
 A major limitation of the scanner is that it is able to classify baggage items
@@ -27,12 +27,12 @@ only by their geometrical properties and material. The recognized item is descri
 as a plain geometrical object and not as a wallet, shaver etc.
 
 The contract itself does not forbid the company to use the scanner data commercially
-under the condition that such a usage reveals no private and sensitive information.
+under the condition that such usage reveals no private and sensitive information.
 
 Such data is a typical example of protodata. The owning company comes to a conclusion
-that the data cannot be easily utilized as such due its primitive character and
-possible infringement of the contract by selling it in the raw form to another
-subject, which could combine it with its own data and possibly misuse the insights
+that the data cannot be easily utilized as such due to its primitive character and
+possible infringement of the contract by selling it in raw form to another
+entity, which could combine it with its own data and possibly misuse the insights
 by revealing sensitive information.
 
 The owner realizes that without discovering a new context the scanner data is
@@ -47,7 +47,7 @@ The scan event consists of two parts: metadata and data. The metadata contains
 the time of the scan, the serial number of the scanner and the id of the
 baggage. The data part consists of a list of items recognized in the baggage.
 Each item contains space coordinates relative to the baggage and geometrical
-and material properties. A sample of a scan event is on Figure 1.
+and material properties. A sample of a scan event is in Figure 1.
 
 Figure 1: JSON samples
 
@@ -100,8 +100,8 @@ Figure 2: Protodata sample model
 
 Modeling in multidimensional objects in languages, which do not include traits
 or similar concepts, may become rather difficult and the resulting model may not
-appropriately grasp the reality. For example in Java, which has no equivalent
-to traits, we would have to substitute traits with interfaces and delegation.
+appropriately represent reality. For example in Java, which has no equivalent
+to traits, we would have to substitute interfaces and delegation for traits.
 
 Figure 3: No-traits diagram
 <div>
@@ -145,7 +145,7 @@ It looks as if the item suffers from some kind of schizophrenia, since its
 identity is scattered across three instances: the item itself, and the metal and
 shape delegatees.
 
-Actually, this is just one of more problems arising when models use delegation
+Actually, this is just one of several problems arising when models use delegation
 and similar patterns such as decorator, adapter, state, strategy, proxy, bridge.
 
 The problem of object schizophrenia is discussed in more detail [here](http://users.jyu.fi/~sakkinen/inhws/papers/Sekharaiah.pdf).
@@ -161,7 +161,7 @@ Figure 4: Traits diagram
 </div>
 
 The following code shows how such a creation with the deferred composition can
-look like.
+look.
 
 ```scala
   val item = new Thing with Metal with Cylinder {
@@ -182,7 +182,7 @@ Then the item can be tested with `isInstanceOf`, which is analogous to Java's
 ```
 
 Now, it is possible to determine the exact type, i.e. what the object exactly is. The reason
-is that the identity is no longer scattered among more instances but the item only.
+is that the identity is no longer scattered among more instances but is carried solely by the item.
 
 Furthermore, one can also use composite types to test instances:
 
@@ -190,8 +190,8 @@ Furthermore, one can also use composite types to test instances:
   val isMetal = item.isInstanceOf[Metal with Cylinder] // true or false
 ```
 
-The absence of the object schizophrenia in models is the key feature when
-the direct mapping between two distinct multidimensional domain models, as
+The absence of the object schizophrenia in models is the key prerequisite for
+functional mapping between two distinct multidimensional domain models, as
 shown later in this text.
 
 The next two pieces of code illustrate the problem. Both determine

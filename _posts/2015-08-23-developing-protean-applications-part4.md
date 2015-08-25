@@ -23,7 +23,9 @@ among luggage items. Considering the scanner protodata contains information
 about the shape and material only, it seems inevitable to use other source to
 detect reliably coins and banknotes. Such a source can be a database of
 international currencies containing comprehensive information about current and
-historical world currencies including physical properties.
+historical world currencies including physical properties. (Note: There is a limitation
+in this scenario, since all U.S. banknotes have the same dimensions. The database
+could not recognize individual dollar banknotes just on the basis of their size).
 
 The domain model of the new context is depicted on the following diagram:
 
