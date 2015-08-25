@@ -4,6 +4,7 @@ title: Developing Protean Application With Morpheus - Part 2
 comments: true
 permalink: developing-protean-applications-part2
 ---
+
 ###Protodata
 
 Protodata can be described as a collection of diverse data objects having no immediate
