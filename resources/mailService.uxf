@@ -4,8 +4,8 @@
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>460</x>
-      <y>200</y>
+      <x>370</x>
+      <y>140</y>
       <w>140</w>
       <h>100</h>
     </coordinates>
@@ -18,12 +18,12 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>430</x>
-      <y>330</y>
+      <x>340</x>
+      <y>270</y>
       <w>190</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>DefaultUserMail
+    <panel_attributes>/DefaultUserMail/
 --
 getMailOwner: MailOwner</panel_attributes>
     <additional_attributes/>
@@ -31,8 +31,8 @@ getMailOwner: MailOwner</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>380</x>
-      <y>430</y>
+      <x>290</x>
+      <y>370</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -45,8 +45,8 @@ sendEmail(msg)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>540</x>
-      <y>430</y>
+      <x>450</x>
+      <y>370</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -58,8 +58,8 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>520</x>
-      <y>280</y>
+      <x>430</x>
+      <y>220</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -69,8 +69,8 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>540</x>
-      <y>370</y>
+      <x>450</x>
+      <y>310</y>
       <w>80</w>
       <h>80</h>
     </coordinates>
@@ -80,8 +80,8 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>370</y>
+      <x>350</x>
+      <y>310</y>
       <w>90</w>
       <h>80</h>
     </coordinates>
@@ -91,8 +91,8 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>370</x>
-      <y>350</y>
+      <x>280</x>
+      <y>290</y>
       <w>80</w>
       <h>30</h>
     </coordinates>
@@ -102,8 +102,8 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>320</x>
-      <y>340</y>
+      <x>230</x>
+      <y>280</y>
       <w>100</w>
       <h>60</h>
     </coordinates>

@@ -34,7 +34,7 @@ the user's traits (e.g. premium), the message being sent and also time, since
 the service can switch between the accounts in the background.
 
 Additionally, the service's interface is also mutable, since at various times
-it can provide various extending features. It puts some special requirements on
+it can provide various extending features. This fact puts some special requirements on
 the service's user interface, which must be able to reflect these mutations.
 For example, if a user is both an employee and a premium customer, then the
 user interface should adapt its look when the service switches the account to the
@@ -170,7 +170,7 @@ the `UserFaxByMail` type.
 
 #####Assembling the Service
 
-The following code sketches how the email service may be assebled from individual
+The following code sketches how the email service may be assembled from individual
 components.
 
 ```java
@@ -186,6 +186,9 @@ UserMail userMail2 = new RegisteredUserMail(registeredUserAdapter);
 
 userMail1 = new VirusDetector(userMail1);
 userMail2 = new VirusDetector(userMail2);
+
+//Now the userMail1 and userMail2 lost the track of the account; the account type
+// is no longer detectable from the instance's type.
 
 if (registeredUser.isPremium()) {
     userMail2 = new DefaultFaxByMail(registeredUserAdapter, userMail2);
@@ -217,7 +220,7 @@ and used as the argument to `EmployeeUserMail` and `RegisteredUserAdapter` const
 
 Both particular service instances userMail1 and userMail2 are wrapped by `VirusDetector`.
 
-If the user is a premium customer, then its email service is wrapped by `DefaultFaxByMail`
+If the user is a premium customer, then his email service is wrapped by `DefaultFaxByMail`
 to provide the fax-by-mail extension.
 
 Then the two mail service instances inserted into `AlternatingUserMail`, which
@@ -229,26 +232,64 @@ The rest of the code creates an email message and switches the accounts.
 The complete source code may be viewed [here](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/java/org/cloudio/morpheus/mail).
 
 #####Summary
-The instance lost the track of the account, which is actually used; the account type is no longer detectable from
-the instance's type.
 
-The preservation of the type would loosen the coupling between the instance and its client. For example,
-the user interface would be able to adapt itself to the type of the account just on the basis of the mail
-service instance's type. Now, the UI would have to consult the state of the instance and retrieve the user account instance
-from some getter.
+As far as the two account adapters are concerned, there is no serious design flaw. The
+combination of inheritance and interface implementation preserves both types
+in instances (i.e. no object schizophrenia). Thus it is possible to check the type
+of an instance and then to cast it to either `Employee` or `RegisteredUser` to
+get access to the account specific members.
 
-Unfortunately, the UserMail interface has no method for getting the user account. Thus it would
-be practically impossible to determine the actual user account type without using some reflection tricks
-or introducing a new getUserAccount method in the UserMail interface. Both solutions are bad.
+The only weakness is the cloning, because the state of the original account instances
+must be transferred to the new adapted instances.
 
-The former would be a plain hack, while the latter purblindly introduces a backward incompatible change to the
-general contract declared by the UserMail interface. It would force all UserMail implementations to add the new method
-even if it would make no sense for them, since some implementation may not wrap any user account object at all.
+Also the implementations of `DefaultUserMail` as well as of its two specializations
+`EmployeeUserMail` and `RegisteredUserMail` are pretty straightforward.
 
-Such classes would have to return null as an indication there is no underlying user account object. Moreover,
-the return type of the getUserAccount method would have to be Object, since there is no common ground shared
-by all potential user accounts; the diversity of user accounts is actually the main presupposition of this
-case study.
+The `DefaultUserMail` is designed a package private abstract class. Thus it cannot
+be instantiated and only classes in from its package can extend it. The package
+contains only two such classes: `EmployeeUserMail` and `RegisteredUserMail`.
+
+The only flaw is the `getMailOwner` public method introduced in `DefaultUserMail` mediating
+the access to the underlying user account and which might indicate a loss of
+user account type information in `DefaultUserMail`'s instances. However, since
+the type of the account is indirectly carried by the only two subclasses
+`EmployeeUserMail` and `RegisteredUserMail`, this issue is of a minor importance.
+
+On the contrary, the `VirusDetector` copes with serious complications caused
+by the induced object schizophrenia, as described above. Further, until the mail service
+instances are not wrapped by `VirusDetector`, they preserve their account type information.
+
+The implementation of the optional fax service `DefaultFaxByMail` also hides the account type.
+Additionally, there is a possibly dangerous assumption that the it must be the topmost
+wrapper.
+
+Probably the most problematic component is `AlternatingUserMail`. Besides its
+serious object schizophrenia stemming from the state pattern used to implement
+the switching, its most serious flaw is the conditional implementation of
+`UserFaxByMail`. Also it must the final wrapper, which is handed over to the
+mail service client, which is tightly coupled with `AlternatingUserMail`, through
+which the client can determine the presence of the fax extension and access it.
+
+The preservation of types when adapting or extending other classes helps loosen
+the coupling between the instances and their client. For example, the user interface
+would be able to adapt itself to the type of the account just on the basis of the mail
+service instance's type.
+
+Unfortunately, the `AlternatingUserMail` interface cannot provide such information,
+since the `UserMail` interface has no method for getting the type of the user account.
+Thus it would be practically impossible for the client to determine the actual user account type
+without using some reflection tricks or introducing a new `getUserAccount` method
+in the `UserMail` interface. Both solutions are bad.
+
+The former would be a plain hack, while the latter purblindly introduces a backward
+incompatible change to the general contract declared by the `UserMail` interface.
+It would force all UserMail implementations to add the new method even if it would
+make no sense for them, since some implementation may not wrap any user account
+object at all. Such classes would have to return `null` as an indication there is
+no underlying user account object. Moreover, the return type of the `getUserAccount`
+method would have to be `Object`, since there is no common ground shared
+by all potential user accounts; the diversity of user accounts is actually
+the main presupposition of this case study.
 
 ####Modelling the Service With Traits
 
