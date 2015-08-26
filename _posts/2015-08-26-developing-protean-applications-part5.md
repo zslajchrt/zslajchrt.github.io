@@ -245,7 +245,7 @@ must be transferred to the new adapted instances.
 Also the implementations of `DefaultUserMail` as well as of its two specializations
 `EmployeeUserMail` and `RegisteredUserMail` are pretty straightforward.
 
-The `DefaultUserMail` is designed a package private abstract class. Thus it cannot
+The `DefaultUserMail` is designed as a package private abstract class. Thus it cannot
 be instantiated and only classes in from its package can extend it. The package
 contains only two such classes: `EmployeeUserMail` and `RegisteredUserMail`.
 
@@ -260,13 +260,13 @@ by the induced object schizophrenia, as described above. Further, until the mail
 instances are not wrapped by `VirusDetector`, they preserve their account type information.
 
 The implementation of the optional fax service `DefaultFaxByMail` also hides the account type.
-Additionally, there is a possibly dangerous assumption that the it must be the topmost
+Additionally, there is a possibly dangerous assumption that it must be the topmost
 wrapper.
 
 Probably the most problematic component is `AlternatingUserMail`. Besides its
 serious object schizophrenia stemming from the state pattern used to implement
 the switching, its most serious flaw is the conditional implementation of
-`UserFaxByMail`. Also it must the final wrapper, which is handed over to the
+`UserFaxByMail`. Further, it must be the final wrapper, which is handed over to the
 mail service client, which is tightly coupled with `AlternatingUserMail`, through
 which the client can determine the presence of the fax extension and access it.
 
