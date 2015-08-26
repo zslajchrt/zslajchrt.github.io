@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part5
 ---
 
-###Protean Services
+####Protean Services
 
 In contrast to the previous case study, this one focuses on behavioral
 aspects of the adaptive applications development (i.e. protean applications).
@@ -44,7 +44,7 @@ In the following paragraphs I am examining how such a service can be
 designed on two platforms: the first having no concept of traits and the other
 with traits.
 
-####Modelling the Service Without Traits
+#####Modelling the Service Without Traits
 
 Before modeling the service itself, let us begin with the domain model. It consists
 of two domain entities only: `RegisteredUser` and `Employee`. Since the two
