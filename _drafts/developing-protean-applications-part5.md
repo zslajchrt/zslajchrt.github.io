@@ -165,7 +165,7 @@ wrapper of such a mail service is wrapped by another wrapper possibly hiding
 the `UserFaxByMail` type.  
 
 <div>
-<img src="http://zslajchrt.github.io/resources/mailServiceNoTraitsAll.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/mailServiceNoTraitsAll.png" width="600" />
 </div>
 
 #####Assembling the Service
