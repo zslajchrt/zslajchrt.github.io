@@ -297,3 +297,7 @@ often exist primarily in persistence models as boolean or enumeration columns si
 there is no concept of traits in databases. In order to avoid the propagation
 of object schizophrenia through the domain model, such properties should be
 converted to traits or interfaces.
+
+However, any attempt to turn categorial properties into types
+on statically types platforms would lead to the exponential explosion of class
+declarations described in the previous chapter.
