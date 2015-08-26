@@ -170,6 +170,9 @@ the `UserFaxByMail` type.
 
 #####Assembling the Service
 
+The following code sketches how the email service may be assebled from individual
+components.
+
 ```java
 Employee employee = new Employee();
 RegisteredUser registeredUser = new RegisteredUser();
@@ -180,13 +183,17 @@ UserMail userMail1 = new EmployeeUserMail(employeeAdapter);
 
 RegisteredUserAdapter registeredUserAdapter = new RegisteredUserAdapter(registeredUser);
 UserMail userMail2 = new RegisteredUserMail(registeredUserAdapter);
+
+userMail1 = new VirusDetector(userMail1);
+userMail2 = new VirusDetector(userMail2);
+
 if (registeredUser.isPremium()) {
     userMail2 = new DefaultFaxByMail(registeredUserAdapter, userMail2);
 }
 
 // The type of account is still discoverable from the type of both userMail1 and userMail2
 
-AlternatingUserMail altUserMail = new AlternatingUserMail(userMail1, userMail2);
+AlternatingUserMail userMail = new AlternatingUserMail(userMail1, userMail2);
 
 // The client must be fixed to AlternatingUserMail through which it can determine whether the service supports fax.
 
@@ -195,14 +202,31 @@ msg.setRecipients(Arrays.asList("pepa@gmail.com"));
 msg.setSubject("Hello");
 msg.setBody("Hi, Pepa!");
 
-UserMail userMail = new VirusDetector(altUserMail);
-
 userMail.sendEmail(msg);
 
-altUserMail.setCurrent(false);
+userMail.setCurrent(false);
 
 userMail.sendEmail(msg);
 ```
+
+It is assumed here that the user owns both types of accounts. The variables
+`employee` and `registeredUser` hold the two accounts.
+
+The two accounts are adapted to the the common ground by corresponding adapters
+and used as the argument to `EmployeeUserMail` and `RegisteredUserAdapter` constructors.
+
+Both particular service instances userMail1 and userMail2 are wrapped by `VirusDetector`.
+
+If the user is a premium customer, then its email service is wrapped by `DefaultFaxByMail`
+to provide the fax-by-mail extension.
+
+Then the two mail service instances inserted into `AlternatingUserMail`, which
+is able to switch the accounts in the background. This must be the topmost
+wrapper so as to preserve the `FaxByMail` type of the resulting service instance.
+
+The rest of the code creates an email message and switches the accounts.
+
+The complete source code may be viewed [here](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/java/org/cloudio/morpheus/mail).
 
 #####Summary
 The instance lost the track of the account, which is actually used; the account type is no longer detectable from
