@@ -4,8 +4,8 @@
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>520</x>
-      <y>130</y>
+      <x>530</x>
+      <y>100</y>
       <w>140</w>
       <h>100</h>
     </coordinates>
@@ -18,25 +18,24 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>460</x>
-      <y>260</y>
-      <w>190</w>
-      <h>50</h>
+      <x>380</x>
+      <y>240</y>
+      <w>120</w>
+      <h>30</h>
     </coordinates>
-    <panel_attributes>DefaultUserMail
---
-getMailOwner: MailOwner</panel_attributes>
+    <panel_attributes>DefaultUserMail</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>430</x>
-      <y>380</y>
+      <x>530</x>
+      <y>240</y>
       <w>140</w>
-      <h>50</h>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>EmployeeUserMail
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/EmployeeUserMail/
 --
 sendEmail(msg)
 </panel_attributes>
@@ -45,12 +44,13 @@ sendEmail(msg)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>580</x>
-      <y>380</y>
-      <w>140</w>
-      <h>50</h>
+      <x>680</x>
+      <y>240</y>
+      <w>170</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>RegisteredUserMail
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/RegisteredUserMail/
 --
 validateEmail(msg)</panel_attributes>
     <additional_attributes/>
@@ -58,38 +58,60 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>570</x>
-      <y>210</y>
-      <w>30</w>
-      <h>70</h>
+      <x>430</x>
+      <y>180</y>
+      <w>170</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>150.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>180</y>
+      <w>40</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>20.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>180</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>710</x>
-      <y>260</y>
-      <w>180</w>
-      <h>80</h>
+      <x>860</x>
+      <y>240</y>
+      <w>140</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>VirusDetector
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/VirusDetector/
 --
-sendEmail(msg)
-validateEmail(msg)
-#scanAttachments(msg)</panel_attributes>
+validateEmail(msg)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>220</x>
-      <y>260</y>
-      <w>140</w>
-      <h>110</h>
+      <x>200</x>
+      <y>240</y>
+      <w>160</w>
+      <h>130</h>
     </coordinates>
-    <panel_attributes>AlternatingUserMail
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/AlternatingUserMail/
 --
 sendEmail(msg)
 validateEmail(msg)
@@ -101,30 +123,30 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
-      <y>200</y>
-      <w>210</w>
+      <x>310</x>
+      <y>180</y>
+      <w>240</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>190.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>220.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>650</x>
-      <y>200</y>
-      <w>150</w>
+      <y>180</y>
+      <w>290</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;130.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;270.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>150</x>
-      <y>610</y>
+      <x>310</x>
+      <y>570</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -135,8 +157,8 @@ User</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>620</y>
+      <x>460</x>
+      <y>580</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -146,8 +168,8 @@ User</panel_attributes>
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>230</x>
-      <y>380</y>
+      <x>390</x>
+      <y>340</y>
       <w>100</w>
       <h>110</h>
     </coordinates>
@@ -161,8 +183,8 @@ email</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>540</y>
+      <x>280</x>
+      <y>500</y>
       <w>160</w>
       <h>30</h>
     </coordinates>
@@ -173,8 +195,8 @@ email</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>290</x>
-      <y>540</y>
+      <x>450</x>
+      <y>500</y>
       <w>130</w>
       <h>30</h>
     </coordinates>
@@ -185,8 +207,8 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>480</y>
+      <x>350</x>
+      <y>440</y>
       <w>90</w>
       <h>80</h>
     </coordinates>
@@ -196,8 +218,8 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>480</y>
+      <x>440</x>
+      <y>440</y>
       <w>90</w>
       <h>80</h>
     </coordinates>
@@ -207,94 +229,86 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>560</y>
-      <w>30</w>
+      <x>350</x>
+      <y>520</y>
+      <w>70</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;self&gt;&gt;</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>340</x>
-      <y>560</y>
-      <w>30</w>
+      <x>500</x>
+      <y>520</y>
+      <w>70</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;self&gt;&gt;</panel_attributes>
     <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>310</x>
-      <y>130</y>
-      <w>290</w>
-      <h>150</h>
+      <x>550</x>
+      <y>290</y>
+      <w>100</w>
+      <h>330</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-right</panel_attributes>
-    <additional_attributes>270.0;20.0;10.0;20.0;10.0;130.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;self&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;310.0;80.0;310.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>290</y>
+      <w>440</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;self&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;320.0;10.0;360.0;420.0;360.0;420.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>290</x>
-      <y>100</y>
-      <w>320</w>
-      <h>180</h>
+      <y>110</y>
+      <w>310</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-left</panel_attributes>
-    <additional_attributes>300.0;40.0;300.0;20.0;10.0;20.0;10.0;160.0</additional_attributes>
+m1=right</panel_attributes>
+    <additional_attributes>290.0;10.0;10.0;10.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>300</y>
-      <w>230</w>
-      <h>120</h>
+      <x>270</x>
+      <y>70</y>
+      <w>370</w>
+      <h>190</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-m1=mailOwner</panel_attributes>
-    <additional_attributes>10.0;100.0;210.0;10.0</additional_attributes>
+m1=left</panel_attributes>
+    <additional_attributes>330.0;40.0;330.0;10.0;10.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>580</x>
-      <y>300</y>
-      <w>80</w>
-      <h>100</h>
+      <x>430</x>
+      <y>260</y>
+      <w>70</w>
+      <h>110</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;60.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>490</x>
-      <y>300</y>
-      <w>110</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>90.0;10.0;10.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>590</x>
-      <y>140</y>
-      <w>240</w>
-      <h>140</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=delegatee</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;10.0;220.0;120.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;self&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLInterface</id>
@@ -310,21 +324,10 @@ faxEmail(msg)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>120</x>
-      <y>170</y>
-      <w>150</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;130.0;90.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>20</x>
-      <y>260</y>
+      <x>30</x>
+      <y>240</y>
       <w>160</w>
       <h>30</h>
     </coordinates>
@@ -334,47 +337,58 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
+      <x>100</x>
       <y>170</y>
-      <w>40</w>
-      <h>110</h>
+      <w>30</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>20.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>170</x>
-      <y>70</y>
-      <w>440</w>
-      <h>230</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-delegatee</panel_attributes>
-    <additional_attributes>420.0;70.0;420.0;20.0;30.0;20.0;30.0;210.0;10.0;210.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>130</x>
+      <x>120</x>
       <y>170</y>
-      <w>400</w>
-      <h>110</h>
+      <w>130</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>380.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;110.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
-      <y>280</y>
-      <w>200</w>
-      <h>140</h>
+      <x>100</x>
+      <y>260</y>
+      <w>110</w>
+      <h>330</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=mailOwner</panel_attributes>
-    <additional_attributes>180.0;120.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;self&gt;&gt;</panel_attributes>
+    <additional_attributes>90.0;310.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>570</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/PremiumUser/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>580</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -4,7 +4,7 @@
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>520</x>
+      <x>590</x>
       <y>130</y>
       <w>140</w>
       <h>100</h>
@@ -18,7 +18,7 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>460</x>
+      <x>530</x>
       <y>260</y>
       <w>190</w>
       <h>50</h>
@@ -31,7 +31,7 @@ getMailOwner: MailOwner</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>430</x>
+      <x>500</x>
       <y>380</y>
       <w>140</w>
       <h>50</h>
@@ -45,7 +45,7 @@ sendEmail(msg)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>580</x>
+      <x>650</x>
       <y>380</y>
       <w>140</w>
       <h>50</h>
@@ -58,7 +58,7 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>570</x>
+      <x>640</x>
       <y>210</y>
       <w>30</w>
       <h>70</h>
@@ -69,7 +69,7 @@ validateEmail(msg)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>710</x>
+      <x>780</x>
       <y>260</y>
       <w>180</w>
       <h>80</h>
@@ -84,7 +84,7 @@ validateEmail(msg)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>220</x>
+      <x>290</x>
       <y>260</y>
       <w>140</w>
       <h>110</h>
@@ -101,7 +101,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
+      <x>400</x>
       <y>200</y>
       <w>210</w>
       <h>80</h>
@@ -112,7 +112,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>720</x>
       <y>200</y>
       <w>150</w>
       <h>80</h>
@@ -123,7 +123,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>150</x>
+      <x>220</x>
       <y>610</y>
       <w>100</w>
       <h>40</h>
@@ -135,7 +135,7 @@ User</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
+      <x>370</x>
       <y>620</y>
       <w>100</w>
       <h>30</h>
@@ -146,7 +146,7 @@ User</panel_attributes>
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>230</x>
+      <x>300</x>
       <y>380</y>
       <w>100</w>
       <h>110</h>
@@ -161,7 +161,7 @@ email</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
+      <x>190</x>
       <y>540</y>
       <w>160</w>
       <h>30</h>
@@ -173,7 +173,7 @@ email</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>290</x>
+      <x>360</x>
       <y>540</y>
       <w>130</w>
       <h>30</h>
@@ -185,7 +185,7 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
+      <x>260</x>
       <y>480</y>
       <w>90</w>
       <h>80</h>
@@ -196,7 +196,7 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
+      <x>350</x>
       <y>480</y>
       <w>90</w>
       <h>80</h>
@@ -207,7 +207,7 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
+      <x>260</x>
       <y>560</y>
       <w>30</w>
       <h>70</h>
@@ -218,7 +218,7 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>340</x>
+      <x>410</x>
       <y>560</y>
       <w>30</w>
       <h>80</h>
@@ -229,7 +229,7 @@ email</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>310</x>
+      <x>380</x>
       <y>130</y>
       <w>290</w>
       <h>150</h>
@@ -241,7 +241,7 @@ right</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>290</x>
+      <x>360</x>
       <y>100</y>
       <w>320</w>
       <h>180</h>
@@ -253,7 +253,7 @@ left</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
+      <x>350</x>
       <y>300</y>
       <w>230</w>
       <h>120</h>
@@ -265,7 +265,7 @@ m1=mailOwner</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>580</x>
+      <x>650</x>
       <y>300</y>
       <w>80</w>
       <h>100</h>
@@ -276,7 +276,7 @@ m1=mailOwner</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
+      <x>560</x>
       <y>300</y>
       <w>110</w>
       <h>100</h>
@@ -287,7 +287,7 @@ m1=mailOwner</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>660</x>
       <y>140</y>
       <w>240</w>
       <h>140</h>
@@ -299,7 +299,7 @@ m1=delegatee</panel_attributes>
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>60</x>
+      <x>130</x>
       <y>110</y>
       <w>120</w>
       <h>80</h>
@@ -312,7 +312,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>120</x>
+      <x>190</x>
       <y>170</y>
       <w>150</w>
       <h>110</h>
@@ -323,7 +323,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>20</x>
+      <x>90</x>
       <y>260</y>
       <w>160</w>
       <h>30</h>
@@ -334,7 +334,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
+      <x>160</x>
       <y>170</y>
       <w>40</w>
       <h>110</h>
@@ -345,7 +345,7 @@ faxEmail(msg)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>170</x>
+      <x>240</x>
       <y>70</y>
       <w>440</w>
       <h>230</h>
@@ -357,7 +357,7 @@ delegatee</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>130</x>
+      <x>200</x>
       <y>170</y>
       <w>400</w>
       <h>110</h>
@@ -368,7 +368,7 @@ delegatee</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
+      <x>160</x>
       <y>280</y>
       <w>200</w>
       <h>140</h>
