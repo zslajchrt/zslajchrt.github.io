@@ -296,4 +296,4 @@ it may indicate mixing of "has" and "is" aspects in the design. Such properties
 often exist primarily in persistence models as boolean or enumeration columns since
 there is no concept of traits in databases. In order to avoid the propagation
 of object schizophrenia through the domain model, such properties should be
-converted mapped to traits or interfaces.
+converted to traits or interfaces.
