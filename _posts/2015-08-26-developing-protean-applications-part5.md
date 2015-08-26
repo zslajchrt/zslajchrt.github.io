@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part5
 ---
 
-####Protean Services
+###Protean Services
 
 In contrast to the previous case study, this one focuses on behavioral
 aspects of the adaptive applications development (i.e. protean applications).
