@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part6
 ---
 
-####Protean Services - Cont.
+###Protean Services - Cont.
 
 The previous analysis showed that modeling a protean component without traits
 leads inevitably to a design suffering from serious flaws, most of them caused
