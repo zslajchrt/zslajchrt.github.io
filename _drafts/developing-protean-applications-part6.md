@@ -31,7 +31,7 @@ extends the concrete class `RegisteredUser`. This extension explicitly declares
 that it is meant to be a trait of the registered user. Also, this trait can be applied
 on `RegisteredUser` only.
 
-Second, the adapter types are also traits and not concrete class.
+Second, the adapter types are also traits and not concrete classes.
 
 ```scala
 trait EmployeeAdapter extends MailOwner {
@@ -55,7 +55,7 @@ to refer to the corresponding account class. To put it briefly, the `self` type 
 a trait specifies a type with which the trait is supposed to be composed.
 Specifically, the `EmployeeAdapter` may only exist in a composition with `Employee`.
 The self-type also makes public and protected members accessible from the trait,
-actually, it behave as if the trait privately extended the self-type, i.e.
+actually, it behaves as if the trait privately extended the self-type, i.e.
 the trait does not expose the self-type.
 
 As far as the mail service is concerned, it also utilizes traits as much as possible
@@ -101,7 +101,8 @@ as shown in the following picture.
 <img src="http://zslajchrt.github.io/resources/faxServiceTraits.png" width="180" />
 </div>
 
-The trait is applied only if the user is a premium customer.
+The trait is applied only if the user is a premium customer. This condition is
+stressed by the self-type of `UserFaxByMail`.
 
 So far the design has manifested no flaws. Unfortunately, the implementation
 of the `AlternatingUserMail` must introduce some delegation. As seen in the
@@ -157,7 +158,7 @@ def initializeMailUser(employee: Employee, registeredUser: RegisteredUser): User
 }
 ```
 
-The first look on the code suggests that the assembling code more compact. It is
+The first look on the code suggests that the assembling code is more compact. It is
 caused mainly by the Scala's syntax and partly by using traits. For example,
 it is not necessary to define the auxiliary `Premium` class, since the `PremiumUser`
 trait can be specified as part of the anonymous class signature in the `new` statement.
@@ -180,7 +181,7 @@ cause problems when monitoring the counter, for example.
 3. When refactoring it is easy to omit some VirusDetector's occurrence
 
 A solution could be to apply the `VirusDetector` as a trait of `AlternatingUserMail`.
-Unfortunately, in such a case the the virus detector's `validateEmail` method
+Unfortunately, in such a case the virus detector's `validateEmail` method
 would not be invoked from `DefaultUserMail.sendEmail` because of delegation.
 
 The complete type information propagates well until the instantiation of the
