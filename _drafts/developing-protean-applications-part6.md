@@ -98,7 +98,7 @@ Similarly to the `VirusDetector`, the `UserFaxByMail` is also implemented as a t
 as shown in the following picture.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/faxServiceTraits.png" width="220" />
+<img src="http://zslajchrt.github.io/resources/faxServiceTraits.png" width="180" />
 </div>
 
 The trait is applied only if the user is a premium customer.
