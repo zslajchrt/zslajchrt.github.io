@@ -7,10 +7,9 @@
       <x>380</x>
       <y>280</y>
       <w>140</w>
-      <h>130</h>
+      <h>110</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;Trait&gt;&gt;
-/AlternatingUserMail/
+    <panel_attributes>AlternatingUserMail
 --
 sendEmail(msg)
 validateEmail(msg)

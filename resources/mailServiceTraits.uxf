@@ -21,9 +21,10 @@ validateEmail(msg)</panel_attributes>
       <x>290</x>
       <y>230</y>
       <w>120</w>
-      <h>30</h>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>DefaultUserMail</panel_attributes>
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/DefaultUserMail/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -45,13 +46,13 @@ email</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>340</x>
-      <y>250</y>
+      <y>260</y>
       <w>70</w>
-      <h>110</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 &lt;&lt;self&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>

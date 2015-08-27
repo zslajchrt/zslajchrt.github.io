@@ -56,6 +56,14 @@ diagram.
 <img src="http://zslajchrt.github.io/resources/userAccounts.png" width="280" />
 </div>
 
+In order to promote the conversion of "IS" properties to types, there is
+the `PremiumUser` interface so that the "isPremium" property could be determined
+by the `instanceof` operator.
+
+<div>
+<img src="http://zslajchrt.github.io/resources/premiumUserNoTraits.png" width="280" />
+</div>
+
 The `MailOwner` interface contains properties having their counterparts in
 both entity classes. There are also two implementations of `MailOwner`, each for
 one entity class.
@@ -94,7 +102,7 @@ a processing pipeline. These processors implement `UserMail` interface and
 are connected through delegation. One of such processors is `VirusDetector`.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/virusDetector.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/virusDetectorNoTraits.png" width="280" />
 </div>
 
 Here, one important weakness related to the absence of traits is evident.
@@ -174,46 +182,75 @@ The following code sketches how the email service may be assembled from individu
 components.
 
 ```java
-Employee employee = new Employee();
-RegisteredUser registeredUser = new RegisteredUser();
+public static void useMailService(Map<String, Object> employeeData, Map<String, Object> regUserData) {
 
-// We need to clone the state of both employee and registeredUser
-EmployeeAdapter employeeAdapter = new EmployeeAdapter(employee);
-UserMail userMail1 = new EmployeeUserMail(employeeAdapter);
+    Employee employee = initEmployee(employeeData);
+    RegisteredUser registeredUser = initRegisteredUser(regUserData);
 
-RegisteredUserAdapter registeredUserAdapter = new RegisteredUserAdapter(registeredUser);
-UserMail userMail2 = new RegisteredUserMail(registeredUserAdapter);
+    // The client must be fixed to AlternatingUserMail through which it can determine whether the service supports fax.
+    AlternatingUserMail userMail = initMailService(employee, registeredUser);
 
-userMail1 = new VirusDetector(userMail1);
-userMail2 = new VirusDetector(userMail2);
+    Message msg = new Message();
+    msg.setRecipients(Collections.singletonList("pepa@gmail.com"));
+    msg.setSubject("Hello");
+    msg.setBody("Hi, Pepa!");
 
-//Now the userMail1 and userMail2 lost the track of the account; the account type
-// is no longer detectable from the instance's type.
+    userMail.sendEmail(msg);
 
-if (registeredUser.isPremium()) {
-    userMail2 = new DefaultFaxByMail(registeredUserAdapter, userMail2);
+    userMail.setCurrent(false);
+
+    userMail.sendEmail(msg);
+
 }
 
-// The type of account is still discoverable from the type of both userMail1 and userMail2
+public static Employee initEmployee(Map<String, Object> employeeData) {
+    Employee employee = new Employee();
+    employee.load(employeeData);
+    return employee;
+}
 
-AlternatingUserMail userMail = new AlternatingUserMail(userMail1, userMail2);
+public static RegisteredUser initRegisteredUser(Map<String, Object> regUserData) {
+    RegisteredUser registeredUser;
+    if (Boolean.TRUE.equals(regUserData.get("isPremium"))) {
+        class Premium extends RegisteredUser implements PremiumUser {}
+        registeredUser = new Premium();
+    } else {
+        registeredUser = new RegisteredUser();
+    }
+    registeredUser.load(regUserData);
 
-// The client must be fixed to AlternatingUserMail through which it can determine whether the service supports fax.
+    return registeredUser;
+}
 
-Message msg = new Message();
-msg.setRecipients(Arrays.asList("pepa@gmail.com"));
-msg.setSubject("Hello");
-msg.setBody("Hi, Pepa!");
+public static AlternatingUserMail initMailService(Employee employee, RegisteredUser registeredUser) {
 
-userMail.sendEmail(msg);
+    // We need to clone the state of both employee and registeredUser
+    EmployeeAdapter employeeAdapter = new EmployeeAdapter(employee);
+    UserMail userMail1 = new EmployeeUserMail(employeeAdapter);
 
-userMail.setCurrent(false);
+    RegisteredUserAdapter registeredUserAdapter = new RegisteredUserAdapter(registeredUser);
+    UserMail userMail2 = new RegisteredUserMail(registeredUserAdapter);
 
-userMail.sendEmail(msg);
+    userMail1 = new VirusDetector(userMail1);
+    userMail2 = new VirusDetector(userMail2);
+
+    // We must resort to the isPremium property since the Premium trait is forgotten by the adaptation.
+    if (registeredUser.isPremium()) {
+        userMail2 = new DefaultFaxByMail(registeredUserAdapter, userMail2);
+    }
+
+    return new AlternatingUserMail(userMail1, userMail2);
+}
+
 ```
 
 It is assumed here that the user owns both types of accounts. The variables
-`employee` and `registeredUser` hold the two accounts.
+`employee` and `registeredUser` are loaded from external data retrieved
+from a persistent storage.
+
+The `initRegisteredUser` method converts the `isPremium` attribute of the
+data record into a "trait" by means of a local class `Premium`. If there were
+more such "IS" properties, it would lead to the explosion of such local classes.
 
 The two accounts are adapted to the the common ground by corresponding adapters
 and used as the argument to `EmployeeUserMail` and `RegisteredUserAdapter` constructors.
@@ -221,7 +258,9 @@ and used as the argument to `EmployeeUserMail` and `RegisteredUserAdapter` const
 Both particular service instances userMail1 and userMail2 are wrapped by `VirusDetector`.
 
 If the user is a premium customer, then his email service is wrapped by `DefaultFaxByMail`
-to provide the fax-by-mail extension.
+to provide the fax-by-mail extension. Unfortunately, the test on a premium customer
+cannot use the `PremiumUser` type since it has gotten lost during the preceding adaptation
+and wrapping.
 
 Then the two mail service instances inserted into `AlternatingUserMail`, which
 is able to switch the accounts in the background. This must be the topmost
@@ -239,15 +278,18 @@ in instances (i.e. no object schizophrenia). Thus it is possible to check the ty
 of an instance and then to cast it to either `Employee` or `RegisteredUser` to
 get access to the account specific members.
 
-The only weakness is the cloning, because the state of the original account instances
+An potential problem lurks behind the converting of the `isPremium` property into
+the `PremiumUser` "trait". Such an approach does not scale with the growing number
+of "IS" properties. This is, however, a limitation of the underlying "no-trait" platform.
+
+Another weakness is the cloning, because the state of the original account instances
 must be transferred to the new adapted instances.
 
-Also the implementations of `DefaultUserMail` as well as of its two specializations
-`EmployeeUserMail` and `RegisteredUserMail` are pretty straightforward.
-
-The `DefaultUserMail` is designed as a package private abstract class. Thus it cannot
-be instantiated and only classes in from its package can extend it. The package
-contains only two such classes: `EmployeeUserMail` and `RegisteredUserMail`.
+The implementations of `DefaultUserMail` as well as of its two specializations
+`EmployeeUserMail` and `RegisteredUserMail` are pretty straightforward. The `DefaultUserMail`
+is designed as a package private abstract class. Thus it cannot be instantiated
+and only classes in from its package can extend it. The package contains only
+two such classes: `EmployeeUserMail` and `RegisteredUserMail`.
 
 The only flaw is the `getMailOwner` public method introduced in `DefaultUserMail` mediating
 the access to the underlying user account and which might indicate a loss of
@@ -261,7 +303,7 @@ instances are not wrapped by `VirusDetector`, they preserve their account type i
 
 The implementation of the optional fax service `DefaultFaxByMail` also hides the account type.
 Additionally, there is a possibly dangerous assumption that it must be the topmost
-wrapper.
+wrapper. Also, the test on premium user cannot be done by type.
 
 Probably the most problematic component is `AlternatingUserMail`. Besides its
 serious object schizophrenia stemming from the state pattern used to implement
