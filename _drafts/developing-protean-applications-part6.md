@@ -118,7 +118,7 @@ in the no-trait case hold here as well.
 The whole system is depicted on the following diagram:
 
 <div>
-<img src="http://zslajchrt.github.io/resources/mailServiceTraitsAll.png" width="320" />
+<img src="http://zslajchrt.github.io/resources/mailServiceTraitsAll.png" width="620" />
 </div>
 
 #####Assembling the Service
