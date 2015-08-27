@@ -5,7 +5,7 @@ comments: true
 permalink: developing-protean-applications-part6
 ---
 
-####Modelling Protean Service With Traits
+####Protean Services - Cont.
 
 The previous analysis showed that modeling a protean component without traits
 leads inevitably to a design suffering from serious flaws, most of them caused
@@ -15,7 +15,7 @@ by object schizophrenia, which results from using delegation instead of inherita
 In this article I will be dealing with modeling the mail service by means of traits.
 Scala and Groovy are two representatives of a platform adopting the concept of traits.
 
-####Using Object Metamorphism to model the Service
+####Modelling Protean Service With Traits
 
 The domain model designed by means of traits is at first sight very similar to
 that of the non-trait case.
