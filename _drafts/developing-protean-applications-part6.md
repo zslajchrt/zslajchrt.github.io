@@ -21,7 +21,7 @@ The domain model designed by means of traits is at first sight very similar to
 that of the non-trait case.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/userAccountTraits.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/userAccountsTraits.png" width="280" />
 </div>
 
 However, there are several substantial differences.
@@ -69,7 +69,7 @@ The composition of the account classes, adapters and mail service types is depic
 on the following diagram.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/mailServiceTraits.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/mailServiceTraits.png" width="400" />
 </div>
 
 If we compare this diagram with its no-traits counterpart, there is
@@ -83,7 +83,7 @@ Not even the `VirusDetector` introduces any delegation in contrast to the no-tra
 design. As expected, the `VirusDetector` is implemented also as a trait.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/virusDetector.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/virusDetector.png" width="180" />
 </div>
 
 Since `VirusDetector` is a trait, it is possible to implement the `validateEmail`
@@ -99,7 +99,7 @@ of the `AlternatingUserMail` must introduce some delegation. As seen in the
 following figure, the model is identical to that of the no-trait case.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/alternatingTraits.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/alternatingTraits.png" width="320" />
 </div>
 
 The reason is that the trait platform has no type-safe tool to implement an instance,
