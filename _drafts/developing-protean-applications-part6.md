@@ -21,7 +21,7 @@ The domain model designed by means of traits is at first sight very similar to
 that of the non-trait case.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/userAccountsTraits.png" width="280" />
+<img src="http://zslajchrt.github.io/resources/userAccountsTraits.png" width="380" />
 </div>
 
 However, there are several substantial differences.
@@ -69,7 +69,7 @@ The composition of the account classes, adapters and mail service types is depic
 on the following diagram.
 
 <div>
-<img src="http://zslajchrt.github.io/resources/mailServiceTraits.png" width="400" />
+<img src="http://zslajchrt.github.io/resources/mailServiceTraits.png" width="450" />
 </div>
 
 If we compare this diagram with its no-traits counterpart, there is
@@ -94,6 +94,15 @@ invokes `validateEmail` within its `sendEmail` method. The invocation jumps into
 the top-most trait overriding the `validateEmail` method, from where the invocation
 may be propagated by `super.validateEmail(msg)`.
 
+Similarly to the `VirusDetector`, the `UserFaxByMail` is also implemented as a trait,
+as shown in the following picture.
+
+<div>
+<img src="http://zslajchrt.github.io/resources/faxServicesTraits.png" width="380" />
+</div>
+
+The trait is applied only if the user is a premium customer.
+
 So far the design has manifested no flaws. Unfortunately, the implementation
 of the `AlternatingUserMail` must introduce some delegation. As seen in the
 following figure, the model is identical to that of the no-trait case.
@@ -105,6 +114,12 @@ following figure, the model is identical to that of the no-trait case.
 The reason is that the trait platform has no type-safe tool to implement an instance,
 whose composition could be modified in real-time. Thus, all issues described
 in the no-trait case hold here as well.
+
+The whole system is depicted on the following diagram:
+
+<div>
+<img src="http://zslajchrt.github.io/resources/mailServiceTraitsAll.png" width="320" />
+</div>
 
 #####Assembling the Service
 
@@ -147,6 +162,7 @@ caused mainly by the Scala's syntax and partly by using traits. For example,
 it is not necessary to define the auxiliary `Premium` class, since the `PremiumUser`
 trait can be specified as part of the anonymous class signature in the `new` statement.
 
+The complete source code may be viewed [here](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/scala/org/cloudio/morpheus/mail/traditional).
 
 ####Summary
 

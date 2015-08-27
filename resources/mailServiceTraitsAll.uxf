@@ -21,9 +21,10 @@ validateEmail(msg)</panel_attributes>
       <x>380</x>
       <y>240</y>
       <w>120</w>
-      <h>30</h>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>/DefaultUserMail/</panel_attributes>
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/DefaultUserMail/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -302,13 +303,13 @@ m1=left</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>430</x>
-      <y>260</y>
+      <y>270</y>
       <w>70</w>
-      <h>110</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 &lt;&lt;self&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLInterface</id>
@@ -329,9 +330,10 @@ faxEmail(msg)</panel_attributes>
       <x>30</x>
       <y>240</y>
       <w>160</w>
-      <h>30</h>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>DefaultFaxByMail</panel_attributes>
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+/DefaultFaxByMail/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -360,13 +362,13 @@ faxEmail(msg)</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>260</y>
+      <y>270</y>
       <w>110</w>
-      <h>330</h>
+      <h>320</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 &lt;&lt;self&gt;&gt;</panel_attributes>
-    <additional_attributes>90.0;310.0;10.0;10.0</additional_attributes>
+    <additional_attributes>90.0;300.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
