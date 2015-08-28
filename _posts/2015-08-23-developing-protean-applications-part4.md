@@ -248,7 +248,7 @@ However, using traits to express multidimensional objects leads to the explosion
 of class declarations and boilerplate code.
 
 This problem can be resolved by extending the type system so that the multidimensional
-space of all possible object forms can be grasped by a special type expression.
+space of all possible object forms can be described by a special type expression.
 
 The result of a mapping is a new target domain object composed of the source domains
 objects. In order to avoid object schizophrenia the source objects must be

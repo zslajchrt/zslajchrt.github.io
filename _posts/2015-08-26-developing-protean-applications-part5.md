@@ -314,8 +314,8 @@ which the client can determine the presence of the fax extension and access it.
 
 The preservation of types when adapting or extending other classes helps loosen
 the coupling between the instances and their client. For example, the user interface
-would be able to adapt itself to the type of the account just on the basis of the mail
-service instance's type.
+would be able to adapt itself to the type of the account and its functionality
+extensions (such fax-by-mail) just on the basis of the mail service instance's type.
 
 Unfortunately, the `AlternatingUserMail` interface cannot provide such information,
 since the `UserMail` interface has no method for getting the type of the user account.
