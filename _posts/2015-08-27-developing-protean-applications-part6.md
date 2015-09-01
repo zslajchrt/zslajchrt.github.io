@@ -12,10 +12,12 @@ leads inevitably to a design suffering from serious flaws, most of them caused
 by object schizophrenia, which results from using delegation instead of inheritance
 (or extension).
 
-In this article I will be dealing with modeling the mail service by means of traits.
-Scala and Groovy are two representatives of a platform adopting the concept of traits.
+In this article I will be dealing with modeling the mail service by means of *static* traits.
+The term static suggests here that traits are applied at compile-time and it is not
+possible to add them to any existing object at run-time. The code listings use Scala,
+since it fully implements static traits.
 
-####Modelling Protean Service With Traits
+####Modelling Protean Service With Static Traits
 
 The domain model designed by means of traits is at first sight very similar to
 that of the non-trait case.
@@ -167,26 +169,27 @@ The complete source code may be viewed [here](https://github.com/zslajchrt/morph
 
 ####Summary
 
-We still need to clone the state of both preexisting `employee` and `registeredUser`
+* There are two statements creating the registered user's mail instance; the only difference
+is that the former creates an instance with the additional `Premium` trait. It is
+obvious that if there were another dimension, which should be expressed by type,
+such as gender, it would lead to further bifurcation. It follows, that modeling
+multidimensional objects by means of static traits is practically impossible
+for a higher number of dimensions because of the combinatorial explosion of
+instantiating statements.
+
+* We still need to clone the state of both preexisting `employee` and `registeredUser`
 instances. The adoption methods are annoying.
 
-`EmployeeUserMail` and `RegisteredUserMail` are now more general since they extend
+* `EmployeeUserMail` and `RegisteredUserMail` are now more general since they extend
 `UserMail` and not `DefaultUserMail`.
 
-`VirusDetector` trait is specified twice; this duplicity may cause several problems:
+* It would make sense to share one `VirusDetector` instance between the employee and
+the registered user. `VirusDetector` contains a virus counter, which could count
+the per person and not per `Employee` and `RegisteredUser` separately. However, static
+traits do not allow such a construction. A solution could be to apply the `VirusDetector`
+as a trait of `AlternatingUserMail`. Unfortunately, in such a case the virus
+detector's `validateEmail` method would not be invoked from `DefaultUserMail.sendEmail` because of delegation.
 
-1. `VirusDetector` contains a virus counter, which will exist in two copies. It may
-cause problems when monitoring the counter, for example.
-2. The two `VirusDetector` instances may unnecessarily use more system resources
-3. When refactoring it is easy to omit some VirusDetector's occurrence
-
-A solution could be to apply the `VirusDetector` as a trait of `AlternatingUserMail`.
-Unfortunately, in such a case the virus detector's `validateEmail` method
-would not be invoked from `DefaultUserMail.sendEmail` because of delegation.
-
-The complete type information propagates well until the instantiation of the
+* The complete type information propagates well until the instantiation of the
 `AlternatingUserMail`. Therefore the client must be still tightly coupled with
 `AlternatingUserMail` and nothing really changes from his perspective.
-
-If only that were possible to overcome this last obstacle. Then we would get
-the ideal implementation of the mail service with lossless propagation of types.
