@@ -22,18 +22,21 @@ under different names. Among others I have to mention Ruby (modules), Groovy (mi
 and Python (mixins) [LINKS]. Such languages are usually dynamic with dynamic types.
 For the purpose of this section I use Groovy as a representative of such languages.
 The main reason is that Groovy is capable of some static type checking and that its
-trait syntax is very similar to that of Scala used when dealing with static traits.
-In addition, Groovy's syntax is generally very close to the syntax of Java.
+trait syntax is very similar to that of Scala, which I used when dealing with static traits.
+In addition, Groovy's syntax is generally very close to the syntax of Java, which
+is used here as a non-trait language.
 
 ####Modeling the Domain
 
 Groovy traits may be stateful, what makes them a possible replacement for classes
 in some cases. For example, when modeling a domain entity we can use a trait
-instead of a class. This possibility is especially important since ...
-actually creates a proxy wrapping the object and implements all *interfaces* of the object plus
-the newly added traits, which are also considered interfaces in contrast to classes.
-It follows that if the entity were modeled as a class the new proxy object
-would loose the information about the entity type.
+instead of a class. This possibility is especially important when extensions must
+not hide extended types. When extending by a trait Groovy actually creates a proxy
+wrapping the object and implementing all *interfaces* of the object plus the newly
+added traits, which, as opposed to classes, are also considered interfaces.
+It follows that if a domain entity were modeled as a class the new proxy object
+would loose the information about the entity type. Since the entity can be
+modeled by a trait, it is possible to overcome that obstacle.
 
 ```groovy
 trait Employee {
@@ -43,6 +46,9 @@ trait Employee {
 }
 ```
 
+In order to instantiate an entity instance, we have to attach it to an "empty"
+object first, since a trait cannot be instantiated alone in Groovy.
+
 ```groovy
 def employee = new Object() as Employee;
 employee.load(employeeData)
@@ -50,58 +56,116 @@ def regUser = new Object() as RegisteredUser;
 regUser.load(regUserData)
 ```
 
-Using `@CompileStatic` ...
+The `as` keyword actually creates a proxy object, which wraps the "empty" object
+and implements `Employee`, resp. `RegisteredUser`.
+
+*Note: Although Groovy is primarily a dynamic language, it also supports static
+compilation. Types or other parts of code annotated by `@CompileStatic`
+are compiled statically. [LINK]*
 
 ####Implementing the Behavior
+
+Now, when the domain objects are created in a way, which allows loss-less
+extension, we can implement the functionality of the mail service.
+
+The diagrams are practically identical to those for the static traits case. The
+only main difference is that the types specified in the self-type are added to
+the list of implemented interfaces. It might sound confusing, however, the self-type
+in Scala is essentially a syntactic sugar for the same thing.
+
+```groovy
+@CompileStatic
+trait DefaultUserMail implements UserMail, MailOwner {
+...
+```
+
+As mentioned above, the step-by-step extensions of objects sounds like
+a solution to the exponential explosion of statements. In order to make
+it more obvious, we will introduce additional dimensions such as
+`Gender` with "values" `Male` and `Female`, and `AgeGroup` with values `Child`
+and `Adult`.
+
+Since the logic in the traits is the same as in the static traits case, we
+will focus on the `AlternatingUserMail` class, whose instance is handed over
+to the email client.
+
+The abstract class `AlternatingUserMail` does not wrap any mail service explicitly,
+instead, it invokes the abstract `getDelegate` method to obtain the actual delegatee.
+In this case, there are basically two mail service instances, one for each
+account type. The employee's mail service is used during the office hours, i.e.
+8am-17pm, and the registered user's one in the remaining time. The following
+listing shows the implementation of `getDelegate` the anonymous class extending
+`AlternatingUserMail`.
 
 ```groovy
 AlternatingUserMail userMail = new AlternatingUserMail() {
 
-    private UserMail empMail = employee.withTraits(EmployeeAdapter, DefaultUserMail, VirusDetector)
-
     @Override
     UserMail getDelegate() {
-        Calendar c = Calendar.getInstance();
-        def h = c.get(Calendar.HOUR_OF_DAY);
-        if (!(h >= 8 && h < 17)) {
-            return getEmployeeMail();
-        } else {
-            return getRegUserMail();
-        }
+      Calendar c = Calendar.getInstance();
+      def h = c.get(Calendar.HOUR_OF_DAY);
+      if (!(h >= 8 && h < 17)) {
+          return getEmployeeMail();
+      } else {
+          return getRegUserMail();
+      }
     }
+
+    ...
+```
+
+The `getEmployeeMail` method is trivial; it always returns
+the same instance, since the composition of the employee's mail service
+is fixed. Its instance is held in `empMail` field in the anonymous implementation
+of `AlternatingUserMail`.
+
+*Note: In Groovy, one uses `withTraits` to add traits at run-time to an object.
+This method accepts one or more trait types and is invoked on the target object.*
+
+```groovy
+    UserMail empMail = employee.withTraits(EmployeeAdapter, DefaultUserMail, VirusDetector)
 
     UserMail getEmployeeMail() {
         return this.empMail;
     }
-
-    UserMail getRegUserMail() {
-        UserMail regUserMail = regUser.withTraits(RegisteredUserAdapter, DefaultUserMail, VirusDetector);
-
-        def calendar = Calendar.getInstance()
-
-        // Dimension 1
-        if (regUser.premium && regUser.validTo.toCalendar().after(calendar)) {
-            regUserMail = regUserMail.withTraits(Premium, DefaultFaxByMail);
-        }
-
-        // Dimension 2
-        if (regUser.isMale()) {
-            regUserMail = regUserMail.withTraits(Male);
-        } else {
-            regUserMail = regUserMail.withTraits(Female);
-        }
-
-        // Dimension 3
-        def isAdult = (calendar.get(Calendar.YEAR) - regUser.birthDate.toCalendar().get(Calendar.YEAR)) > 18;
-        if (isAdult) {
-            regUserMail = regUserMail.withTraits(Adult);
-        }
-
-        return regUserMail;
-    }
-
-};
 ```
+
+The `getRegUserMail` method is more complex, since the actual composition of the service
+depends on several circumstances. The rules for the composition can be summarized
+as follows:
+* If the user is 
+
+```groovy
+  UserMail getRegUserMail() {
+      UserMail regUserMail = regUser.withTraits(RegisteredUserAdapter, DefaultUserMail, VirusDetector);
+
+      def calendar = Calendar.getInstance()
+
+      // Dimension 1
+      if (regUser.premium && regUser.validTo.toCalendar().after(calendar)) {
+          regUserMail = regUserMail.withTraits(Premium, DefaultFaxByMail);
+      }
+
+      // Dimension 2
+      if (regUser.isMale()) {
+          regUserMail = regUserMail.withTraits(Male);
+      } else {
+          regUserMail = regUserMail.withTraits(Female);
+      }
+
+      // Dimension 3
+      def isAdult = (calendar.get(Calendar.YEAR) - regUser.birthDate.toCalendar().get(Calendar.YEAR)) > 18;
+      if (isAdult) {
+          regUserMail = regUserMail.withTraits(Adult);
+      } else {
+        regUserMail = regUserMail.withTraits(Child);
+      }
+
+      return regUserMail;
+  }
+```
+
+
 
 ###Summary
 
