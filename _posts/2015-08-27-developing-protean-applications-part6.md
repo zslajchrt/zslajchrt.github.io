@@ -132,32 +132,54 @@ components.
 ```scala
 def initializeMailUser(employee: Employee, registeredUser: RegisteredUser): UserMail = {
 
-  val empMail = new Employee() with
+  val employeeMail = new Employee() with
     EmployeeAdapter with
     DefaultUserMail with
     EmployeeUserMail with
     VirusDetector
 
-  empMail.adoptState(employee)
+  employeeMail.adoptState(employee)
 
-  val ruMail = if (registeredUser.premium)
-    new RegisteredUser() with PremiumUser with
-      RegisteredUserAdapter with
-      DefaultUserMail with
-      RegisteredUserMail with
-      VirusDetector with
-      DefaultFaxByMail
-  else
-    new RegisteredUser() with
-      RegisteredUserAdapter with
-      DefaultUserMail with
-      RegisteredUserMail with
-      VirusDetector
+  val regUserMail = new RegisteredUser() with
+    RegisteredUserAdapter with
+    DefaultUserMail with
+    RegisteredUserMail with
+    VirusDetector
+  regUserMail.adoptState(registeredUser)
 
-  ruMail.adoptState(registeredUser)
+  val regUserMailPremium = new RegisteredUser() with PremiumUser with
+    RegisteredUserAdapter with
+    DefaultUserMail with
+    RegisteredUserMail with
+    VirusDetector with
+    DefaultFaxByMail
+  regUserMailPremium.adoptState(registeredUser)
 
-  new AlternatingUserMail(empMail, ruMail)
-}
+  new AlternatingUserMail {
+    override protected def getDelegate: UserMail = {
+      Calendar c = Calendar.getInstance()
+      def h = c.get(Calendar.HOUR_OF_DAY)
+      if (h >= 8 && h < 17) {
+        getEmployeeMail
+      } else {
+        getRegUserMail
+      }
+    }
+
+    def getEmployeeMail = {
+      employeeMail
+    }
+
+    def getRegUserMail = {
+      if (regUser.premium &&
+        regUser.validTo != null &&
+        regUser.validTo.toCalendar().after(Calendar.getInstance()))
+        regUserMailPremium
+      else
+        regUserMail
+    }
+
+  }
 ```
 
 The first look on the code suggests that the assembling code is more compact. It is
@@ -165,14 +187,21 @@ caused mainly by the Scala's syntax and partly by using traits. For example,
 it is not necessary to define the auxiliary `Premium` class, since the `PremiumUser`
 trait can be specified as part of the anonymous class signature in the `new` statement.
 
+The `AlternatingUserMail` is an abstract class, whose `useLeft` method must be
+implemented to determine, which one of the two wrapped instances of `UserMail` will
+be used for the delegation. Here, the decision is made according to the current time.
+If it is between 8am-17pm then the employee email service is used (i.e. the "left" one).
+
 The complete source code may be viewed [here](https://github.com/zslajchrt/morpheus-tutor/tree/master/src/main/scala/org/cloudio/morpheus/mail/traditional).
 
 ####Summary
 
 * There are two statements creating the registered user's mail instance; the only difference
-is that the former creates an instance with the additional `Premium` trait. It is
+is that the latter creates an instance with the additional `Premium` trait. It is
 obvious that if there were another dimension, which should be expressed by type,
-such as gender, it would lead to further bifurcation. It follows, that modeling
+such as gender, it would lead to further bifurcation. It follows that, there would
+have to be as many pre-initialized instances as the number of all possible compositions
+of the registered user's mail service. It means, however, that modeling
 multidimensional objects by means of static traits is practically impossible
 for a higher number of dimensions because of the combinatorial explosion of
 instantiating statements.

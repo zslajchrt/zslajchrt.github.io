@@ -7,6 +7,60 @@ permalink: developing-protean-applications-part7
 
 ###Modelling Protean Service With Dynamic Traits
 
+```groovy
+@CompileStatic
+trait Employee {
+
+    private String firstName;
+...
+}
+```
+
+```groovy
+def employee = new Object() as Employee;
+loadEmployee(employeeData);
+def regUser = new Object() as RegisteredUser;
+loadRegUser(regUserData);
+```
+
+```groovy
+UserMail employeeMail = employee.withTraits(EmployeeAdapter, DefaultUserMail, VirusDetector)
+```
+
+```groovy
+UserMail regUserMail = regUser.withTraits(RegisteredUserAdapter, DefaultUserMail, VirusDetector);
+UserMail regUserMailPremium = regUserMail.withTraits(Premium, DefaultFaxByMail);
+```
+
+```groovy
+AlternatingUserMail userMail = new AlternatingUserMail() {
+    @Override
+    UserMail getDelegate() {
+        Calendar c = Calendar.getInstance();
+        def h = c.get(Calendar.HOUR_OF_DAY);
+        if (h >= 8 && h < 17) {
+            return getEmployeeMail();
+        } else {
+            return getRegUserMail();
+        }
+    }
+
+    UserMail getEmployeeMail() {
+        return employeeMail;
+    }
+
+    UserMail getRegUserMail() {
+        if (regUser.premium &&
+                regUser.validTo != null &&
+                regUser.validTo.toCalendar().after(Calendar.getInstance()))
+            return regUserMailPremium;
+        else
+            return regUserMail;
+    }
+
+};
+```
+
 - combinatorial explosion is over, the
 
 - weak type system, cannot use composite types for variables:

@@ -196,11 +196,6 @@ public static void useMailService(Map<String, Object> employeeData, Map<String, 
     msg.setBody("Hi, Pepa!");
 
     userMail.sendEmail(msg);
-
-    userMail.setCurrent(false);
-
-    userMail.sendEmail(msg);
-
 }
 
 public static Employee initEmployee(Map<String, Object> employeeData) {
@@ -223,23 +218,39 @@ public static RegisteredUser initRegisteredUser(Map<String, Object> regUserData)
 }
 
 public static AlternatingUserMail initMailService(Employee employee, RegisteredUser registeredUser) {
-
     // We need to clone the state of both employee and registeredUser
     EmployeeAdapter employeeAdapter = new EmployeeAdapter(employee);
-    UserMail userMail1 = new EmployeeUserMail(employeeAdapter);
+    final UserMail employeeMail = new VirusDetector(new EmployeeUserMail(employeeAdapter));
 
-    RegisteredUserAdapter registeredUserAdapter = new RegisteredUserAdapter(registeredUser);
-    UserMail userMail2 = new RegisteredUserMail(registeredUserAdapter);
+    final RegisteredUserAdapter registeredUserAdapter = new RegisteredUserAdapter(regUser);
+    final UserMail regUserMail = new VirusDetector(new RegisteredUserMail(registeredUserAdapter));
+    final UserMail regUserMailPremium = new DefaultFaxByMail(registeredUserAdapter, regUserMail);
 
-    userMail1 = new VirusDetector(userMail1);
-    userMail2 = new VirusDetector(userMail2);
+    return new AlternatingUserMail() {
+        @Override
+        protected UserMail getDelegate() {
+            Calendar c = Calendar.getInstance();
+            int h = c.get(Calendar.HOUR_OF_DAY);
+            if (!(h >= 8 && h < 17)) {
+                return getEmployeeMail();
+            } else {
+                return getRegUserMail();
+            }
+        }
 
-    // We must resort to the isPremium property since the Premium trait is forgotten by the adaptation.
-    if (registeredUser.isPremium()) {
-        userMail2 = new DefaultFaxByMail(registeredUserAdapter, userMail2);
-    }
+        UserMail getEmployeeMail() {
+            return employeeMail;
+        }
 
-    return new AlternatingUserMail(userMail1, userMail2);
+        UserMail getRegUserMail() {
+            if (regUser.isPremium() &&
+                    regUser.getValidTo() != null &&
+                    regUser.getValidTo().compareTo(Calendar.getInstance().getTime()) >= 0)
+                return regUserMailPremium;
+            else
+                return regUserMail;
+        }
+    };
 }
 
 ```
@@ -262,9 +273,15 @@ to provide the fax-by-mail extension. Unfortunately, the test on a premium custo
 cannot use the `PremiumUser` type since it has gotten lost during the preceding adaptation
 and wrapping.
 
-Then the two mail service instances inserted into `AlternatingUserMail`, which
-is able to switch the accounts in the background. This must be the topmost
-wrapper so as to preserve the `FaxByMail` type of the resulting service instance.
+Then `AlternatingUserMail` is implemented and instantiated. This instance is able to switch
+the accounts in the background according to the current time. (If it is between 8am-17pm then
+`employeeMail` is used.) When the account of the registered user is to be used,
+the implementation also checks whether the registered user is a premium one
+and whether his account is valid. If so, the `AlternatingUserMail` instance uses
+the `regUserMailPremium` mail service.
+
+`AlternatingUserMail` must be the topmost wrapper so as to preserve the `FaxByMail` type of
+the resulting service instance.
 
 The rest of the code creates an email message and switches the accounts.
 
