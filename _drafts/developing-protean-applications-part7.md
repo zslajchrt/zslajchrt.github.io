@@ -133,7 +133,12 @@ This method accepts one or more trait types and is invoked on the target object.
 The `getRegUserMail` method is more complex, since the actual composition of the service
 depends on several circumstances. The rules for the composition can be summarized
 as follows:
-* If the user is 
+
+* If the registered user owns a premium license and this license is still valid,
+then the resulting mail service instance is marked by the `Premium` trait and
+extended by `DefaultFaxByMail`.
+* If the user is mail, the instance is further marked by `Male` or `Female` traits.
+* If the use is older then the instance is marked by `Adult`.
 
 ```groovy
   UserMail getRegUserMail() {
@@ -157,64 +162,96 @@ as follows:
       def isAdult = (calendar.get(Calendar.YEAR) - regUser.birthDate.toCalendar().get(Calendar.YEAR)) > 18;
       if (isAdult) {
           regUserMail = regUserMail.withTraits(Adult);
-      } else {
-        regUserMail = regUserMail.withTraits(Child);
       }
 
       return regUserMail;
   }
 ```
 
+The above-mentioned rules represent three independent dimensions constituting a
+configuration space, where every point corresponds to one possible composition
+of the resulting mail service instance for the registered user.
 
+The very important fact is, however, that the assembling code no longer blows up
+exponentially with the number of dimension. This fact is a consequence of the
+step-by-step extensions.
+
+Nevertheless, there are several downsides. First, a new composite instance is
+created again and again on each invocation of `getDelegate`, even when the structure
+of the new instance remains the same. This problem can be mitigated by storing
+the information about the structure of the last instance into a field. A new
+instance would be created only if its structure differs from that of the last one.
+
+Second, each extension step leads to the creation of a new proxy object wrapping the
+object from the previous step. Here, we can end up in having a cascade of
+four proxies (three dimensions plus the proxied `RegisteredUser` entity). It follows
+that to get a value of a property in the `RegisteredUser` entity amounts to four
+delegated invocations on the nested proxies.
+
+Third, it makes no sense for the extending traits to be stateful, because
+the state of an extension attached to the last instance gets lost on every
+re-instantiation. Here, it concerns the `VirusDetector` trait, since it holds
+a counter of detected viruses in email attachments, which would be periodically
+reset. A solution, or rather a workaround, could be to hold the extension's
+state out of the extension, which is not a good design practice violating
+encapsulation of data.
 
 ###Summary
 
-- no cloning
+There is no doubt that using dynamic traits helped resolve some problems.
 
-- combinatorial explosion is over, the number of initialization statements (O(n))
+* Combinatorial explosion is over, the number of initialization statements (O(n))
 is proportional to the number of dimensions (3) and not to the cardinality
 of the cartesian product of the dimensions (O(2^n)).
 
-- a downside is that the instances of the services are created over and over.
-Also, there may be some stateful traits, whose state would get lost (e.g. `VirusDetector`).
+* We no longer have to clone the state of domain entity objects to the new
+extended instances.
 
-- weak type system, cannot use composite types for variables:
-e.g. `RegisteredUser & Male & Premium & Adult`, it is very important for multidimensional
-metamorphism, since it provides a sort of type query language.
+On the other hand, dynamic traits did not help solve the problem of metamorphism,
+and the client is still tightly coupled with `AlternatingUserMail` class, which
+provides the client with an interface to determine the current functionality of
+the mail service instance, for example. The metamorphism must still be implemented
+by delegation.
 
-```
-UserMail with Employee empMail = employee.withTraits(EmployeeAdapter, DefaultUserMail)
-```
+Dynamic traits also bring a couple of new problems, some are inherently connected
+to the concept of dynamic traits, while others to Groovy's implementation.
 
-- no compile type check of the assignment
+* A trait does not have to implement all methods from the extended type, because
+it may be assumed that the missing methods will be delivered by other traits when
+extending an object. Since the extension mechanism includes no trait completeness check,
+it may happen that some methods will be missing after extending the object by
+such a set of traits. The dynamic nature of a dynamic traits language also make
+it difficult to introduce some reliable completeness check.
 
-- no shared traits instances, it would be nice if we could extends the employee and regUser by
- the same VirusDetector instance. There remains the duplicity when counting the detected viruses.
+* A traits may also depend on other traits. In dynamic languages it is in general also
+very difficult to check dependencies at the moment of extending an object, since
+the object may or may not contain the required traits. Composing more complex
+structures by dynamic traits is therefore prone to missing dependencies.
 
-- no completeness check, i.e. all methods are implemented by some fragment
-- no fragment dependencies check, neither compile-time nor run-time
+* Objects can be extended by trait type, not by trait instance. It has important consequences
+especially for stateful traits, since their state is initialized at the moment
+of extending an object. It follows that while the extended object remains the same
+during a series of repeated extensions, the attached traits themselves are always
+newly instantiated. It would be useful if we could extend two objects by the same
+trait instance to share the trait's state between the two objects.
 
-```groovy
-VirusDetector virusDetect = new Object() as VirusDetector;
-UserMail employeeAdapt = employee.withTraits(EmployeeAdapter, DefaultUserMail, virusDetect)
-UserMail regUserAdapt = employee.withTraits(RegisteredUserAdapter, DefaultUserMail, virusDetect)
-```
-- the metamorphism must be implemented by delegation, thus the client is still
-tightly coupled with a concrete .
+* A cascade of step-by-step extensions leads to stacked proxies. As a result of it
+an invocation of a method belonging to the most bottom trait is mediated by
+the whole stack of proxies. (requirement: to flatten the proxies)
 
-If only that were possible to overcome this last obstacle. Then we would get
-the ideal implementation of the mail service with lossless propagation of types.
-
-###Wrapping Up
-
-####Type Preservation
-Why?
+* Dynamic languages have a weak type system, which does not allow constructing
+composite types, such as `RegisteredUser & Male & Premium & Adult`. Such types
+would serve as a sort of type query language used to determine concrete traits
+in multiple dimensions:
 
 ```groovy
 if (userMail instanceof RegisteredUser & Male & Premium & Adult) {
     //...
 }
 ```
+
+In Scala we could use the `match` construct to distinguish between
+various combinations of traits:
 
 ```scala
 userMail match {
@@ -223,33 +260,14 @@ userMail match {
 }
 ```
 
-####Multidimensionality
 
-TODO: What is it?
-An instance may assume any of the set of predefined forms. Each form corresponds
-to a point in a multidimensional space, where each dimension is represented by
-an abstract "trait" (material) and values in the dimension are "concrete" traits (paper, metal ...).
+```
+UserMail with Employee empMail = employee.withTraits(EmployeeAdapter, DefaultUserMail)
+```
 
-modeling multidimensional data, combinatorial explosion of class declarations,
-multidimensional polymorphism -> a need to describe all combinations in one expression
-
-####Metamorphism
-
-TODO: What is it? It
-
-####Multidimensional Metamorphism
-
-TODO: What is it?
-
-a loss-less extension of types, the information about the types constituting
-an object's class should percolate through all abstraction layers,
-from the persistence layer, through the business layer to the presentation layer,
-loose coupling,
-
-cloning object state
-
-the client is tightly coupled with a concrete implementation of a general interface:
-to find out the type of the underlying entity, to determine the implemented
-interfaces (isXXX methods)
-
-The functionality of AlternatingUserMail should be provided by the platform.
+In general, because of the lack of a strong static type system, modeling
+multidimensional domains by dynamic traits with complex dependencies is
+prone to errors and the resulting implementation will tend to end up
+in a unmaintainable mess. With the growing number of dimensions and concrete traits
+there will be an increasing probability that some method or some dependency is missing
+in the final composition of traits used to extend an object.

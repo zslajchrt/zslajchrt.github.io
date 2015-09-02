@@ -5,36 +5,43 @@ comments: true
 permalink: developing-protean-applications-part8
 ---
 
-```scala
-case class Connection(userId: String)
+###Wrapping Up
 
-case class MarketingPersonaDemographics(ageGroup: Option[Int], gender: Option[Int], salaryGroup: Option[Int], location: Option[Int], education: Option[Int], family: Option[Int])
-case class MarketingPersonaProfessional(field: Option[Int], position: Option[Int], experience: Option[Int])
-case class MarketingPersonaHobby(fields: List[Int])
-case class MarketingPersona(demographics: Option[MarketingPersonaDemographics], professional: Option[MarketingPersonaProfessional], hobbies: Option[MarketingPersonaHobby])
-```
-
-TODO: link to the loaders, which are pretty same as the others
+In the light of the above-mentioned findings,... strong
 
 
-```scala
-val regUserOrEmpModel = parse[
-  (RegisteredUserEntity with RegisteredUserPublicCommon) or
-    (EmployeeEntity with EmployeePublicCommon) with
-    \?[PersonConnectionsEntity] with
-    \?[MarketingPersonaEntity]
-  ](true)
-```
 
-```scala
-val regUserOrEmpLoaderRef: &[$[(RegisteredUserLoader or
-  EmployeeLoader or
-  PersonConnectionsLoader or
-  MarketingPersonLoader) with UserDatasourcesMock]] = regUserOrEmpKernel
+####Type Preservation
+Why?
 
-val regUserOrEmpLoaderKernel = *(regUserOrEmpLoaderRef, single[RegisteredUserLoader], single[EmployeeLoader],
-  single[PersonConnectionsLoader], single[MarketingPersonLoader], single[UserDatasourcesMock])
-```
 
-```scala
-```
+####Multidimensionality
+
+TODO: What is it?
+An instance may assume any of the set of predefined forms. Each form corresponds
+to a point in a multidimensional space, where each dimension is represented by
+an abstract "trait" (material) and values in the dimension are "concrete" traits (paper, metal ...).
+
+modeling multidimensional data, combinatorial explosion of class declarations,
+multidimensional polymorphism -> a need to describe all combinations in one expression
+
+####Metamorphism
+
+TODO: What is it? It
+
+####Multidimensional Metamorphism
+
+TODO: What is it?
+
+a loss-less extension of types, the information about the types constituting
+an object's class should percolate through all abstraction layers,
+from the persistence layer, through the business layer to the presentation layer,
+loose coupling,
+
+cloning object state
+
+the client is tightly coupled with a concrete implementation of a general interface:
+to find out the type of the underlying entity, to determine the implemented
+interfaces (isXXX methods)
+
+The functionality of AlternatingUserMail should be provided by the platform.
