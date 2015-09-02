@@ -265,9 +265,13 @@ userMail match {
 UserMail with Employee empMail = employee.withTraits(EmployeeAdapter, DefaultUserMail)
 ```
 
-In general, because of the lack of a strong static type system, modeling
-multidimensional domains by dynamic traits with complex dependencies is
-prone to errors and the resulting implementation will tend to end up
-in a unmaintainable mess. With the growing number of dimensions and concrete traits
+The above-mentioned findings indicate that because of the lack of a strong static
+type system, modeling multidimensional domains by dynamic traits with complex
+dependencies is prone to errors and the resulting implementation will tend to end up
+in a unmaintainable chaos. With the growing number of dimensions and concrete traits
 there will be an increasing probability that some method or some dependency is missing
 in the final composition of traits used to extend an object.
+
+It also leads us to the conclusion that only a platform equipped with a strong
+static type system allowing for a safe dynamic composition of traits is suitable
+for developing complex multidimensional mutable applications must be.
