@@ -266,8 +266,8 @@ as shown in the following snippet.
 
 It is obvious that such an instantiation is unsustainable since the number
 of lines (boilerplate) grows exponentially with the number of dimensions. Unfortunately,
-there is currently no practical solution in Scala to cope with this
-problem. It is, after all, a phenomenon tightly connected with static
+there is currently no practical solution in Scala (and any other statically typed language)
+to cope with this problem. It is, after all, a phenomenon tightly connected with static
 type systems.
 
 Let us have a closer look at this problem. It is required that every item
@@ -305,70 +305,37 @@ themselves (what they are). On the other hand, using the standard means of stati
 typed languages leads to the excessive amount of boilerplate and large number
 of classes.
 
-In order to find a solution we must not only take into account
-the generation, but also consider some extension of the type system.
+One solution to the exponential growth could be to use a dynamic language with
+a capability to extend object at run-time. This option is is evaluated later
+in this chapter.
 
-The solution stems from the idea to express the multidimensionality of a domain
-object as a type. It is actually an extension of the traditional way of expressing
-object types. For example the following expression refers to a simple type:
+Another option is to extend or modify a static language such as Scala in such
+a way that it provides special constructs for modeling multidimensional objects.
 
-```scala
-  Thing
-```
+###Summary
 
-and this expression refers to a composition of three type.
+* The traditional approach to model multidimensional data objects uses
+the composition and delegation, eventually adaptation, patterns.
+The composition produces an object (item) wrapping other objects (material, shape),
+which can assume various forms. The number of wrapped objects corresponds to
+the number of dimensions. For each dimension the top object exposes a corresponding
+interface by means of delegation.
 
-```scala
-  Thing with Paper with Cylinder
-```
+* Delegation hides the real shape (character, type) of an object. We cannot
+determine from the top object's type that it is a rectangular paper. Instead,
+we always find out that it is a something of some shape and material.
+To determine the real type, one cannot use a single  `instanceof` operator.
+Instead, he must resort to examining the object's attributes, i.e. the state,
+holding references to the wrapped objects (`getMaterial()`, `getShape()`) and
+additionally apply `instanceof` for each wrapped instance.
 
-It would be nice if another type expression could be constructed to refer to a type
-containing alternatives (a sort of union).
+* The character of a composite object is scattered accros the object and its
+components. The result is the so-called object schizophrenia.
 
-```scala
-  Thing with (Paper or Metal) with (Rectangle or Cylinder)
-```
+* Traits are a natural concept for modeling multidimensional objects, which
+helps preserve full object's type information and avoid object schizophrenia.
 
-The previous type expresses in one line all combinations of forms that an item
-can assume. Adding a new dimension or a new type to an existing dimension does
-not cause a code explosion.
-
-To support such a kind of expression in applications, there must be some extension
-in the language platform, especially in the compiler and type system sections.
-
-The following code shows how such a complex type could be used to instantiate
-an item (the code uses the real *Morpheus* code):
-
-```scala
-  val itemKernel = compose[Thing with (Paper or Metal) with (Rectangle or Cylinder)]
-  val item = itemKernel.morph(new ItemBuilder(scanEvent)) // ItemBuilder determines the final form of the item
-
-  assert(true, item.isInstanceOf[Thing with Material with Shape])
-
-  val maybeBanknote = item.isInstanceOf[Paper with Rectangle] // true or false
-```
-
-Without delving too much into the details, the program flow can be described
-this way:
-
-First, the `compose` operator creates the so-called kernel for the type specified
-in the brackets. The kernel 'knows' all the alternative forms which an item
-can assume. It also holds factories for instantiating individual fragments, of
-which the type is composed.
-
-Second, the item is instantiated by invoking `morph` method on the kernel.
-Since there are a number of possible alternatives, the kernel needs a companion,
-which helps him to determine the right alternative. The `ItemBuilder` is such
-a companion which selects the correct alternative according to the `scanEvent`
-passed as the argument to its constructor.
-
-Third, the returned object is always an instance of type `Thing with Material with Shape`,
-which is the lowest common ancestor type of all alternative types.
-
-Fourth, the item can be checked whether it is a certain combination of
-concrete types by means of `isInstanceOf` method as usual.
-
-The complete code including the initialization is discussed later.
-
-For the sake of further analysis let us assume that at this stage the multidimensional
-protodata can be modeled by means of the extended system system sketched above.
+* Modeling multidimensional objects by means of static traits (Scala) leads
+to exponential explosion of code making the static traits practically
+unusable. It can be solved either by using a dynamic language with traits or
+by extending a static language.

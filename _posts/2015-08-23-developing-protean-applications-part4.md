@@ -48,9 +48,32 @@ The goal of the mapping is to bind the objects from the target domain to
 the objects from the source domain in order to avoid any intermediary processes
 normalizing and transforming the source domains objects into the target domain ones.
 
-Furthermore, since the type systems of advanced programming languages are
-powerful enough to grasp the complex nature of domain objects, domain models
-should use primarily the type system to model the objects.
+In order to make the mapping easier and also to reduce the coupling between
+the two domain models, the type of individual domain objects should contain
+as much information about objects' character (i.e. what they are) as possible
+and avoid describing the object by state (i.e. no "isABC" properties).
+
+Then we can describe a banknote as a rectangular paper and not as a generic item.
+
+In Scala we can express the mapping by means of the so-called self-type,
+which specifies the context for traits.
+
+```scala
+trait Banknote {
+  // this self-type limits the use of this trait to instances of Rectangle and Paper only
+  this: Rectangle with Paper =>
+}
+```
+
+```scala
+trait Banknote {
+  this: Item =>
+}
+```
+
+
+The type systems of advanced programming languages are powerful enough to grasp
+the complex nature of domain objects.
 
 Here, the source domains are the scanner protodata and the currency database, while
 the target domain is the currency context. The mapping declares how an object

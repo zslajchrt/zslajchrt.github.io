@@ -272,6 +272,11 @@ in a unmaintainable chaos. With the growing number of dimensions and concrete tr
 there will be an increasing probability that some method or some dependency is missing
 in the final composition of traits used to extend an object.
 
-It also leads us to the conclusion that only a platform equipped with a strong
+The step-by-step concept of extending objects seems to be too unconstrained
+delegating the responsibility for the consistency of trait compositions on the developer.
+However, considering that the number of trait combinations grows exponentially with
+the number of dimensions, the system will quickly run out of control of any developer.
+
+It leads us to the conclusion that only a platform equipped with a strong
 static type system allowing for a safe dynamic composition of traits is suitable
 for developing complex multidimensional mutable applications must be.
