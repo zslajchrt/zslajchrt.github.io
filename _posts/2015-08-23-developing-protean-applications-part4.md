@@ -345,15 +345,15 @@ by means of the underlying language platform, especially the type-system.
 
 There more reasons for it:
 
-- **Stability**: The character or meaning of domain entities is more stable than the structure
+** **Stability**: The character or meaning of domain entities is more stable than the structure
    of individual entities. It follows that if the meaning and character is expressed
    by types and not by state, then possible structural changes in the domain model
    should not affect the mapping schema.
-- **Type safety**: The type system verifies the consistency of the mapping rules,
+** **Type safety**: The type system verifies the consistency of the mapping rules,
    i.e. that the types involved in the mapping can be mapped and composed as intended.
    It can detect missing parts and makes the mapping schema robust against changes
    in the domain models.
-- **Early error discovery**: If a static language is used then the consistency
+** **Early error discovery**: If a static language is used then the consistency
    check and the verifications are carried out at compile-time. It follows that
    possible errors and inconsistencies in the mapping may be caught early.
 
