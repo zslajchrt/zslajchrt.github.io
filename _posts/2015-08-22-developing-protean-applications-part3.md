@@ -229,8 +229,24 @@ extension of the language's type system (and the compiler). It would have a
 important consequence that domain mapping schemas could be type-checked for
 correctness and type safety at compile-time.
 
+#####Modeling multidimensional in Scala (static traits)
+
 Before going further, we should closer examine how actually a new multidimensional
-instance is created from external data in Scala.
+instance is created from external data in Scala. The concept of static traits
+seems to fit well to this multidimensional problem, since the individual dimensions
+can be modeled by them.
+
+Typically, the initialization procedure prepares a list of traits by selecting
+one trait from each dimension (e.g. `Paper`, `Rectangle`) according to the input
+data. This list of traits represents a point in the multidimensional space given
+by the dimensions and the traits in the list correspond to the point's coordinates.
+
+There is an important limitation, however, stemming from Scala's strong static
+type system: traits can be specified only as a part of the class declaration.
+This fact actually rules out any step-by-step imperative way to build the list
+of traits from the input data (i.e. the builder pattern). Instead, the initialization
+procedure must handle all possible combinations of traits. I will illustrate the
+problem in the following example.
 
 Let us assume that the external data for the item is stored in a dictionary-like
 object `event`. In order to create a new item then for every
@@ -241,22 +257,22 @@ as shown in the following snippet.
   val x = event.get("thing").get("x")
   val y = event.get("thing").get("y")
   val z = event.get("thing").get("z")
-  val item = if (event.contains("metal") && event.contains("cylinder")) {
+  val item = if (event.containsKey("metal") && event.containsKey("cylinder")) {
     new Thing(x, y, z) with Metal with Cylinder {
       val height = event.get("cylinder").get("height")
-      val radius = event.get("cylinder").get("height")
+      val radius = event.get("cylinder").get("radius")
     }
-  } else if (event.contains("metal") && event.contains("rectangle")) {
+  } else if (event.containsKey("metal") && event.containsKey("rectangle")) {
     new Thing(x, y, z) with Metal with Cylinder {
       val width = event.get("rectangle").get("width")
       val height = event.get("rectangle").get("height")
     }
-  } else if (event.contains("paper") && event.contains("cylinder")) {
+  } else if (event.containsKey("paper") && event.containsKey("cylinder")) {
     new Thing(x, y, z) with Metal with Cylinder {
       val height = event.get("cylinder").get("height")
-      val radius = event.get("cylinder").get("height")
+      val radius = event.get("cylinder").get("radius")
     }
-  } else if (event.contains("paper") && event.contains("rectangle")) {
+  } else if (event.containsKey("paper") && event.containsKey("rectangle")) {
     new Thing(x, y, z) with Metal with Cylinder {
       val width = event.get("rectangle").get("width")
       val height = event.get("rectangle").get("height")
@@ -305,12 +321,79 @@ themselves (what they are). On the other hand, using the standard means of stati
 typed languages leads to the excessive amount of boilerplate and large number
 of classes.
 
-One solution to the exponential growth could be to use a dynamic language with
-a capability to extend object at run-time. This option is is evaluated later
-in this chapter.
+#####Modeling multidimensional in Groovy (dynamic traits)
 
-Another option is to extend or modify a static language such as Scala in such
-a way that it provides special constructs for modeling multidimensional objects.
+Since static traits in Scala leads to the exponential growth of code when
+attempting to model a multidimensional data, we can try a dynamic approach.
+
+Groovy is a dynamic language which, however, supports some optional static language
+features, like a compile-time type check. It also contains traits that can
+be applied on both types and instances. To solve the exponential growth problem
+we will try to rewrite the previous code by means of the dynamic traits.
+
+The common data of the item is represented by trait `Thing`, which contains the
+coordinates (x, y, z) of the item in the luggage. The following code creates
+the item object implementing the `Thing` trait. The item object is then initialized
+from the input data.
+
+```groovy
+def item = new Object() as Thing
+
+Map thingData = event.get("thing")
+item.x = thingData.get("x")
+item.y = thingData.get("y")
+item.z = thingData.get("z")
+```
+
+Now we can use the dynamic traits and extend the item step-by-step by the right traits.
+We use `withTraits` method invoked on the item object to extend it by the selected trait.
+The selected trait is immediately initialized from the input data.
+
+```groovy
+// Shape dimension
+if (event.containsKey("cylinder")) {
+    item = item.withTraits(Cylinder)
+    Map cylinderData = event.get("cylinder")
+    item.height = cylinderData.get("height")
+    item.radius = cylinderData.get("radius")
+} else if (event.containsKey("rectangle")) {
+    item = item.withTraits(Rectangle)
+    Map rectangleData = event.get("rectangle")
+    item.height = rectangleData.get("height")
+    item.width = rectangleData.get("width")
+}
+
+// Material dimension
+if (event.containsKey("metal")) {
+    item = item.withTraits(Metal)
+} else if (event.containsKey("paper")) {
+    item = item.withTraits(Paper)
+}
+```
+
+It seems that using dynamic traits and the step-by-step extensions resolved the problem
+with the exponential growth. The number of conditions is proportional to
+the number of dimensions and not to the number of all possible combinations.
+
+The resulting object also carries all type information about itself. It can
+be tested by the `instanceof` operator.
+
+```groovy
+def isThing = item instanceof Thing
+def isRectangle = item instanceof Rectangle
+def isPaper = item instanceof Paper
+
+if (isThing && isRectangle && isPaper)
+    println(/${item.x}, ${item.y}, ${item.z}, ${item.width}, ${item.height}/)
+```
+
+Although this solution based on using the dynamic traits seems to be
+perfect, because it allows us to capture the multidimensional character of data
+by traits, preserves the types and prevents the code from exponential growth,
+there are still a couple of serious problems connected to the dynamic
+nature of the language and its weak type system. As shown later in this chapter,
+modeling complex multidimensional domains with the dynamic traits on a platform
+with a weak type system tend to unmaintainable code.
 
 ###Summary
 
@@ -339,3 +422,8 @@ helps preserve full object's type information and avoid object schizophrenia.
 to exponential explosion of code making the static traits practically
 unusable. It can be solved either by using a dynamic language with traits or
 by extending a static language.
+
+* One solution to the exponential growth could be to use a dynamic language
+such as Groovy with a capability to extend object at run-time. This approach
+however also suffers from a couple of serious issues as shown later in this
+chapter.
