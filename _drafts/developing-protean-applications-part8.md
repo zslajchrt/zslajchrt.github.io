@@ -9,7 +9,76 @@ permalink: developing-protean-applications-part8
 
 In the light of the above-mentioned findings,... strong
 
+```
+  Item ::= thing Material Shape
+  Material ::= paper metal other
+  Shape ::= rectangle cylinder other
+```
 
+```
+  thing metal cylinder
+  thing metal rectangle
+  thing metal other
+  thing paper cylinder
+  thing paper rectangle
+  thing paper other
+  thing other cylinder
+  thing other rectangle
+  thing other other
+```
+
+
+```scala
+  def getRectangleAreaAndPaperColor(item: Map[String, Object]): Option[Float, Int] = {
+    val shape = item.get("shape")
+    val material = item.get("material")
+    if (shape == null || !"rectangle".shape.get("type") ||
+        material == null || !"paper".material.get("type")) {
+      None
+    } else {
+      val w = shape.asInstanceOf[Map[String, Object]].get("width");
+      val c = material.asInstanceOf[Map[String, Object]].get("color");
+      Some((w, c))
+    }
+  }
+```
+
+```java
+  Float getRectangleWidth processItem(ParsedObject item) {
+    if (item.getObjectProperty("shape").is("Rectangle")) {
+      return item.getObjectProperty("shape").getFloatProperty("width");
+    } else {
+      return null;
+    }
+  }
+```
+
+```scala
+  def getRectangleAreaAndPaperColor(item: Item): Option[Float, Int] = {
+    if (item.shape.isInstanceOf[Rectangle] && item.material.isInstanceOf[Paper]) {
+      val w = shape.asInstanceOf[Rectangle].width;
+      val c = material.asInstanceOf[Paper].color;
+      Some((w, c))
+    } else {
+      return null;
+    }
+  }
+```
+
+```scala
+  def getRectangleAreaAndPaperColor(item: Item): Option[Float, Int] = {
+    item match {
+      case pr: Rectangle with Paper => Some((pr.width, pr.color))
+      case _ => None
+    }
+  }
+```
+
+```java
+  void processItem(<Thing & (Paper | Metal | Other) & (Rectangle | Cylinder | Other )> item) {
+    ...
+  }
+```
 
 ####Type Preservation
 Why?

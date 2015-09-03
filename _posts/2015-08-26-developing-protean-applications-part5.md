@@ -313,7 +313,7 @@ in instances (i.e. no object schizophrenia). Thus it is possible to check the ty
 of an instance and then to cast it to either `Employee` or `RegisteredUser` to
 get access to the account specific members.
 
-* An potential problem lurks behind the converting of the `isPremium` property into
+* A potential problem lurks behind the converting of the `isPremium` property into
 the `PremiumUser` "trait". Such an approach does not scale with the growing number
 of "IS" properties. This is, however, a limitation of the underlying "no-trait" platform.
 
