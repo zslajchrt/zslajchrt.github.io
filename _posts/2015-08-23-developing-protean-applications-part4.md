@@ -341,10 +341,8 @@ to compose the target domain objects of the objects from the source domains.
 * Such a mapping should be domain-agnostic, i.e. its functionality should
 not be principally driven by the knowledge of the participating domains.
 In other words, the mapper should be able to map one domain onto another only
-by means of the underlying language platform, especially the type-system.
-
-There more reasons for it:
-
+by means of the underlying language platform, especially the type-system. There
+more reasons for it:
   * **Stability**: The character or meaning of domain entities is more stable than the structure
    of individual entities. It follows that if the meaning and character is expressed
    by types and not by state, then possible structural changes in the domain model
