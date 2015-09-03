@@ -156,9 +156,10 @@ by means of the state pattern.[LINK]
 <img src="http://zslajchrt.github.io/resources/alternating.png" width="280" />
 </div>
 
-This class also implements the `UserFaxByMail`
-interface, which is only a conditional implementation, since unless the current
-mail service implements `UserFaxByMail` the `faxEmail` method throws an exception.
+This class also implements the `UserFaxByMail` interface, which is only a conditional
+implementation, since unless the current mail service implements `UserFaxByMail`,
+the `faxEmail` method throws an exception.
+
 Whether the `faxEmail` is possible to invoke may be determined by `canFaxEmail`.
 The positive test, however, does not guarantee that the invocation
 of `canFaxEmail` will be pass, since the current mail service in the `AlternatingUserMail`
@@ -171,6 +172,20 @@ The reason is that `AlternatingUserMail` determines whether a mail service insta
 is `UserFaxByMail` by checking its type. It follows that it may happen that the topmost
 wrapper of such a mail service is wrapped by another wrapper possibly hiding
 the `UserFaxByMail` type.  
+
+Additionally, it would be practically impossible for the client to determine
+the actual user account type without using some reflection tricks or introducing
+a new `getUserAccount` method in the `UserMail` interface. Both solutions are bad.
+
+The former would be a plain hack, while the latter purblindly introduces a backward
+incompatible change to the general contract declared by the `UserMail` interface.
+It would force all `UserMail` implementations to add the new method even if it would
+make no sense for them, since some implementation may not wrap any user account
+object at all. Such classes would have to return `null` as an indication there is
+no underlying user account object. Moreover, the return type of the `getUserAccount`
+method would have to be `Object`, since there is no common ground shared
+by all potential user accounts; the diversity of user accounts is actually
+the main presupposition of this case study.
 
 <div>
 <img src="http://zslajchrt.github.io/resources/mailServiceNoTraitsAll.png" width="600" />
@@ -289,74 +304,57 @@ The complete source code may be viewed [here](https://github.com/zslajchrt/morph
 
 #####Summary
 
-As far as the two account adapters are concerned, there is no serious design flaw. The
+Developing a protean service on a platform without traits significantly reduces
+design options and tends to hide type information about the domain objects.
+
+* As far as the two account adapters are concerned, there is no serious design flaw. The
 combination of inheritance and interface implementation preserves both types
 in instances (i.e. no object schizophrenia). Thus it is possible to check the type
 of an instance and then to cast it to either `Employee` or `RegisteredUser` to
 get access to the account specific members.
 
-An potential problem lurks behind the converting of the `isPremium` property into
+* An potential problem lurks behind the converting of the `isPremium` property into
 the `PremiumUser` "trait". Such an approach does not scale with the growing number
 of "IS" properties. This is, however, a limitation of the underlying "no-trait" platform.
 
-Another weakness is the cloning, because the state of the original account instances
-must be transferred to the new adapted instances.
+* Another weakness is the cloning, because the state of the original account instances
+must be copied to the new adapted instances.
 
-The implementations of `DefaultUserMail` as well as of its two specializations
+* The implementations of `DefaultUserMail` as well as of its two specializations
 `EmployeeUserMail` and `RegisteredUserMail` are pretty straightforward. The `DefaultUserMail`
 is designed as a package private abstract class. Thus it cannot be instantiated
 and only classes in from its package can extend it. The package contains only
 two such classes: `EmployeeUserMail` and `RegisteredUserMail`.
 
-The only flaw is the `getMailOwner` public method introduced in `DefaultUserMail` mediating
+* The only flaw is the `getMailOwner` public method introduced in `DefaultUserMail` mediating
 the access to the underlying user account and which might indicate a loss of
 user account type information in `DefaultUserMail`'s instances. However, since
 the type of the account is indirectly carried by the only two subclasses
 `EmployeeUserMail` and `RegisteredUserMail`, this issue is of a minor importance.
 
-On the contrary, the `VirusDetector` copes with serious complications caused
+* On the contrary, the `VirusDetector` copes with serious complications caused
 by the induced object schizophrenia, as described above. Further, until the mail service
 instances are not wrapped by `VirusDetector`, they preserve their account type information.
 
-The implementation of the optional fax service `DefaultFaxByMail` also hides the account type.
+* The implementation of the optional fax service `DefaultFaxByMail` also hides the account type.
 Additionally, there is a possibly dangerous assumption that it must be the topmost
 wrapper. Also, the test on premium user cannot be done by type.
 
-Probably the most problematic component is `AlternatingUserMail`. Besides its
+* Probably the most problematic component is `AlternatingUserMail`. Besides its
 serious object schizophrenia stemming from the state pattern used to implement
 the switching, its most serious flaw is the conditional implementation of
 `UserFaxByMail`. Further, it must be the final wrapper, which is handed over to the
 mail service client, which is tightly coupled with `AlternatingUserMail`, through
 which the client can determine the presence of the fax extension and access it.
 
-The preservation of types when adapting or extending other classes helps loosen
+* The preservation of types when adapting or extending other classes helps loosen
 the coupling between the instances and their client. For example, the user interface
 would be able to adapt itself to the type of the account and its functionality
 extensions (such fax-by-mail) just on the basis of the mail service instance's type.
 
-Unfortunately, the `AlternatingUserMail` interface cannot provide such information,
-since the `UserMail` interface has no method for getting the type of the user account.
-Thus it would be practically impossible for the client to determine the actual user account type
-without using some reflection tricks or introducing a new `getUserAccount` method
-in the `UserMail` interface. Both solutions are bad.
-
-The former would be a plain hack, while the latter purblindly introduces a backward
-incompatible change to the general contract declared by the `UserMail` interface.
-It would force all UserMail implementations to add the new method even if it would
-make no sense for them, since some implementation may not wrap any user account
-object at all. Such classes would have to return `null` as an indication there is
-no underlying user account object. Moreover, the return type of the `getUserAccount`
-method would have to be `Object`, since there is no common ground shared
-by all potential user accounts; the diversity of user accounts is actually
-the main presupposition of this case study.
-
-In general, the presence of various `isSomething` properties may be alarming since
+* The presence of various `isSomething` properties may be alarming since
 it may indicate mixing of "has" and "is" aspects in the design. Such properties
 often exist primarily in persistence models as boolean or enumeration columns since
 there is no concept of traits in databases. In order to avoid the propagation
 of object schizophrenia through the domain model, such properties should be
 converted to traits or interfaces.
-
-However, any attempt to turn categorial properties into types
-on statically types platforms would lead to the exponential explosion of class
-declarations described in the previous chapter.
