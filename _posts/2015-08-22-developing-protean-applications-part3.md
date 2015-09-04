@@ -412,7 +412,7 @@ Instead, he must resort to examining the object's attributes, i.e. the state,
 holding references to the wrapped objects (`getMaterial()`, `getShape()`) and
 additionally apply `instanceof` for each wrapped instance.
 
-* The character of a composite object is scattered accros the object and its
+* The character of a composite object is scattered across the object and its
 components. The result is the so-called object schizophrenia.
 
 * Traits are a natural concept for modeling multidimensional objects, which

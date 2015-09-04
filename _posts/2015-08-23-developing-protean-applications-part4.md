@@ -39,258 +39,288 @@ of the protodata corresponding to the selected time period and it attempts to
 convert each luggage item into a currency. Such a set of currency objects is then
 aggregated into a statistical report and published on the portal.
 
-The only missing part is now the conversion of the item to a currency object. This
-task is analyzed in the next paragraph.
-
-#####Mapping the context domain on the proto-domain
-
-The goal of the mapping is to bind the objects from the target domain to
-the objects from the source domain in order to avoid any intermediary processes
-normalizing and transforming the source domains objects into the target domain ones.
-
-In order to make the mapping easier and also to reduce the coupling between
-the two domain models, the type of individual domain objects should contain
-as much information about objects' character (i.e. what they are) as possible
-and avoid describing the object by state (i.e. no "isABC" properties).
-
-Then we can describe a banknote as a rectangular paper and not as a mere item.
-
-The following listing shows how we can express the mapping between banknotes and
-rectangular paper items in Scala. We use the so-called self-type, which specifies
-the context for traits.
-
-```scala
-trait Banknote {
-  // this self-type limits the use of this trait to instances of Rectangle and Paper only
-  this: Paper with Rectangle =>
-
-  // here it is possible to access the members of Rectangle and Paper traits
-  val isValidBanknote: Boolean =
-   currencyDb.findBanknote(this.width, this.height) match {
-     case None => false
-     case Some(banknote) => banknote.isValid
-   }
-
-   ...
-}
-```
-Here, the implementor of the `Banknote` trait can be sure, that the mapping code
-will be executed in the context of an object implementing both `Rectangle` and `Paper`
-traits. It follows that it is possible to safely access the members of
-`Rectangle` and `Paper` traits.
-
-the major part of the mapping is left to the platform, resp. to the type system.
-
-On the contrary, if the item does carry any type information about its "traits",
-we would be limited to a too weak mapping between the banknotes and items.
-We will have to resort to casting an item's property (such as shape) to the requested type
-hoping that the context object (`this`) is associated with "right" item.
-
-```scala
-trait Banknote {
-  this: Item =>
-
-  val width = this.shape.asInstanceOf[Rectangle].width
-  val height = this.shape.asInstanceOf[Rectangle].height
-
-  val isValidBanknote: Boolean = ...
-}
-```
-
-This evidently introduces a loophole in the design, which can become a source
-of future problems. In particular, nothing prevents the creator of a `Banknote`
-instance from attaching the `Banknote` trait to a wrong item.
-
-After executing the following statement, it is guaranteed by the platform
-that the banknote is an instance of both `Rectangle` and `Paper`.
-
-```scala
-  val banknote = new Thing with Paper with Rectangle with Banknote
-```
-
-On the other hand, after executing this statement:
-
-```scala
-  val banknote = new Item with Banknote
-```
-
-it is the developer who must guarantee that the item is the right one.
-
-#####Mapping Currencies To Items by Type
-
-In this case the source domains are the scanner protodata and the currency database, while
-the target domain is the currency context. The mapping declares how an object
-from the target domain can be bound to objects from the source domains. Particularly,
-the mapping in this example contains rules for mapping coins and banknotes to
-luggage items and records in the currency database.
-
-The mapping between the currency and luggage items domain is sketched on the following diagram.
+The relation between the currency and luggage items domain is sketched on the following diagram.
 
 Figure 6: Mapping context domain to proto-domain diagram
 <div>
 <img src="http://zslajchrt.github.io/resources/itemCurrencyMap.png" width="450" />
 </div>
 
-Each concrete type in the target domain is mapped to a subset of source domain
+Each concrete type in the target domain is mapped to a subset of the source domain
 concrete types. Moreover, this mapping is *orthogonal* since all these
 subsets do not overlap with one another.
 
-Since the mapping should utilize primarily the capabilities of the underlying
-type system, the rules should be declared by means of type expressions
-composed of the trait types defined in the source and target domains.
+The only missing part is the construction of currency objects from the source objects,
+i.e. from appropriate items and currency database records. This task is called
+*mapping* and is analyzed in the next paragraph.
 
-Let us try to formally declare the mapping rules for coins and banknotes:
+#####Mapping Target Objects To Source Ones
 
-```
-  Coin -> {Metal, Cylinder}
-  Banknote -> {Paper, Rectangle}
-```
+The purpose of the mapping is to bind objects from the target domain directly to
+the objects from the source domain in order to avoid any intermediary processes
+normalizing and transforming the source domains objects into the target domain ones.
+Such processes often discard some source data, which could potentially be utilized
+in subsequent transformations.
 
-In other words, these rules say that a coin is a metal cylinder and a banknote
-is a paper rectangle. Of course, such definitions are far from complete. Not
-every metal cylinder is a coin.
+The goal is to construct a lossless mapping. In other words, the target objects
+preserve both data and behavior of the source objects.
 
-The rules can easily express in Scala by traits and the self-type.
+A target object constructed by binding it directly to its source objects allow tracking
+its origins, which is as desirable property in the case when the target object becomes
+a source in another mapping. Such a secondary mapping may exploit the information about the
+origin of the source (then-target) object to perform a finer-grained binding.
 
-```scala
-trait Coin {
-  this: Metal with Cylinder =>
-...
-}
 
-trait Banknote {
-  this: Paper with Rectangle =>
-...
-}
-```
+In the following paragraphs we will attempt to design such a lossless mapping procedure.
 
-This is the moment, when the auxiliary currency database is used to complete the missing
-parts in the definitions.
+#####Mapping Currencies To Items by Properties
 
-We can declare that a metal cylinder is a coin if the currency database contains
-a coin record, whose physical properties correspond to that of the metal cylinder,
-of course, within some predefined margin of error.
-
-To reflect these additional constraints the Coin mapping rule can be completed as follows:
-
-```
-  Coin -> {m: Metal, c: Cylinder, ce: CoinExemplar(radius = c.diameter/2, thickness = c.height)}
-```
-
-The rule for `Coin` is now a composition of three components and can be seen as
-a template for valid `Coin` instances demanding existence of the three constituting
-components. Every component is annotated with an identifier, which can be used in expressions
-constraining property values in other components such as `radius` and `thickness` in
-CoinExemplar.
-
-This extended rule can also be expressed by a trait as follows:
-
-trait Coin {
-  this: Metal with Cylinder with CoinExemplar =>
-
-  require(radius == diameter/2)
-  require(thickness == height)
-...
-}
-
-The trait also includes two `require` statements checking the constraints
-between the `Cylinder`s and `CoinExemplar`s properties.
-
-If an item being mapped to a coin is a metal cylinder, then the existence of
-the first two components is fulfilled automatically. However, the existence of
-the third component must be confirmed by a lookup in the currency database.
-Of course, this last step cannot be delegated to the platform's type system and
-must be done by the application itself.
-
-The resulting object is a composition of two source objects (item and currency exemplar)
-with a target trait (`Coin` or `Banknote`). Although the target object interface
-provides only a view of the underlying source objects, there is, in fact, no lost
-of information, neither data nor type information. The complete information is
-encapsulated in the target object and some new features of the target domain
-code can make use of it in the future.
-
-#####Static Traits Mapping Issues
-
-In order to illustrate the problems connected to the use of static traits, let us
-sketch the code constructing a currency object from an item.
+The following listing is an example of a low-level lossless mapping in Scala. The source and target
+objects are plain maps, whose values can be other maps or scalar values. The result
+of the mapping procedure is a map representing a scanned banknote, whose single property
+`isExported` combines properties from the item and the banknote record in the database.
+The result also wraps the source objects (item, exemplar) so as not to loose
+the track of its origin.
 
 ```scala
-def mapCurrencyOnItem(item: Thing): Option[Currency] = item match {
+  def makeCurrency(item: Map[String, Object]): Option[Map[String, Object]] = {
+    val shape = item.get("shape")
+    val material = item.get("material")
+    if (shape == null || !"rectangle".shape.get("type") ||
+        material == null || !"paper".material.get("type")) {
+      None
+    } else {
+      val w = shape.asInstanceOf[Map[String, Object]].get("width");
+      val h = shape.asInstanceOf[Map[String, Object]].get("height");
+      val c = material.asInstanceOf[Map[String, Object]].get("color");
 
-    case metCyl: Metal with Cylinder  =>
-      currencyDb.findCoin(2 * metCyl.radius, metCyl.height) match {
+      currencyDb.findBanknote(w, h, c) match {
         case None => None
-        case Some(coinEx) =>
-          val coin = new Metal with Cylinder with CoinExemplar with Banknote
-          // How to get metCyl and coinEx into the new coin object?
-          Some(coin)
+        case Some(banknote) =>
+          val isExported = banknote.get("issuingCountry") == item.
+            get("luggage").asInstanceOf[Map[String, Object]].
+            get("scanner").asInstanceOf[Map[String, Object]].
+            get("location").asInstanceOf[Map[String, Object]].
+            get("country")
+          val banknote = Map("type" -> "scanned-banknote",
+                             "isExported" -> isExported,
+                             "item" -> item,
+                             "currency" -> banknote)
+          Some(banknote)  
       }
-
-      case paperRect: Paper with Rectangle  =>
-        ...
+    } else ... // a similar code for a coin
   }
 ```
 
-The `mapCurrencyOnItem` method converts the item passed as the argument to a
-currency object. We use `Option[Currency]` as the return type, which allows
-returning `None` if neither coin nor banknote can be constructed from the item.
+The method first checks whether the `shape` and `material` dimension properties
+hold rectangle, respective paper data. If so, the method retrieves the width,
+height and color from the two components. Then the currency database is queried
+for a banknote having the corresponding properties. It a banknote exemplar is found,
+a new map representing the banknote is created.
 
-In Scala one can use the `match` pattern matcher as an elegant replacement for `isInstanceOf`.
-Each `case` keyword in the matcher's body can be followed by a labeled type expression,
-which selects only such objects whose type matches the type expression.
+Although this mapping is lossless, it suffers from several flaws, such as:
 
-In this example there are two `case` blocks, one capturing metal cylinders and
-the other capturing paper rectangles.
+* It is too low-level, domain objects are represented as maps, not as domain types.
+It is prone to type mismatch errors.
+* There is no behavior on the domain objects (maps). Target objects should be able
+to inherit some behavior from the source objects. For example, the `Shape` trait
+could define a method calculating the area (or surface) of the shape. It makes
+good sense for banknotes and coins as the target objects to inherit this method.
+* There must be some convention on how the source data are embedded into
+the target objects. Such a convention makes the mapping subsystem very proprietary.
+* It is too verbose, too much boilerplate.
 
-When a metal cylinder is caught, for example, the currency database is consulted
-to return the corresponding coin exemplar. The result is processed in another
-`match` block. If the exemplar is found, then the metal cylinder item is by definition
-considered a coin.
+The absence of types and behavior is evidently the most annoying issue of
+this property-based approach. Let us try therefore to evaluate a type-based
+approach.
 
-At this moment we have to create the instance of `Coin`. In Scala, we have to
-create a new instance composed of all necessary traits: `Metal`, `Cylinder`,
-`CoinExemplar` and `Banknote`. The `Thing` is not necessary to include since it
-is not referenced from any other trait.
+#####Mapping Currencies To Items by Type
 
-Then we have to associate somehow the new coin object with the two source objects
-`metCyl` and `coinEx`. In Scala, we have unfortunately no other option than
-to copy the state of the source objects to the new object, even if we tend
-to apply the `Banknote` trait directly on a composition of the two instances in
-a way shown in the following state):
+Let us assume first, that the multidimensional character of the item is modeled
+by means of composition. This approach would have to be used on platforms without
+dynamic traits (such as Scala or Java) because of the problems with the exponential
+growth of code described previously.
 
 ```scala
-val coin = metCyl with coinEx with Banknote
+trait Item {
+  def shape: Shape
+  def material: Material
+  ...
+}
 ```
 
-The fact that we cannot avoid copying the states of the source objects to
-the target one along with the exponential growth of the code when modeling
-multidimensional objects are the two key issues when using static traits to
-develop applications on top of multidimensional domains.
+The source domain is described in the previous section, so here we focus on
+the description of the currency database types and the target domain types.
+
+The currency database has a simple model consisting of two types of currency records:
+`Banknote` and `Coin`, both having the same ancestor `Currency`.
+
+```scala
+trait Currency {
+  def currencyValue: BigDecimal
+  def currencyCode: String
+  def issuingCountry: String
+}
+trait Banknote extends Currency
+trait Coin extends Currency
+```
+
+The `Currency` trait consists of a couple of basic properties, while the other
+traits may carry some specific properties. (They are omitted since they are not important for
+the purpose of this example.)
+
+The target types mimic the structure of the currency database domain. The `ScannedCurrency`
+trait represents a currency found in a luggage and its single property `isExported`
+combines data from the two source domains. A currency is considered *exported*
+if the currency's issuing country is the same as the country where the item was
+scanned.
+
+```scala
+trait ScannedCurrency {
+  this: Currency with Item =>
+
+  val isExported: Boolean = issuingCountry == luggage.scanner.location.country
+}
+
+trait ScannedBanknote extends ScannedCurrency {
+  this: Banknote with Item =>
+}
+
+trait ScannedCoin extends ScannedCurrency {
+  this: Coin with Item =>
+}
+```
+
+Now, let us turn our attention to the mapping method `makeCurrency` using
+the above-mentioned types.
+
+```scala
+def makeCurrency(item: Item): Option[ScannedCurrency] = {
+  if (item.shape.isInstanceOf[Rectangle] && item.material.isInstanceOf[Paper]) {
+    val rect = item.shape.isInstanceOf[Rectangle]
+    val paper = item.material.isInstanceOf[Paper]
+    val w = rect.width;
+    val h = rect.height;
+    val c = paper.color;
+
+    currencyDb.findBanknote(w, h, c) match {
+      case None => None
+      case Some(banknote) =>
+        val scannedBanknote = new ScannedBanknote with Banknote with Item {
+          val itemDlg = item
+          val banknoteDlg = banknote
+          // Delegating methods ...
+        }
+        Some(scannedBanknote)
+    }
+
+  } else ... // a similar code for a coin
+}
+```
+
+The method must first check the types of the two dimensions `shape` and `material`
+held as properties in the item. Then the values are type-casted to the concrete
+types to retrieve the width, height of the rectangle and the paper color.
+
+Then the database is asked to find the corresponding banknote. If it is found,
+a new instance of `ScannedBanknote` is created, which implements both `Banknote`
+and `Item` traits by delegation.
+
+At first sight, the code looks tidier than the property-based one. However, there
+are some
+
+* Nothing prevents `ScannedBanknote` from being instantiated with wrong
+(i.e. not banknote-like) item. The reason is that the right item is determined
+by examining the item's state and not type. Thus the proper composition of `ScannedBanknote`
+with items is on the developer. This problem stems from the composition used
+to model the multidimensionality of the item.
+* Another issue relates to the delegation: on each consecutive mapping the item
+instance looses some behavior, because not all interface implemented by
+the source object must be implemented by the target one. The item instances also
+sinks one delegation level down gradually becoming unreachable.
+
+These two findings can formulated more generally:
+
+* A multidimensional source object modeled by composition makes subsequent compositions
+prone to type inconsistencies.
+* The construction of target objects by means of delegations tends to lose behavior
+and type.
+
+
+#####Mapping Currencies To Items by Type: part 2
+
+Since one of the problems described in the previous paragraph was caused by
+composition, i.e. by the wrapped dimensions in the item object, in this example
+we will examine the use of traits extending `Item` to model the multidimensionality
+of items (no type schizophrenia). Let us temporarily forget the problem with
+the exponential growth of code linked.
+
+Since now the shape and material dimension are part of the item's type, we can
+refine the binding self-type in the `ScannedBanknote` so as to refer
+`Banknote with Rectangle with Paper` instead of `Banknote with Item`.
+
+```scala
+trait ScannedBanknote extends ScannedCurrency {
+  this: Banknote with Rectangle with Paper =>
+}
+```
+
+This refinement actually solves the problem with the possibility of combining
+`ScannedBanknote` with inappropriate item. The type system ensures that `ScannedBanknote`
+can be instantiated only with an item implementing `Rectangle` and `Paper`.
+
+Thanks to the presence of dimension types in the item's type the mapping
+method can perform the test for paper rectangles directly on the item. Instead of
+using `isInstanceOf[Rectangle with Paper]` we use Scala's `match` block, which
+is more suitable for this purpose:
+
+```scala
+def makeCurrency(item: Item): Option[ScannerCurrency] = {
+  item match {
+    case paperRect: Rectangle with Paper =>
+      currencyDb.findBanknote(paperRect.width, paperRect.height, paperRect.color) match {
+            case None => None
+            case Some(exemplar) =>
+              val scannedBanknote = new ScannedBanknote with Banknote with Rectangle with Paper {
+                val paperRectDlg = paperRect
+                val banknoteDlg = banknote
+                // Delegating methods ...
+              }
+              Some(scannedBanknote)
+      }
+    case _ => None
+  }
+}
+```
+
+Unfortunately, the new instance cannot avoid the delegation. The conclusion is:
+
+* The composition issue is over, `ScannedBanknote` can be accompanied by paper rectangles only
+* The delegation issue still persists, i.e. behavior and type degrade on every successive mapping
+
 
 #####Dynamic Traits Mapping Issues
 
 In this paragraph we will try if the above-mentioned problems disappears if
 we use dynamic traits.
 
-The semantics of the the `mapCurrencyOnItem` method is the same as in
-the previous paragraph except the return type, which is not optional.
+The semantics of the the `makeCurrency` method is the same as in
+the previous paragraphs except the return type, which is not optional.
 The method simply returns `null` in case it cannot construct a currency object.
 
 ```groovy
-public Currency mapCurrencyOnItem(Thing item) {
-    if ((item instanceof Metal) && (item instanceof Cylinder)) {
-        CoinExemplar coinEx = currencyDb.findCoin(2 * item.radius, item.height)
-        if (coinEx != null) {
-            Coin coin = item.withTraits(Coin, CoinExemplar)
-            // we cannot avoid the copying of the coinEx's state
-            coin.adoptExemplar(coinEx)
-            return coin;
+public Currency makeCurrency(Item item) {
+    if ((item instanceof Paper) && (item instanceof Rectangle)) {
+        Banknote banknote = currencyDb.findBanknote(item.width, item.height, item.color)
+        if (banknote != null) {
+            ScannedBanknote scannedBanknote = item.withTraits(ScannedBanknote, Banknote)
+            // we cannot avoid the copying of the banknote's state to scannedBanknote
+            scannedBanknote.adoptBanknote(banknote)
+            return scannedBanknote;
         } else {
             return null;
         }
-    } else if ((item instanceof Paper) && (item instanceof Rectangle)) {
-      ...
-    }
+    } else ... // a similar code for a coin
 }
 ```
 
@@ -299,14 +329,14 @@ to extend objects in such a way that the extending objects can completely
 preserve the type information carried by the extended objects. It permits us
 to determine what the object is by means of `instanceof`.
 
-Thus, the `mapCurrencyOnItem` method determines whether the item is a metal
-cylinder by two invocations of `instanceof`. Then the method asks the currency database
-if such a coin is registered. If so, it uses `withTraits` to create a new proxy
+Thus, the `makeCurrency` method determines whether the item is a paper
+rectangle by two invocations of `instanceof`. Then the method asks the currency database
+if such a banknote is registered. If so, it uses `withTraits` to create a new proxy
 object from the item object. The new proxy object has all the item's traits plus
-`Coin` and `CoinExemplar`.
+`ScannedBanknote` and `Banknote`.
 
 Unfortunately, using `withTraits` helped us only in part. We avoided copying
-the item's state to the new instance, but there is the `coinEx` object left,
+the item's state to the new instance, but there is the `banknote` object left,
 whose state must be copied to the new instance. This is a conceptual problem
 stemming from the nature of traits, which are primarily supposed to extend
 the target object's behavior, not its state. Yet if a trait has some state,
@@ -315,8 +345,19 @@ of this concept it makes a perfect sense for Groovy to provide the `withTraits`
 special method, which is invoked on the target object accepting a list of
 trait types, not trait "instances".
 
-Unfortunately, the conclusion is that the use of dynamic traits does not
-solve the problem with copying state between instances as such.
+The conclusion is:
+
+* The use of dynamic traits solves the problem with losing the item's type and behavior,
+because `withTraits` automatically implements all interfaces on the source object.
+* The removal of the delegation was helpful in the previous issue, however it brings
+another problem: the `banknote`'s state must be copied to the `scannedBanknote` instance.
+The `banknote` can theoretically be an instance of an extended trait carrying additional
+data. This extra state will not be copied to `scannedBanknote`, thus there is a potential
+of losing some information when copying state.
+* The problem of combining `ScannedBanknote` with a wrong item emerges again, because
+the weak type system and the dynamic nature of Groovy does not allow checking
+the inter-trait relationships.
+
 
 #####Summary
 
@@ -354,6 +395,8 @@ more reasons for it:
   * **Early error discovery**: If a static language is used then the consistency
    check and the verifications are carried out at compile-time. It follows that
    possible errors and inconsistencies in the mapping may be caught early.
+  * **Clean code**: Since many of responsibilities can be delegated on the underlying
+  platform, the code contains only the necessary stuff.
 
 * Java's type system does not provide sufficient means to express the real character
 of objects by type. Therefore, designers must resort to the modeling of the object
