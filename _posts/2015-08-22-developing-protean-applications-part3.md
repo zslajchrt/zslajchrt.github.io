@@ -90,7 +90,7 @@ Using term *trait* seems quite adequate since some programming languages, such a
 Scala, implement the concept of trait (or mixin), which perfectly suits to modeling
 multidimensional objects.
 
-The following diagram depicts the classes and traits involved in the protodata
+The following diagram depicts sample objects with various "traits" from the protodata
 domain.
 
 Figure 2: Protodata sample model
@@ -98,29 +98,32 @@ Figure 2: Protodata sample model
 <img src="http://zslajchrt.github.io/resources/scannerModel.png" width="560" />
 </div>
 
+#####Modeling Multidimensional Data Without Traits
+
 Modeling in multidimensional objects in languages, which do not include traits
 or similar concepts, may become rather difficult and the resulting model may not
 appropriately represent reality. For example in Java, which has no equivalent
-to traits, we would have to substitute interfaces and delegation for traits.
+to traits, we have to implement the item's dimensions by composition. It follows
+that for each dimension there will be one property in the `Items` class (`material`, `shape`).
 
 Figure 3: No-traits diagram
 <div>
 <img src="http://zslajchrt.github.io/resources/itemNoTraits.png" width="500" />
 </div>
 
-Considering this model, a new item can be created as follows.
+Considering such a no-trait model, a new item can be created as follows.
 
 ```java
   Item item = new Item(10.1, 20.4, 3.1, new Metal(), new Cylinder(0.3, 10.32));
 ```
 
-
-However, this substitution comes with some serious design flaws. According to
-the model, every item is an instance of `Thing` and two types `Shape`
-and `Metal`. In Java, if one needs to know what an object is, (s)he uses
-the `instanceof` operator. For example, if an instance of `Item` is tested
-whether it is `Thing` or `Material` by this operator, the result will always be true.
-On the other hand, testing the item for being `Baggage` will never be true.
+However, such a composition comes with some serious design flaws. In Java, if one
+needs to know what an object is, (s)he uses the `instanceof` operator.
+For example, if an instance of `Item` is tested whether it is `Thing` or `Material`
+by this operator, the result will always be true by definition, since according
+to the model, every item is an instance of `Thing`, `Shape` and `Metal`,
+unless it is null. On the contrary, testing the item for being `Baggage` will
+always be false.
 
 ```java
   boolean isThing = item instanceof Thing;       // always true
@@ -128,29 +131,38 @@ On the other hand, testing the item for being `Baggage` will never be true.
   boolean isBaggage = item instanceof Baggage;   // always false
 ```
 
-A problem arises when one wishes to check whether the item is metal. The following
-statement will always be false regardless of the possibility that the item may
-be, or rather represent, a metal item.
+It is clear that such a type examination is redundant and does not reveal any
+additional information about the item's character. On the other hand, what we
+could wish to find out, by means of the "what-it-is" `instanceof` operator, for
+example, is whether the item is metal or not, since the item may or may not
+have such a trait. It would by natural to express the condition as follows:
 
 ```java
   boolean isMetal = item instanceof Metal; // always false, even if the item is metal
 ```
 
-By using `instanceof` we cannot find out more details about the real character
-of the item.
+Unfortunately, this statement will be always false, since the type system would have
+to consult somehow the item' state to determine the "real" type of the item.
 
 The problem is rooted in the model itself. The item's real character is not
 completely carried by the item itself, but also by the wrapped instances.
-It looks as if the item suffers from some kind of schizophrenia, since its
-identity is scattered across three instances: the item itself, and the metal and
-shape delegatees.
+It looks as if the item suffers from some kind of type schizophrenia, since its
+identity is scattered across three instances: the item itself, and the material
+and shape delegatees.
 
 Actually, this is just one of several problems arising when models use delegation
-and similar patterns such as decorator, adapter, state, strategy, proxy, bridge.
+or composition (e.g. composite, decorator, adapter, state, strategy, proxy, bridge).
 
 The problem of object schizophrenia is discussed in more detail [here](http://users.jyu.fi/~sakkinen/inhws/papers/Sekharaiah.pdf).
 
-On the other hand, let us see how the model looks if the language offers traits ([Groovy](http://docs.groovy-lang.org/latest/html/documentation/core-traits.html), [Scala](http://www.scala-lang.org/old/node/126)).
+#####Modeling Multidimensional Data With Traits
+
+Traits can be used to model dimensions of an object. Typically, each dimension (material)
+is represented by one abstract trait (`Material`). Such an abstract trait is the base for
+other concrete traits (`Metal`, `Paper`) corresponding to "values" in the dimension (metal, paper).
+
+The concept of traits is dealt with in detail here ([Groovy](http://docs.groovy-lang.org/latest/html/documentation/core-traits.html), [Scala](http://www.scala-lang.org/old/node/126)).
+
 In contrast to the no-trait model, here the `Thing` type and the two dimensions
 are separated. The composition is deferred until the moment of the creation of a new
 item.
@@ -160,7 +172,7 @@ Figure 4: Traits diagram
 <img src="http://zslajchrt.github.io/resources/itemTraits.png" width="560" />
 </div>
 
-The following code shows how such a creation with the deferred composition can
+The following Scala code shows how such a creation with the deferred composition can
 look.
 
 ```scala
@@ -190,63 +202,34 @@ Furthermore, one can also use composite types to test instances:
   val isMetal = item.isInstanceOf[Metal with Cylinder] // true or false
 ```
 
-The absence of the object schizophrenia in models is the key prerequisite for
-functional mapping between two distinct multidimensional domain models, as
-shown later in this text.
+The absence of the type schizophrenia in models is the key prerequisite for
+a type-safe mapping between two distinct multidimensional domain models, as
+shown later.
 
-The next two pieces of code illustrate the problem. Both determine
-whether the item represents a rectangular paper. If so, the banknote database
-is requested to try to find the corresponding banknote.
-
-```java
-  if ((item.material instanceof Paper) && (item.shape instanceof Rectangle)) {
-    return banknotesDb.findBanknote((Rectangle)item.shape);
-  }
-```
-
-```scala
-  item match {
-    case prItem: Paper with Rectangle =>
-      banknotesDb.findBanknote(prItem)
-    case _ => None  
-  }
-```
-
-The Java mapper must evaluate the types of the two item's attributes `material` and
-`shape` in order to determine the "type" of the item itself. Thus, this mapper
-must inevitably understand the structure of the item.
-
-On the other hand, the Scala mapper makes do with the item itself and does not
-need any knowledge of the item's internal structure. Since `prItem` is an instance
-of `Paper with Rectangle` it is possible to pass it to `findBanknote`, which
-accepts instances of `Rectangle`.
-
-The difference becomes very important when building a tool for domain mapping.
-Ideally, all information about what the objects in the domains **are** should
-be retrieved from the **type system** of the language only with no evaluation
-of the objects' state at all. In such a case the mapper can be considered an
-extension of the language's type system (and the compiler). It would have a
-important consequence that domain mapping schemas could be type-checked for
-correctness and type safety at compile-time.
-
-#####Modeling multidimensional in Scala (static traits)
+#####Modeling Multidimensional Data With Static Traits in Scala
 
 Before going further, we should closer examine how actually a new multidimensional
 instance is created from external data in Scala. The concept of static traits
 seems to fit well to this multidimensional problem, since the individual dimensions
 can be modeled by them.
 
-Typically, the initialization procedure prepares a list of traits by selecting
-one trait from each dimension (e.g. `Paper`, `Rectangle`) according to the input
-data. This list of traits represents a point in the multidimensional space given
-by the dimensions and the traits in the list correspond to the point's coordinates.
+Static traits are applied to target types at compile-time, which contributes
+to the robustness of the code. The compiler checks, among other things, whether
+the resulting composite classes are complete (i.e. all abstract members are
+implemented) and that the used traits are applied to correct types.
+
+When instantiating a multidimensional type, we must specify a list of traits used
+for the instantiation by selecting one concrete trait (e.g. `Paper`, `Rectangle`)
+for each dimension trait (`Material`, `Shape`) in accordance with the input data.
+This list of traits represents a point in the multidimensional space given by
+the dimensions and the traits in the list corresponding to the point's coordinates.
 
 There is an important limitation, however, stemming from Scala's strong static
 type system: traits can be specified only as a part of the class declaration.
 This fact actually rules out any step-by-step imperative way to build the list
 of traits from the input data (i.e. the builder pattern). Instead, the initialization
-procedure must handle all possible combinations of traits. I will illustrate the
-problem in the following example.
+procedure must handle all possible combinations of concrete dimension traits.
+I will illustrate the problem in the following example.
 
 Let us assume that the external data for the item is stored in a dictionary-like
 object `event`. In order to create a new item then for every
@@ -281,21 +264,19 @@ as shown in the following snippet.
 ```
 
 It is obvious that such an instantiation is unsustainable since the number
-of lines (boilerplate) grows exponentially with the number of dimensions. Unfortunately,
-there is currently no practical solution in Scala (and any other statically typed language)
-to cope with this problem. It is, after all, a phenomenon tightly connected with static
-type systems.
+of lines (boilerplate) grows exponentially with the number of dimensions.
+Unfortunately, there is currently no practical solution in Scala to cope with this problem.
 
-Let us have a closer look at this problem. It is required that every item
-must provide information about what it is through the type system only and
+Let us have a closer look at this problem. It is desirable that every item
+provides information about what it is through the type system only and
 not from the item's state. In other words this information must be encoded
-in the class of which the item is an instance. It follows that there must be
+in the **class** of which the item is an instance. It follows that there must be
 as many classes in the system as the number of all possible forms which
 an item can assume.
 
 Next, there are only two ways to define a class. Either it is compiled from its
 definition in the source code, or it is generated. Application developers normally
-use the former way only, while the latter is there for framework developers.
+use the former way only, while the latter is there for frameworks.
 
 If we momentarily forget the possibility to generate classes then the source
 code must inevitably contain all possible composite class declarations allowed
@@ -307,7 +288,7 @@ The concrete one (using Scala notation):
 class ThingPaperRectangle extends Thing with Paper with Rectangle
 ```
 
-or an anonymous one, which is a part of the initialization statement:
+or an anonymous one, which is part of the initialization statement:
 
 ```scala
 new Thing with Paper with Rectangle
@@ -321,15 +302,37 @@ themselves (what they are). On the other hand, using the standard means of stati
 typed languages leads to the excessive amount of boilerplate and large number
 of classes.
 
-#####Modeling multidimensional in Groovy (dynamic traits)
+#####Solutions of the Exponential Growth
 
-Since static traits in Scala leads to the exponential growth of code when
-attempting to model a multidimensional data, we can try a dynamic approach.
+The exponential growth of code results from the inability to apply the concrete
+dimension traits in a step-by-step manner analogous to how instances are created
+by the builder pattern [LINK]. Before creating an instance, the builder must be
+configured in several steps according to the context and the input data.
+This configuration directly or indirectly specifies the parts from which
+the builder will compose the instance.
 
-Groovy is a dynamic language which, however, supports some optional static language
+Such a step-by-step approach effectively eliminates the exponential growth, because
+the number of statements is proportional to the number of dimensions (see below).
+
+There are basically two types of such a multidimensional builder. The first one
+generates a composite class according to the dimension configuration. The resulting
+object is then instantiated from this generated class. The other type instantiates
+a preliminary instance from the common base class. This instance is then decorated by
+the selected concrete dimension traits.
+
+While the first approach generating a composite class would require that
+the developer use some rather exotic low-level tools for byte-code generation,
+the second approach can be very easily employed with the help of a suitable dynamic language.
+Therefore, in this paragraph we will examine this second approach, based on
+the application of dynamic traits on an existing instance.
+
+#####Modeling Multidimensional Data With Dynamic Traits in Groovy
+
+Groovy is a dynamic language which also supports some optional static language
 features, like a compile-time type check. It also contains traits that can
 be applied on both types and instances. To solve the exponential growth problem
-we will try to rewrite the previous code by means of the dynamic traits.
+we will try to rewrite the previous code by means of Groovy's dynamic traits in
+a builder-like manner.
 
 The common data of the item is represented by trait `Thing`, which contains the
 coordinates (x, y, z) of the item in the luggage. The following code creates
@@ -371,7 +374,7 @@ if (event.containsKey("metal")) {
 }
 ```
 
-It seems that using dynamic traits and the step-by-step extensions resolved the problem
+It is clear that using dynamic traits and the step-by-step extensions resolved the problem
 with the exponential growth. The number of conditions is proportional to
 the number of dimensions and not to the number of all possible combinations.
 
@@ -390,10 +393,251 @@ if (isThing && isRectangle && isPaper)
 Although this solution based on using the dynamic traits seems to be
 perfect, because it allows us to capture the multidimensional character of data
 by traits, preserves the types and prevents the code from exponential growth,
-there are still a couple of serious problems connected to the dynamic
-nature of the language and its weak type system. As shown later in this chapter,
-modeling complex multidimensional domains with the dynamic traits on a platform
-with a weak type system tend to unmaintainable code.
+there are still a couple of serious problems resulting from the step-by-step
+approach as well as from the dynamic nature of the language and its weak type system.
+
+*  Incompleteness: The configuration procedure may forget to select a trait
+for some dimension
+*  Redundancy: The `withTraits` method can possibly add two mutually exclusive traits from
+the same dimension to the builder.
+*  Missing Dependencies: A trait from one dimension may depend on another trait
+from another dimension. The configuration procedure must take these inter-trait
+dependencies into account, because it is out of the capabilities of dynamic languages.
+This responsibility makes the possibility fragile and open to inconsistencies.
+*  Ambiguous Dependencies: The configuration procedure must also guarantee
+that there is no ambiguity in the dependencies.
+*  Since the above-mentioned responsibilities are solved on the application level
+and not on the platform level, the dynamic traits approach tends to developing
+unmaintainable code.
+
+#####Modeling Multidimensional Data By Generated Classes w. Run-Time Checks
+
+There still remains one possibility how to instantiate an instance of
+a multidimensional entity: to generate the composite class at run-time.
+Class generation is usually chosen as a last resort to solve problems
+in applications. It is rather an extreme low-level technique requiring
+experienced developers and which should be used mostly in frameworks or platforms.
+
+Let us assume that there is a framework whereby it is possible to create a
+class builder, which can be configured to build a class composed from selected
+traits. The resulting class is then used to create the final instance. In contrast
+to the dynamic trait approach, which creates a preliminary instance on which it then applies
+the selected traits, the class generating approach first creates the class
+composed of the selected traits, from which the final instance is created.
+
+The following code shows how such a class builder could be created.
+
+```scala
+  val classBuilder = new ClassBuilder[Thing with Material with Shape]()
+```
+
+The type parameter of the builder's constructor specifies the common type for
+all possible combinations of traits, which is `Thing with Material with Shape`.
+This composite type will also be type of the instance created from the generated
+class.
+
+The builder's `addTrait` method serves to register a selected concrete trait.
+The method also accepts a function for the initialization of the trait when
+the resulting object is instantiated from the generated class.
+
+The `Thing` trait is present in every item, so the builder is always configured
+to use `Thing` along with the trait initialization function.
+
+```scala
+  classBuilder.addTrait[Thing](thing => {
+    thing.x = event.get("thing").get("x")
+    thing.y = event.get("thing").get("y")
+    thing.z = event.get("thing").get("z")
+  })
+```
+
+Next, the procedure handles the `Material` dimension. According to the existence
+of `metal` or `paper` keys in the input data, the builder is configured for
+the corresponding trait.
+
+```scala  
+  if (event.containsKey("metal")) {
+    classBuilder.addTrait[Metal]
+  } else if (event.containsKey("paper")) {
+    classBuilder.addTrait[Paper]
+  }
+```
+
+The `Shape` dimension is handled similarly, except the additional
+trait initialization function passed to `addTrait`, by means of which
+the trait's properties will be initialized from the input data upon
+the instantiation.
+
+```scala
+  if (event.containsKey("rectangle")) {
+    classBuilder.addTrait[Rectangle](rect => {
+      rect.width = event.get("rectangle").get("width")
+      rect.height = event.get("rectangle").get("height")
+    })
+  } else if (event.containsKey("cylinder")) {
+    classBuilder.addTrait[Cylinder](cyl => {
+      cyl.height = event.get("cylinder").get("height")
+      cyl.radius = event.get("cylinder").get("radius")
+    })
+  }
+```
+
+Now it is possible to build the class and use it to create the new item instance.
+
+```scala
+  val itemClass: Class[Thing with Material with Shape] = classBuilder.buildClass
+  val item: Thing with Material with Shape = item.newInstance
+```
+
+All problems associated with the dynamic traits mentioned in the previous paragraph
+may be solved by the framework at run-time, but not at compile-time, because of
+the imperative character of the configuration. Thus the conclusion is that:
+
+*  The generated classes approach would be a progress in modeling multidimensional
+objects in comparison to the dynamic traits. So far it is the best technique.
+*  It improves the run-time part only. It would be desirable, however, to perform all
+those necessary checks at compile-time.
+
+
+#####Modeling Multidimensional Data By Generated Classes w. Compile-Time Checks
+
+In this paragraph we will attempt to come up with an improvement of the previous
+class generator, which would allow moving the run-time consistency checks of
+the generated class to compile-time.
+
+The previous class builder is very constrained in terms of static consistency
+checks primarily because there is no static model or schema for the generated
+classes. The only information available at compile-time is the type of the resulting
+instance, specified as the type parameter of the builder's constructor:
+
+```
+Thing with Material with Shape
+```
+
+This type is actually the lowest upper type bound of all possible trait combinations (LUB).
+From the LUB the compiler can infer the abstract dimensions, however, it cannot
+infer the concrete traits constituting these dimensions. The choice, which
+concrete traits come into consideration when building a class, is the task for the developer,
+not the compiler. It follows that the developer must pass this information to the compiler
+declaratively so as to allow a compile-time verification of multidimensional
+class models.
+
+It follows that we have to introduce some declarative construct to allow
+a specification of multidimensional structures. On a statically typed
+platform such as Scala, it is the most natural to express the multidimensional
+structure by special type.
+
+The principal idea is to substitute the abstract dimension traits in the type parameter
+in the builder constructor with a list of possible concrete traits. The traits
+in the list will be delimited by `or` to emphasize the mutually exclusive character of the traits in the list.
+
+```
+Thing with (Metal or Paper) with (Rectangle or Cylinder)
+```
+
+The previous type could be treated as a boolean formula, which can also be expressed in
+the *conjunctive norm form* as follows:
+
+```
+(Thing with Metal with Rectangle) or
+(Thing with Metal with Cylinder) or
+(Thing with Paper with Rectangle) or
+(Thing with Paper with Cylinder)
+```
+
+Such a type actually determines all possible forms of the generated composite class.
+Since this information is encoded in a type, it is also available to the compiler,
+which can use to perform the necessary consistency checks.
+
+So, the new builder would be created by the following statement:
+
+```scala
+  val classBuilder = new ClassBuilder[Thing with (Metal or Paper) with (Rectangle or Cylinder)]()
+```
+
+It is assumed that there would be a compiler extension that could handle this
+special type and could also build a model, from which all possible trait compositions
+could be derived.
+
+Once the compiler extension has all trait compositions, it can take one by one
+and verify whether all traits in a given composition satisfy the rules such as
+completeness, unambiguity etc.
+
+The model serves primarily to check the consistency of all trait compositions.
+There must be another concept, however, through which the developer
+can determine, which trait composition will be used to compose the generated class.
+
+This concept is called class builder strategy and its primary task is to
+select the right trait composition from the model. An new instance of such
+a strategy could be obtained from the class builder instance as follows:
+
+```scala  
+  val classBuilderStrategy = classBuilder.newClassBuilderStrategy()
+```
+
+The strategy contains `selectTrait` method through which the developer
+specifies hints to the strategy, which traits must be in the resulting trait
+composition.
+
+It is not necessary to provide a hint for the `Thing` traits, since, according
+to the model, it must be present always by default.
+
+The trait hints for the material dimension can handled in the following way:
+
+```scala
+  if (event.containsKey("metal")) {
+    classBuilderStrategy.selectTrait[Metal]
+  } else if (event.containsKey("paper")) {
+    classBuilderStrategy.selectTrait[Paper]
+  }
+```
+
+And the shape dimension can be handled similarly:
+
+```scala
+  if (event.containsKey("rectangle")) {
+    classBuilderStrategy.selectTrait[Rectangle](rect => {
+      rect.width = event.get("rectangle").get("width")
+      rect.height = event.get("rectangle").get("height")
+    })
+  } else if (event.containsKey("cylinder")) {
+    classBuilderStrategy.selectTrait[Cylinder](cyl => {
+      cyl.height = event.get("cylinder").get("height")
+      cyl.radius = event.get("cylinder").get("radius")
+    })
+  }
+```
+
+The resulting instance is created by calling `newInstance` on the class builder
+and passing the configured strategy.
+
+```scala
+  val item: Thing with Material with Shape = classBuilder.newInstance(classBuilderStrategy)
+```
+
+The item's type is the LUB of the multidimensional model, however, its
+concrete type can be determined by `isInstanceOf`
+
+```scala
+  val isPaperRectangle = item.isInstanceOf[Paper with Rectangle]
+```
+
+or by the `match` block
+
+```scala
+item match {
+  case pr: Paper with Rectangle =>
+    ...
+  case mc: Metal with Cylinder =>
+    ...
+}
+```
+
+This analysis indicates that all run-time checks performed by the previous version
+of the class builder could be theoretically performed at compile-time in
+compiler extension. Such a statically typed class builder would give developers
+a powerful tool for type-safe processing of multidimensional objects.
+
 
 ###Summary
 
@@ -405,25 +649,35 @@ the number of dimensions. For each dimension the top object exposes a correspond
 interface by means of delegation.
 
 * Delegation hides the real shape (character, type) of an object. We cannot
-determine from the top object's type that it is a rectangular paper. Instead,
-we always find out that it is a something of some shape and material.
+determine from the top object's type that it is a rectangular paper, for instance.
+Instead, we just find out that the item is something of some shape and material.
 To determine the real type, one cannot use a single  `instanceof` operator.
 Instead, he must resort to examining the object's attributes, i.e. the state,
 holding references to the wrapped objects (`getMaterial()`, `getShape()`) and
 additionally apply `instanceof` for each wrapped instance.
 
 * The character of a composite object is scattered across the object and its
-components. The result is the so-called object schizophrenia.
+components. The result is type schizophrenia.
 
 * Traits are a natural concept for modeling multidimensional objects, which
-helps preserve full object's type information and avoid object schizophrenia.
+helps preserve full object's type information and avoid type schizophrenia.
 
 * Modeling multidimensional objects by means of static traits (Scala) leads
 to exponential explosion of code making the static traits practically
-unusable. It can be solved either by using a dynamic language with traits or
-by extending a static language.
+unusable.
 
 * One solution to the exponential growth could be to use a dynamic language
 such as Groovy with a capability to extend object at run-time. This approach
 however also suffers from a couple of serious issues as shown later in this
 chapter.
+
+* Another solution could be to create the instance from a generated class composed
+of the selected traits. However, without a new declarative language construct for specifying
+multidimensional models such a class builder could perform the important consistency
+checks at run-time only.
+
+* If the type system is extended in such a way that it allows declaring optional
+types (union-like), the developer can specify all possible trait compositions,
+i.e. the model, by means of a type expression analogous to boolean expression. This
+type expression can be processed by the compiler extension and provide all necessary
+checks at compile-time.

@@ -70,7 +70,6 @@ its origins, which is as desirable property in the case when the target object b
 a source in another mapping. Such a secondary mapping may exploit the information about the
 origin of the source (then-target) object to perform a finer-grained binding.
 
-
 In the following paragraphs we will attempt to design such a lossless mapping procedure.
 
 #####Mapping Currencies To Items by Properties
@@ -131,10 +130,25 @@ the target objects. Such a convention makes the mapping subsystem very proprieta
 * It is too verbose, too much boilerplate.
 
 The absence of types and behavior is evidently the most annoying issue of
-this property-based approach. Let us try therefore to evaluate a type-based
-approach.
+this property-based approach. Let us try therefore to evaluate an approach
+using properties and types of the domain objects.
 
-#####Mapping Currencies To Items by Type
+#####Mapping Currencies To Items by Properties and Static Traits
+
+The mapping procedure in this paragraph combines the properties of the domain objects
+as well as their types. The item contains two properties, `shape` and `material`,
+representing the two independent dimensions of the item. The mapping procedure
+first reads the wrapped objects held in these two dimension properties and
+examines their concrete types. In other words, in order to find out what the
+item really is we have to look into its properties and determine the types of
+their values.
+
+The individual types of the domain objects and the are represented by Scala static traits.
+
+The application of static traits to target classes takes place at compile-time.
+The compiler checks among other things whether the resulting composite classes
+are complete (i.e. all abstract members are implemented) and that the used traits
+are applied to correct classes
 
 Let us assume first, that the multidimensional character of the item is modeled
 by means of composition. This approach would have to be used on platforms without
@@ -227,19 +241,20 @@ a new instance of `ScannedBanknote` is created, which implements both `Banknote`
 and `Item` traits by delegation.
 
 At first sight, the code looks tidier than the property-based one. However, there
-are some
+are still some issues:
 
 * Nothing prevents `ScannedBanknote` from being instantiated with wrong
-(i.e. not banknote-like) item. The reason is that the right item is determined
-by examining the item's state and not type. Thus the proper composition of `ScannedBanknote`
-with items is on the developer. This problem stems from the composition used
-to model the multidimensionality of the item.
+(i.e. not banknote-like) item. The reason is that the proper composition
+of `ScannedBanknote` with luggage items must be guaranteed by the developer and
+not by the platform. The developer does it by examining the item's state, while
+the platform would do it by examining the types.
+
 * Another issue relates to the delegation: on each consecutive mapping the item
-instance looses some behavior, because not all interface implemented by
-the source object must be implemented by the target one. The item instances also
+instance looses some behavior because not all interfaces implemented by
+the source object must be implemented by the target object. The item instances also
 sinks one delegation level down gradually becoming unreachable.
 
-These two findings can formulated more generally:
+These two findings can be formulated more generally:
 
 * A multidimensional source object modeled by composition makes subsequent compositions
 prone to type inconsistencies.
@@ -247,13 +262,21 @@ prone to type inconsistencies.
 and type.
 
 
-#####Mapping Currencies To Items by Type: part 2
+#####Mapping Currencies To Items by Static Traits Only
+
+In this paragraph we will examine a purely static type-based approach to mapping
+target objects on the source ones by means of static traits.
 
 Since one of the problems described in the previous paragraph was caused by
 composition, i.e. by the wrapped dimensions in the item object, in this example
-we will examine the use of traits extending `Item` to model the multidimensionality
-of items (no type schizophrenia). Let us temporarily forget the problem with
-the exponential growth of code linked.
+we will try to model the multidimensionality of items (no type schizophrenia)
+by static traits (Scala).
+It follows that there will be no properties in `Item` representing
+the two dimensions. Instead, the dimensions become part of the item's type
+expressed by means of traits.
+
+Note: Let us temporarily forget the problem with the exponential growth of code
+linked to using statically specified traits as described in the previous section.
 
 Since now the shape and material dimension are part of the item's type, we can
 refine the binding self-type in the `ScannedBanknote` so as to refer
@@ -293,13 +316,14 @@ def makeCurrency(item: Item): Option[ScannerCurrency] = {
 }
 ```
 
-Unfortunately, the new instance cannot avoid the delegation. The conclusion is:
+Unfortunately, the new instance cannot avoid the delegation. The conclusion is
+that event if we suppressed the problem of the exponential growth of code,
 
 * The composition issue is over, `ScannedBanknote` can be accompanied by paper rectangles only
 * The delegation issue still persists, i.e. behavior and type degrade on every successive mapping
 
 
-#####Dynamic Traits Mapping Issues
+#####Mapping Currencies To Items by Dynamic Traits
 
 In this paragraph we will try if the above-mentioned problems disappears if
 we use dynamic traits.
