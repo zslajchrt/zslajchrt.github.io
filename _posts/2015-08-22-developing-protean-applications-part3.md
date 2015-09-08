@@ -30,7 +30,7 @@ The contract itself does not forbid the company to use the scanner data commerci
 under the condition that such usage reveals no private and sensitive information.
 
 Such data is a typical example of protodata. The owning company comes to a conclusion
-that the data cannot be easily utilized as such due to its primitive character and
+that the data cannot be easily utilized as such due to its primitive characteristics and
 possible infringement of the contract by selling it in raw form to another
 entity, which could combine it with its own data and possibly misuse the insights
 by revealing sensitive information.
@@ -100,9 +100,9 @@ Figure 2: Protodata sample model
 
 #####Modeling Multidimensional Data Without Traits
 
-Modeling in multidimensional objects in languages, which do not include traits
+Modeling multidimensional objects in languages, which do not include traits
 or similar concepts, may become rather difficult and the resulting model may not
-appropriately represent reality. For example in Java, which has no equivalent
+accurately represent reality. For example in Java, which has no equivalent
 to traits, we have to implement the item's dimensions by composition. It follows
 that for each dimension there will be one property in the `Items` class (`material`, `shape`).
 
@@ -132,28 +132,28 @@ always be false.
 ```
 
 It is clear that such a type examination is redundant and does not reveal any
-additional information about the item's character. On the other hand, what we
+additional information about the item's characteristics. On the other hand, what we
 could wish to find out, by means of the "what-it-is" `instanceof` operator, for
 example, is whether the item is metal or not, since the item may or may not
-have such a trait. It would by natural to express the condition as follows:
+have such a trait. It would be natural to express the condition as follows:
 
 ```java
   boolean isMetal = item instanceof Metal; // always false, even if the item is metal
 ```
 
 Unfortunately, this statement will be always false, since the type system would have
-to consult somehow the item' state to determine the "real" type of the item.
+to consult somehow the item's state to determine the "real" type of the item.
 
-The problem is rooted in the model itself. The item's real character is not
+The problem is rooted in the model itself. The item's real characteristics are not
 completely carried by the item itself, but also by the wrapped instances.
 It looks as if the item suffers from some kind of type schizophrenia, since its
-identity is scattered across three instances: the item itself, and the material
+characteristics are scattered across three instances: the item itself, and the material
 and shape delegatees.
 
 Actually, this is just one of several problems arising when models use delegation
 or composition (e.g. composite, decorator, adapter, state, strategy, proxy, bridge).
 
-The problem of object schizophrenia is discussed in more detail [here](http://users.jyu.fi/~sakkinen/inhws/papers/Sekharaiah.pdf).
+The similar problem of object schizophrenia is discussed [here](http://users.jyu.fi/~sakkinen/inhws/papers/Sekharaiah.pdf).
 
 #####Modeling Multidimensional Data With Traits
 
@@ -161,10 +161,10 @@ Traits can be used to model dimensions of an object. Typically, each dimension (
 is represented by one abstract trait (`Material`). Such an abstract trait is the base for
 other concrete traits (`Metal`, `Paper`) corresponding to "values" in the dimension (metal, paper).
 
-The concept of traits is dealt with in detail here ([Groovy](http://docs.groovy-lang.org/latest/html/documentation/core-traits.html), [Scala](http://www.scala-lang.org/old/node/126)).
+The concept of traits is dealt with in greater detail here ([Groovy](http://docs.groovy-lang.org/latest/html/documentation/core-traits.html), [Scala](http://www.scala-lang.org/old/node/126)).
 
 In contrast to the no-trait model, here the `Thing` type and the two dimensions
-are separated. The composition is deferred until the moment of the creation of a new
+are separated. The composition is deferred until the moment of creation of a new
 item.
 
 Figure 4: Traits diagram
@@ -172,7 +172,7 @@ Figure 4: Traits diagram
 <img src="http://zslajchrt.github.io/resources/itemTraits.png" width="560" />
 </div>
 
-The following Scala code shows how such a creation with the deferred composition can
+The following Scala code shows how such a creation with the deferred composition may
 look.
 
 ```scala
@@ -194,7 +194,7 @@ Then the item can be tested with `isInstanceOf`, which is analogous to Java's
 ```
 
 Now, it is possible to determine the exact type, i.e. what the object exactly is. The reason
-is that the identity is no longer scattered among more instances but is carried solely by the item.
+is that the type is no longer scattered among more instances but is carried solely by the item.
 
 Furthermore, one can also use composite types to test instances:
 
@@ -208,9 +208,9 @@ shown later.
 
 #####Modeling Multidimensional Data With Static Traits in Scala
 
-Before going further, we should closer examine how actually a new multidimensional
-instance is created from external data in Scala. The concept of static traits
-seems to fit well to this multidimensional problem, since the individual dimensions
+Before going further, we should take a closer look how a new multidimensional
+instance is actually created from external data in Scala. The concept of static traits
+seems to fit well with this multidimensional problem, since the individual dimensions
 can be modeled by them.
 
 Static traits are applied to target types at compile-time, which contributes
@@ -225,7 +225,7 @@ This list of traits represents a point in the multidimensional space given by
 the dimensions and the traits in the list corresponding to the point's coordinates.
 
 There is an important limitation, however, stemming from Scala's strong static
-type system: traits can be specified only as a part of the class declaration.
+type system: traits can be specified only as part of the class declaration.
 This fact actually rules out any step-by-step imperative way to build the list
 of traits from the input data (i.e. the builder pattern). Instead, the initialization
 procedure must handle all possible combinations of concrete dimension traits.
@@ -280,7 +280,7 @@ use the former way only, while the latter is there for frameworks.
 
 If we momentarily forget the possibility to generate classes then the source
 code must inevitably contain all possible composite class declarations allowed
-by the domain model. Such explicit declarations can assume basically two forms.
+by the domain model. Such explicit declarations may assume basically two forms.
 
 The concrete one (using Scala notation):
 
@@ -302,7 +302,7 @@ themselves (what they are). On the other hand, using the standard means of stati
 typed languages leads to the excessive amount of boilerplate and large number
 of classes.
 
-#####Solutions of the Exponential Growth
+#####Solutions to the Exponential Growth
 
 The exponential growth of code results from the inability to apply the concrete
 dimension traits in a step-by-step manner analogous to how instances are created
@@ -317,7 +317,7 @@ the number of statements is proportional to the number of dimensions (see below)
 There are basically two types of such a multidimensional builder. The first one
 generates a composite class according to the dimension configuration. The resulting
 object is then instantiated from this generated class. The other type instantiates
-a preliminary instance from the common base class. This instance is then decorated by
+a preliminary instance from the common base class and this instance is then decorated by
 the selected concrete dimension traits.
 
 While the first approach generating a composite class would require that
@@ -330,7 +330,7 @@ the application of dynamic traits on an existing instance.
 
 Groovy is a dynamic language which also supports some optional static language
 features, like a compile-time type check. It also contains traits that can
-be applied on both types and instances. To solve the exponential growth problem
+be applied to both types and instances. To solve the exponential growth problem
 we will try to rewrite the previous code by means of Groovy's dynamic traits in
 a builder-like manner.
 
@@ -349,7 +349,7 @@ item.z = thingData.get("z")
 ```
 
 Now we can use the dynamic traits and extend the item step-by-step by the right traits.
-We use `withTraits` method invoked on the item object to extend it by the selected trait.
+We use the `withTraits` method invoked on the item object to extend it by the selected trait.
 The selected trait is immediately initialized from the input data.
 
 ```groovy
@@ -374,8 +374,8 @@ if (event.containsKey("metal")) {
 }
 ```
 
-It is clear that using dynamic traits and the step-by-step extensions resolved the problem
-with the exponential growth. The number of conditions is proportional to
+It is clear that using dynamic traits and the step-by-step extensions resolves the problem
+of the exponential growth. The number of conditions is proportional to
 the number of dimensions and not to the number of all possible combinations.
 
 The resulting object also carries all type information about itself. It can
@@ -391,7 +391,7 @@ if (isThing && isRectangle && isPaper)
 ```
 
 Although this solution based on using the dynamic traits seems to be
-perfect, because it allows us to capture the multidimensional character of data
+perfect, because it allows us to capture the multidimensional characteristics of data
 by traits, preserves the types and prevents the code from exponential growth,
 there are still a couple of serious problems resulting from the step-by-step
 approach as well as from the dynamic nature of the language and its weak type system.
@@ -402,13 +402,13 @@ for some dimension
 the same dimension to the builder.
 *  Missing Dependencies: A trait from one dimension may depend on another trait
 from another dimension. The configuration procedure must take these inter-trait
-dependencies into account, because it is out of the capabilities of dynamic languages.
-This responsibility makes the possibility fragile and open to inconsistencies.
+dependencies into account, because it is beyond the capabilities of dynamic languages.
+This additional requirement makes the code fragile and open to inconsistencies.
 *  Ambiguous Dependencies: The configuration procedure must also guarantee
 that there is no ambiguity in the dependencies.
 *  Since the above-mentioned responsibilities are solved on the application level
 and not on the platform level, the dynamic traits approach tends to developing
-unmaintainable code.
+unmanagable code.
 
 #####Modeling Multidimensional Data By Generated Classes w. Run-Time Checks
 
@@ -648,7 +648,7 @@ which can assume various forms. The number of wrapped objects corresponds to
 the number of dimensions. For each dimension the top object exposes a corresponding
 interface by means of delegation.
 
-* Delegation hides the real shape (character, type) of an object. We cannot
+* Delegation hides the real shape (characteristics, type) of an object. We cannot
 determine from the top object's type that it is a rectangular paper, for instance.
 Instead, we just find out that the item is something of some shape and material.
 To determine the real type, one cannot use a single  `instanceof` operator.
@@ -656,7 +656,7 @@ Instead, he must resort to examining the object's attributes, i.e. the state,
 holding references to the wrapped objects (`getMaterial()`, `getShape()`) and
 additionally apply `instanceof` for each wrapped instance.
 
-* The character of a composite object is scattered across the object and its
+* The characteristics of a composite object are scattered across the object and its
 components. The result is type schizophrenia.
 
 * Traits are a natural concept for modeling multidimensional objects, which
