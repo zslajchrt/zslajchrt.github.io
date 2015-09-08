@@ -65,7 +65,7 @@ in subsequent transformations.
 The goal is to construct a lossless mapping. In other words, the target objects
 preserve both data and behavior of the source objects.
 
-A target object constructed by binding it directly to its source objects allow tracking
+A target object constructed by binding it directly to its source objects allows tracking
 its origins, which is as desirable property in the case when the target object becomes
 a source in another mapping. Such a secondary mapping may exploit the information about the
 origin of the source (then-target) object to perform a finer-grained binding.
@@ -76,8 +76,8 @@ In the following paragraphs we will attempt to design such a lossless mapping pr
 
 The following listing is an example of a low-level lossless mapping in Scala. The source and target
 objects are plain maps, whose values can be other maps or scalar values. The result
-of the mapping procedure is a map representing a scanned banknote, whose single property
-`isExported` combines properties from the item and the banknote record in the database.
+of the mapping procedure is a map representing a scanned currency, whose single property
+`isExported` combines properties from the item and the currency record in the database.
 The result also wraps the source objects (item, exemplar) so as not to loose
 the track of its origin.
 
@@ -141,14 +141,10 @@ representing the two independent dimensions of the item. The mapping procedure
 first reads the wrapped objects held in these two dimension properties and
 examines their concrete types. In other words, in order to find out what the
 item really is we have to look into its properties and determine the types of
-their values.
+their values (i.e. type schizophrenia).
 
-The individual types of the domain objects and the are represented by Scala static traits.
-
-The application of static traits to target classes takes place at compile-time.
-The compiler checks among other things whether the resulting composite classes
-are complete (i.e. all abstract members are implemented) and that the used traits
-are applied to correct classes
+The item, its dimensions (i.e. material, shape) and the dimensions' "values"
+(i.e. paper, rectangle etc.) are represented by Scala static traits.
 
 Let us assume first, that the multidimensional character of the item is modeled
 by means of composition. This approach would have to be used on platforms without
@@ -185,7 +181,7 @@ the purpose of this example.)
 
 The target types mimic the structure of the currency database domain. The `ScannedCurrency`
 trait represents a currency found in a luggage and its single property `isExported`
-combines data from the two source domains. A currency is considered *exported*
+combines data from the two source domains: a currency is considered *exported*
 if the currency's issuing country is the same as the country where the item was
 scanned.
 
@@ -204,6 +200,19 @@ trait ScannedCoin extends ScannedCurrency {
   this: Coin with Item =>
 }
 ```
+
+The self-type (`=>`) of `ScannedCurrency` constrains the application of this trait
+only to the compositions containing `Currency` and `Item` traits. Since any object
+containing `ScannedCurrency` must also contain the two traits it is possible to
+access the `Currency` and `Item` members from the body of `ScannedCurrency`.
+
+`ScannedBanknote` constrains its application even more to objects with
+the `Banknote` and `Item` traits. Similarly, `ScannedCoin` limits is use to
+the context of `Coin` and `Item`.
+
+The self-type constrains in `ScannedBanknote` and `ScannedCoin` could be even
+stricter if we could replace `Item` with `Paper with Rectangle`, resp. `Metal with Cylinder`.
+However, it is not possible, because of the type schizophrenia of the item.
 
 Now, let us turn our attention to the mapping method `makeCurrency` using
 the above-mentioned types.
@@ -233,32 +242,34 @@ def makeCurrency(item: Item): Option[ScannedCurrency] = {
 ```
 
 The method must first check the types of the two dimensions `shape` and `material`
-held as properties in the item. Then the values are type-casted to the concrete
+included in the item as its properties. Then the values are type-casted to the concrete
 types to retrieve the width, height of the rectangle and the paper color.
 
 Then the database is asked to find the corresponding banknote. If it is found,
 a new instance of `ScannedBanknote` is created, which implements both `Banknote`
 and `Item` traits by delegation.
 
-At first sight, the code looks tidier than the property-based one. However, there
+At first sight, the code looks much tidier than the property-based one. However, there
 are still some issues:
 
 * Nothing prevents `ScannedBanknote` from being instantiated with wrong
 (i.e. not banknote-like) item. The reason is that the proper composition
 of `ScannedBanknote` with luggage items must be guaranteed by the developer and
 not by the platform. The developer does it by examining the item's state, while
-the platform would do it by examining the types.
+the platform would do it by examining the types. It could be prevented by specifying
+the self-type of `ScannedBanknote` as `Banknote with Paper with Rectangle`, but
+it is not possible because of the type schizophrenia of the item.
 
 * Another issue relates to the delegation: on each consecutive mapping the item
 instance looses some behavior because not all interfaces implemented by
-the source object must be implemented by the target object. The item instances also
-sinks one delegation level down gradually becoming unreachable.
+the source object must be implemented by the target object. The wrapped item instance also
+sinks one delegation level down becoming gradually unreachable.
 
 These two findings can be formulated more generally:
 
-* A multidimensional source object modeled by composition makes subsequent compositions
+* A multidimensional source object modeled by **composition** makes subsequent compositions
 prone to type inconsistencies.
-* The construction of target objects by means of delegations tends to lose behavior
+* The construction of target objects by means of **delegations** tends to lose behavior
 and type.
 
 
@@ -268,10 +279,9 @@ In this paragraph we will examine a purely static type-based approach to mapping
 target objects on the source ones by means of static traits.
 
 Since one of the problems described in the previous paragraph was caused by
-composition, i.e. by the wrapped dimensions in the item object, in this example
-we will try to model the multidimensionality of items (no type schizophrenia)
-by static traits (Scala).
-It follows that there will be no properties in `Item` representing
+composition, i.e. by the dimensions wrapped in the item object, in this example
+we will try to model the multidimensionality of items by Scala static traits
+(no type schizophrenia). It follows that there will be no properties in `Item` representing
 the two dimensions. Instead, the dimensions become part of the item's type
 expressed by means of traits.
 
@@ -317,7 +327,7 @@ def makeCurrency(item: Item): Option[ScannerCurrency] = {
 ```
 
 Unfortunately, the new instance cannot avoid the delegation. The conclusion is
-that event if we suppressed the problem of the exponential growth of code,
+that with the supposition of ignoring the problem of the exponential growth of code,
 
 * The composition issue is over, `ScannedBanknote` can be accompanied by paper rectangles only
 * The delegation issue still persists, i.e. behavior and type degrade on every successive mapping
@@ -375,12 +385,14 @@ The conclusion is:
 because `withTraits` automatically implements all interfaces on the source object.
 * The removal of the delegation was helpful in the previous issue, however it brings
 another problem: the `banknote`'s state must be copied to the `scannedBanknote` instance.
-The `banknote` can theoretically be an instance of an extended trait carrying additional
+The `banknote` can theoretically be an instance of a `Banknote` subclass carrying additional
 data. This extra state will not be copied to `scannedBanknote`, thus there is a potential
 of losing some information when copying state.
 * The problem of combining `ScannedBanknote` with a wrong item emerges again, because
 the weak type system and the dynamic nature of Groovy does not allow checking
 the inter-trait relationships.
+
+
 
 
 #####Summary
