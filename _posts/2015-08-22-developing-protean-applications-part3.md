@@ -536,7 +536,7 @@ Thing with (Metal or Paper) with (Rectangle or Cylinder)
 ```
 
 The previous type could be treated as a boolean formula, which can also be expressed in
-the *conjunctive norm form* as follows:
+the *disjunctive normal form* as follows:
 
 ```
 (Thing with Metal with Rectangle) or

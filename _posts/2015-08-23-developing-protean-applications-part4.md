@@ -393,7 +393,268 @@ the weak type system and the dynamic nature of Groovy does not allow checking
 the inter-trait relationships.
 
 
+#####Mapping Currencies To Items by Class Generator
 
+So far no mapping attempt has offered an ideal solution. The Scala showed to be too
+stiff while Groovy too flexible. This paragraph is dealing with an alternative
+approach searching for a middle course, which would lead us to a statically checked
+yet dynamic mapping.
+
+The basic building block in such an approach is the fictional class builder presented
+in the previous section. This builder is able to build consistent compositions
+of traits according to the model specified as a special type expression in the builder's
+constructor. The compiler is supposed to execute the consistency checks of the model
+so that the builder can rely on the model's consistency at run-time.
+
+In Scala it is possible to define type aliases by means of the so-called type
+members. To make the code more maintainable and readable, we will use such type aliases
+instead of the original type expressions throughout the code. The first one is
+the alias of the item's multidimensional model.
+
+```scala
+type ItemModel = Thing with (Metal or Paper) with (Rectangle or Cylinder)
+```
+
+This model can be rewritten to the equivalent disjunctive form, which
+shows better the four possible compositions of the traits.
+
+```
+(Thing with Metal with Rectangle) or
+(Thing with Metal with Cylinder) or
+(Thing with Paper with Rectangle) or
+(Thing with Paper with Cylinder)
+```
+
+The item builder is created by instantiating `ClassBuilder` and specifying
+the `ItemModel` type alias as the constructor's type argument.
+
+```scala
+  val itemBuilder = new ClassBuilder[ItemModel]
+  val itemBuilderStrategy = itemBuilder.newClassBuilderStrategy()
+  ... // configuring the strategy
+  val itemRef: Ref[ItemModel] = itemBuilder.newInstanceRef(itemBuilderStrategy)
+```
+
+At this stage, for each trait in the model, the builder holds a trait factory, which may
+be asked to create the trait's proxy object.
+
+Then the hints are passed to the builder strategy by the developer. The strategy object
+may actually contain inconsistent hints, but they will never lead
+to using an inconsistent composition of traits. Hints only helps the builder
+to select the best matching trait composition to the given hints. Without any
+hint the class builder selects the first composition from the list of all possible
+compositions.
+
+After the builder selects the valid trait composition, after consulting the selection
+with the builder strategy's hints, it invokes the corresponding trait factory for
+each trait in the selected composition.
+
+The builder can be used repeatedly to instantiate various trait compositions.
+
+```scala
+val otherItemRef: Ref[ItemModel] = itemBuilder.newInstanceRef(otherItemBuilderStrategy)
+```
+
+Since the builder uses always the same trait factories, it becomes very important,
+whether a factory is stateless or stateful. If a factory is stateless it always
+creates a new trait proxy instance. On the other hand, if a factory is stateful
+it may implement some instance management such as pooling. In the simplest case
+it works as a singleton factory, which creates only one instance.
+
+If all trait factories are singleton factories, then the same trait proxy objects
+may appear in different trait line-ups produced by the same builder.
+
+The state of the singleton factories before the first instantiation.
+<div>
+<img src="http://zslajchrt.github.io/resources/unitializedProxies.png" />
+</div>
+
+The state of the singleton factories after the first instantiation.
+<div>
+<img src="http://zslajchrt.github.io/resources/partiallyInitializedProxies.png" />
+</div>
+
+The state of the singleton factories after the second instantiation.
+<div>
+<img src="http://zslajchrt.github.io/resources/fullyInitializedProxies.png" />
+</div>
+
+Such a configuration reminds *object morphing*. The instances returned by the builder
+with singleton factories only may be seen as different forms of
+one *multi-instance* consisting of the trait proxy objects held by the singleton
+factories in the builder.
+
+After the item builder is configured, it returns the result wrapped in
+a special `Ref` object.
+
+This object, in contrast to the plain reference returned by `newInstance`,
+keeps a link to the model, from which the instance is created. Using the `Ref`
+object reference instead of the plain reference allows performing additional compile-time
+checks when the reference is passed to a method as its argument.
+
+The instance is kept in the `instance` property of the reference object.
+
+```scala
+  val item: Thing with Material with Shape = itemRef.instance
+```
+
+Now, let us turn our attention to the target domain model. It may be
+expressed in terms of a one-dimensional model with two concrete traits
+`ScannedBanknote` and `ScannedCoin` belonging to the `ScannedCurrency` dimension.
+
+```scala
+type ScannedCurrencyModel = ScannedBanknote or ScannedCoin
+```
+
+This model generates only two trivial trait compositions and it may be tempting
+to create an instance of this in a similar way as the item instance, as shown in
+the previous section.
+
+```scala
+val curBuilder = new ClassBuilder[ScannedCurrencyModel]()
+... // the strategy configuration
+val curRef = curBuilder.newInstanceRef(curBuilderStrategy)
+```
+
+Unfortunately, it will not work. The reason is that the traits `ScannedBanknote`
+and `ScannedCoin` are dependent on other traits via their self-type. In other
+words, the model used in the builder is incomplete.
+
+To make it complete we would have to extend it by the required dependencies:
+
+```scala
+type ScannedCurrencyModelComplete =
+  (ScannedBanknote with Banknote with Rectangle with Paper) or
+  (ScannedCoin with Coin with Cylinder with Metal)
+```
+
+Now we could make an instance of this model, however, we would have to copy
+data from outer instances of the selected traits. And this is exactly what we
+do not want. What we want is to reuse those outer trait instances by the
+scanned currency builder.
+
+Reusing the item's trait proxies in the currency builder should be as easy as
+passing the item's reference object to the constructor of the currency builder:
+
+```scala
+def makeCurrency(itemRef: Ref[ItemModel]): Option[Ref[ScannerCurrencyModel]] = {
+  val curBuilder = new ClassBuilder[ScannedCurrencyModel](itemRef)
+  ...
+}
+```
+
+Now, the compiler has all necessary information about the the target model (which is incomplete)
+and the source model retrieved from the object reference type (i.e. `ItemModel`).
+The compiler must be able to determine if the source model can deliver all
+trait proxies required by the traits in the incomplete target model.
+
+In this case the compiler should fail, since the source model cannot deliver
+`Banknote` and `Coin` trait proxies.
+
+One solution could be to extend again the `ScannedCurrencyModel` by `Banknote`
+and `Coin`, but it would lead to another copying of data from external currency
+instances returned by the currency database to the instance created by the builder.
+
+```scala
+type ScannedCurrencyModelCompleteWithCurrency = (ScannedBanknote with Banknote) or (ScannedCoin with Coin)
+```
+
+There is, however, another way to incorporate an existing trait instance
+to a new composition: the target model may be extended by special traits
+implementing the factories for the missing traits. Since the two missing
+traits are `Banknote` and `Coin`, the extended target model will look as follows:
+
+```scala
+type ScannedCurrencyModelWithLoaders = (ScannedBanknote with BanknoteLoader) or (ScannedCoin with CoinLoader)
+```
+
+The `BanknoteLoader` and `CoinLoader` are trait factories providing the missing
+trait proxies and may be implemented as shown in this listing:
+
+
+```scala
+trait BanknoteLoader extends TraitFactory[Banknote] {
+  this: Paper with Rectangle =>
+
+  def load(): Option[Banknote] = {
+    currencyDb.findBanknote(width, height, color)
+  }
+}
+
+trait CoinLoader extends TraitFactory[Coin] {
+  this: Metal with Cylinder =>
+
+  def load(): Option[Coin] = {
+    currencyDb.findCoin(2 * radius, height)
+  }
+}
+```
+
+The `BanknoteLoader` implements the `TraitFactory` interface and specifies its
+dependencies on `Paper` and `Rectangle` by the self-type. This self-type gives
+the loader access to the paper's and rectangle's properties, which are used to locate the
+corresponding banknote object in the currency database in the `load` method.
+The result of the method is optional, which allows to indicate a failure to
+find the banknote in the database by returning `None`.
+
+The `CoinLoader` works analogously.
+
+Note: A trait factory must not depend on the trait it creates.
+
+Now we can pass the target model with the loaders to the currency builder's
+constructor along with the item's reference object.
+
+```scala
+def makeCurrency(itemRef: Ref[ItemModel]): Option[Ref[ScannerCurrencyModel]] = {
+  val curBuilder = new ClassBuilder[ScannedCurrencyModelWithLoaders](itemRef)
+  val curRefOpt: Option[Ref[ScannedCurrencyModelWithLoaders]] = loaderBuilder.maybeToRef
+  loaderRefOpt
+}
+```
+
+The compiler should not complain now, since all missing trait proxies may be
+delivered either by `ItemModel` or by the currency loaders.
+
+The target model effectively shrinks the number of possible input compostions
+from four to two, because only `Thing with Metal with Cylinder` and
+`Thing with Paper with Rectangle` matches with the target model.
+
+```
+ScannedBanknote with BanknoteLoader with Banknote -> Thing with Metal with Cylinder
+ScannedCoin with CoinLoader with Coin -> Thing with Paper with Rectangle
+```
+
+It is important to emphasize, that there is no builder strategy used in this case,
+since the resulting composition is determined by the composition wrapped in
+`itemRef`. The currency builder in fact inherits the strategy from the `itemRef`.
+
+The effective joined model may be expressed as follows:
+
+```
+(Thing with Metal with Cylinder with Coin with CoinLoader with ScannedCoin) or
+(Thing with Paper with Rectangle with Banknote with BanknoteLoader with ScannedBanknote)
+```
+
+A possible state of singleton factories in the joined model.
+<div>
+<img src="http://zslajchrt.github.io/resources/joinedProxies.png" />
+</div>
+
+
+There are two scenarios in which the builder's `maybeToRef` method returns
+None (i.e. fails):
+
+* The item reference carries an unmapped composition (i.e. `Thing with Metal with Rectangle` or `Thing with Paper with Cylinder`)
+* A currency loader does not find the corresponding currency record in the database.
+
+Both scenarios are considered application exceptions, i.e. are part of the use-case
+and must be handled by the application.
+
+The conclusion is that mapping based on the class builder
+
+* may ensure consistency of target compositions at compile-time
+* may avoid loosing behavior and data in successive mappings
+* may reuse more proxies
 
 #####Summary
 
@@ -447,6 +708,8 @@ of class declarations and the code as such. Using dynamic traits solves this pro
 
 * Neither static nor dynamic traits solve the problem of copying states between
 source and target instances during the mapping.
+
+* The solution may be a mapper based on the concept of the class builder
 
 #####Source Code
 
