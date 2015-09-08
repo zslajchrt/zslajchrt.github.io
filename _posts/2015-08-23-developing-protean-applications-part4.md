@@ -697,7 +697,7 @@ more reasons for it:
 
 * Java's type system does not provide sufficient means to express the real character
 of objects by type. Therefore, designers must resort to the modeling of the object
-character by state (e.g. delegation) whereby they incorporate object schizophrenia
+character by state (e.g. delegation) whereby they incorporate type schizophrenia
 into the model.
 
 * The concept of traits as implemented in Scala or Groovy fits very well to
