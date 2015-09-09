@@ -7,17 +7,17 @@ permalink: developing-protean-applications-part8
 
 ###Modelling Protean Services With Class Builder (static/dynamic)
 
-In the section dealing with the modeling of multidimensional data [LINK] it is shown
+In the section dealing with the modeling of multidimensional data [LINK] is shown
 that the current languages and platforms do not match perfectly with such a task.
 Scala as a representative of a statically typed platform is not able to represent
-statically the multitude of combinations, stemming from the multidimensionality.
+statically the multitude of combinations arising from the multidimensionality.
 On the other hand, Groovy as a dynamic language with some support of static features,
 offers a very high flexibility, which, however, cannot guarantee consistency
 of trait compositions made at run-time.
 
 It has also been demonstrated that the concept of a class builder, which combines
-declarative and dynamic features, may be a solution to the modeling of complex
-multidimensional domains.
+declarative and dynamic features, may be a solution to problem of modeling
+complex multidimensional domains.
 
 The goal of this section is to examine whether the class builder can solve
 the main issues associated with the purely dynamic and static approaches.
@@ -44,7 +44,7 @@ Employee or
 RegisteredUser
 ```
 
-An user instance is created by means of the class builder, whose constructor
+A user instance is created by means of the class builder, whose constructor
 is specified with `UserModel` and the trait initializer. The model allows
 the compiler extension to check the consistency of the model. For example, `PremiumUser` requires through
 its self-type that it can appear only in the compositions including `RegisteredUser` too.
@@ -155,14 +155,14 @@ maps exactly to one user model alternative, since only one has both `RegisteredU
 and `PremiumUser` as required by `RegisteredUserAdapter` and `DefaultFaxByMail`.
 
 However, the third alternative depending on `RegisteredUser` through `RegisteredUserAdapter`,
-can be satisfied by two user model alternatives. This unambiguity may cause problems
+can be satisfied by two user model alternatives. This ambiguity may cause problems
 when the class builder instantiates a mail service and is selecting the target alternative
 for a user instance implementing both `RegisteredUser` and `PremiumUser` traits,
 since there are two eligible alternatives in the mail service model.
 
 This problem may be solved by taking into account the sorting order of the target
-alternatives: the first matching wins. So in this case the second alternative (with
-`DefaultFaxByMail`) would win.
+alternatives: the first matching target alternative wins. So in this case the second
+alternative (with `DefaultFaxByMail`) would win.
 
 ####Runtime Morphing
 
@@ -179,9 +179,9 @@ the `mutableInstance` method.
 val mailService: UserMail = mailServiceRef.mutableInstance
 ```
 
-The returned object is in fact a proxy holding the reference to the current mail
+The returned object is in fact a proxy holding a reference to the current mail
 service composition of traits. The proxy implements the lowest upper bound type (LUB) for
-all target alternatives by delegating on the reference. (The LUB in this example
+all target alternatives by delegating on this reference. (The LUB in this example
 is `UserMail`.)
 
 To refresh the proxy's delegate reference could be a responsibility of the proxy itself
@@ -194,7 +194,7 @@ which allows the client to control the proxy:
 val mailService: UserMail with MutableInstance[MailServiceModel] = mailServiceRef.mutableInstance
 ```
 
-The control interface exposes the reference by through the `delegate` method.
+The control interface exposes the reference through the `delegate` method.
 This method may be used in situations, when the client wishes to customize
 its appearance, for example.
 
@@ -243,7 +243,7 @@ wrapping in the previous approaches.
 `VirusDetector` in the previous approaches.
 
 * The client may check the availability of extension interfaces (e.g. `FaxByMail`)
-through the `delegate` method on the mutable instance, `AlternatingUserMail` is no longer needed.
+through the `delegate` method on the mutable instance; `AlternatingUserMail` is no longer needed.
 
 * All trait proxy objects, regardless of many mappings the underwent, remain on
 the top of the instance, i.e. they are not "sinking" after every mapping.
