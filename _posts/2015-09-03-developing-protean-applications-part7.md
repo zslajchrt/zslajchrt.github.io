@@ -9,13 +9,14 @@ permalink: developing-protean-applications-part7
 
 ####Introduction
 
-In programming languages with dynamic traits it is possible to add one or more traits
-to an object at run-time. A trait is added to an object by invoking a special method on the object and
-specifying the trait's type. This provide us with a way to hook
-various traits on an object step-by-step, in contrast to the static traits, where the traits
-are specified declaratively at once in the initialization statement. The imperative
-decoration by traits sounds promising as far as tackling with the problem of
-combinatorial explosion of class declarations is concerned.
+In certain dynamic programming languages such as Groovy and Ruby it is possible
+to add one or more traits to an object at run-time [LINK]. A trait is added to an object
+by invoking a special method on the object and specifying the trait's type. This
+provide us with a way to hook various traits on an object step-by-step, in
+contrast to the static traits, where the traits are specified declaratively at
+once in the initialization statement. The imperative decoration by traits sounds
+promising as far as tackling with the problem of combinatorial explosion of class
+declarations is concerned.
 
 There are a couple of languages providing dynamic traits, although they offer them
 under different names. Among others I have to mention Ruby (modules), Groovy (mixins, traits)

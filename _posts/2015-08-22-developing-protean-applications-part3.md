@@ -552,14 +552,31 @@ which can use to perform the necessary consistency checks.
 So, the new builder would be created by the following statement:
 
 ```scala
-  val classBuilder = new ClassBuilder[Thing with (Metal or Paper) with (Rectangle or Cylinder)]()
+  val classBuilder = new ClassBuilder[Thing with (Metal or Paper) with (Rectangle or Cylinder)]({
+    case rect: Rectangle =>
+      rect.width = event.get("rectangle").get("width")
+      rect.height = event.get("rectangle").get("height")
+    case cyl: Cylinder =>
+      cyl.height = event.get("cylinder").get("height")
+      cyl.radius = event.get("cylinder").get("radius")
+  })
 ```
 
-It is assumed that there would be a compiler extension that could handle this
-special type and could also build a model, from which all possible trait compositions
-could be derived.
+The type argument of the constructor specifies the model,
 
-Once the compiler extension has all trait compositions, it can take one by one
+For each trait in the model the builder maintains a trait factory creating
+an instance of the trait's proxy object. Whenever a factory creates a new proxy,
+the proxy may be additionally initialized by the trait initializer passed as
+the optional class builder's constructor argument. The new proxy
+may be initialized by one `case` block in the partial function [LINK] implementing
+the trait initializer. It may become useful when a new trait instance must be loaded
+with some external data like in this case.
+
+In respect of the model, it is assumed that there would be a compiler extension
+that could handle this special type and could also build a model, from which
+all possible trait compositions could be derived.
+
+Once the compiler extension knows all trait compositions, it can take one by one
 and verify whether all traits in a given composition satisfy the rules such as
 completeness, unambiguity etc.
 
@@ -572,12 +589,12 @@ select the right trait composition from the model. An new instance of such
 a strategy could be obtained from the class builder instance as follows:
 
 ```scala  
-  val classBuilderStrategy = classBuilder.newClassBuilderStrategy()
+  val classBuilderStrategy = new HintClassBuilderStrategy()
 ```
 
-The strategy contains `selectTrait` method through which the developer
-specifies hints to the strategy, which traits must be in the resulting trait
-composition.
+The `HintClassBuilderStrategy` strategy contains `hintTrait` method through
+which the developer specifies hints to the strategy, which traits must be in
+the resulting trait composition.
 
 It is not necessary to provide a hint for the `Thing` traits, since, according
 to the model, it must be present always by default.
@@ -586,9 +603,9 @@ The trait hints for the material dimension can handled in the following way:
 
 ```scala
   if (event.containsKey("metal")) {
-    classBuilderStrategy.selectTrait[Metal]
+    classBuilderStrategy.hintTrait[Metal]
   } else if (event.containsKey("paper")) {
-    classBuilderStrategy.selectTrait[Paper]
+    classBuilderStrategy.hintTrait[Paper]
   }
 ```
 
@@ -596,15 +613,9 @@ And the shape dimension can be handled similarly:
 
 ```scala
   if (event.containsKey("rectangle")) {
-    classBuilderStrategy.selectTrait[Rectangle](rect => {
-      rect.width = event.get("rectangle").get("width")
-      rect.height = event.get("rectangle").get("height")
-    })
+    classBuilderStrategy.hintTrait[Rectangle]
   } else if (event.containsKey("cylinder")) {
-    classBuilderStrategy.selectTrait[Cylinder](cyl => {
-      cyl.height = event.get("cylinder").get("height")
-      cyl.radius = event.get("cylinder").get("radius")
-    })
+    classBuilderStrategy.hintTrait[Cylinder]
   }
 ```
 

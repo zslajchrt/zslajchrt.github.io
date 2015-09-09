@@ -426,11 +426,19 @@ shows better the four possible compositions of the traits.
 ```
 
 The item builder is created by instantiating `ClassBuilder` and specifying
-the `ItemModel` type alias as the constructor's type argument.
+the `ItemModel` type alias as the constructor's type argument and the trait
+initializer as the other argument.
 
 ```scala
-  val itemBuilder = new ClassBuilder[ItemModel]
-  val itemBuilderStrategy = itemBuilder.newClassBuilderStrategy()
+  val itemBuilder = new ClassBuilder[ItemModel]({
+    case rect: Rectangle =>
+      rect.width = event.get("rectangle").get("width")
+      rect.height = event.get("rectangle").get("height")
+    case cyl: Cylinder =>
+      cyl.height = event.get("cylinder").get("height")
+      cyl.radius = event.get("cylinder").get("radius")
+  })
+  val itemBuilderStrategy = new HintClassBuilderStrategy[ItemModel]()
   ... // configuring the strategy
   val itemRef: Ref[ItemModel] = itemBuilder.newInstanceRef(itemBuilderStrategy)
 ```
@@ -438,8 +446,12 @@ the `ItemModel` type alias as the constructor's type argument.
 At this stage, for each trait in the model, the builder holds a trait factory, which may
 be asked to create the trait's proxy object.
 
-Then the hints are passed to the builder strategy by the developer. The strategy object
-may actually contain inconsistent hints, but they will never lead
+Then the developer configures the builder strategy, which is used by the builder
+during the instantiation to consult which trait composition should be selected for
+the instantiation. The `HintClassBuilderStrategy` strategy allows specifying traits that
+should be present in the selected trait composition.
+
+The strategy object may actually contain inconsistent hints, but they will never lead
 to using an inconsistent composition of traits. Hints only helps the builder
 to select the best matching trait composition to the given hints. Without any
 hint the class builder selects the first composition from the list of all possible
@@ -492,7 +504,7 @@ keeps a link to the model, from which the instance is created. Using the `Ref`
 object reference instead of the plain reference allows performing additional compile-time
 checks when the reference is passed to a method as its argument.
 
-The instance is kept in the `instance` property of the reference object.
+The instance may be retrieved by invoking the `instance` method on the reference object.
 
 ```scala
   val item: Thing with Material with Shape = itemRef.instance
@@ -537,7 +549,7 @@ Reusing the item's trait proxies in the currency builder should be as easy as
 passing the item's reference object to the constructor of the currency builder:
 
 ```scala
-def makeCurrency(itemRef: Ref[ItemModel]): Option[Ref[ScannerCurrencyModel]] = {
+def makeCurrency(itemRef: Ref[ItemModel]): Ref[ScannerCurrencyModel] = {
   val curBuilder = new ClassBuilder[ScannedCurrencyModel](itemRef)
   ...
 }
@@ -605,17 +617,16 @@ Now we can pass the target model with the loaders to the currency builder's
 constructor along with the item's reference object.
 
 ```scala
-def makeCurrency(itemRef: Ref[ItemModel]): Option[Ref[ScannerCurrencyModel]] = {
+def makeCurrency(itemRef: Ref[ItemModel]): Ref[ScannerCurrencyModel] = {
   val curBuilder = new ClassBuilder[ScannedCurrencyModelWithLoaders](itemRef)
-  val curRefOpt: Option[Ref[ScannedCurrencyModelWithLoaders]] = loaderBuilder.maybeToRef
-  loaderRefOpt
+  loaderBuilder.newInstanceRef
 }
 ```
 
 The compiler should not complain now, since all missing trait proxies may be
 delivered either by `ItemModel` or by the currency loaders.
 
-The target model effectively shrinks the number of possible input compostions
+The target model effectively shrinks the number of possible input compositions
 from four to two, because only `Thing with Metal with Cylinder` and
 `Thing with Paper with Rectangle` matches with the target model.
 
@@ -641,14 +652,21 @@ A possible state of singleton factories in the joined model.
 </div>
 
 
-There are two scenarios in which the builder's `maybeToRef` method returns
-None (i.e. fails):
+There are two scenarios, however, in which the references's `instance` method may fail:
 
 * The item reference carries an unmapped composition (i.e. `Thing with Metal with Rectangle` or `Thing with Paper with Cylinder`)
 * A currency loader does not find the corresponding currency record in the database.
 
 Both scenarios are considered application exceptions, i.e. are part of the use-case
 and must be handled by the application.
+
+In order to facilitate handling of such conditions, the reference object
+provides the `maybeInstance` method, which returns `Some(instance)` in case of success
+or None otherwise.
+
+```scala
+  val itemOpt: Option[Thing with Material with Shape] = itemRef.maybeInstance
+```
 
 The conclusion is that mapping based on the class builder
 
