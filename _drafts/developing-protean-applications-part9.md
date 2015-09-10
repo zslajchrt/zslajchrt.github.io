@@ -154,7 +154,7 @@ The **morph mapper** is a compile-time component composing one morph model with
 another. It performs a series of checks to guarantee that the two model produce
 a complete morph model.
 
-####Morph Strategy
+#####Morph Strategy
 
 A **morph strategy** is an object assisting the morpher during the instantiation
 of a morph in the selection of the right alternative. The morph strategy
