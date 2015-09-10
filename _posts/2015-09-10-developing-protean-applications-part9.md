@@ -91,7 +91,8 @@ The **alternative's type** is the type composed of all fragment types in the alt
 
 #####Lowest Upper Bound (LUB) of Morph Type
 
-A **lowest upper bound** is the most specific type yet compatible with the types of all alternatives.
+A **lowest upper bound** is the most specific type yet compatible with the types
+of all alternatives from the morph model.
 
 #####Morph Model
 
