@@ -160,7 +160,7 @@ A **morph strategy** is an object assisting the morpher during the instantiation
 of a morph in the selection of the right alternative. The morph strategy
 is receiving all possible alternatives one by one and is replying by
 a recommendation statement. It follows that the morpher can never instantiate
-an invalid compisition of fragments. The only risk is that the strategy is
+an invalid composition of fragments. The only risk is that the strategy is
 not properly configured or implemented and may thus recommend improper alternatives.
 
 ####Code Samples
