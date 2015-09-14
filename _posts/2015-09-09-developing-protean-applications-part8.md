@@ -146,7 +146,7 @@ of the user model:
 ```
 DefaultUserMail with VirusDetector with EmployeeUserMail with EmployeeAdapter -> Employee
 DefaultUserMail with VirusDetector with RegisteredUserMail with RegisteredUserAdapter with DefaultFaxByMail -> RegisteredUser with PremiumUser
-DefaultUserMail with VirusDetector with RegisteredUserMail with RegisteredUserAdapter -> (RegisteredUser or RegisteredUser with PremiumUser)
+DefaultUserMail with VirusDetector with RegisteredUserMail with RegisteredUserAdapter -> (RegisteredUser or (RegisteredUser with PremiumUser))
 ```
 
 The first mail service alternative maps exactly to one alternative of the user model,

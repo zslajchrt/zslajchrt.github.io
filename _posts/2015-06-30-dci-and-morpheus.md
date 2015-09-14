@@ -117,7 +117,7 @@ trait Context {
 
 The context is a simple trait declaring the two roles as values of a composite type `Account with Source`, resp. `Account with Destination`. The types indicate that the members **are** accounts playing the corresponding roles in the use case. `Source` and `Destination` are roles defined below.
 
-The implementation of the context is also pretty simple. It uses the `role` macro that hides some Morpheus boilerplate. The macro accepts three types: the role type, the object type and the context type. The only arguments is the reference to the object.
+The implementation of the context is also pretty simple. It uses the `role` macro that hides some Morpheus boilerplate. The macro accepts three types: the role type, the object type and the context type. The only argument is the reference to the object.
 
 ```scala
 class ContextImpl(srcAcc: Account, dstAcc: Account, val Amount: BigDecimal) extends Context {
