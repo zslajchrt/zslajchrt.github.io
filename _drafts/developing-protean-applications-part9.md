@@ -72,7 +72,7 @@ A **morph type** is a type produced by a special type expression. By the type ex
 the developer declares all possible *alternatives*, i.e. compositions of fragments
 (forms).
 
-The type expression is equivalent to a *non-recursive context-free grammar*
+The type expression is equivalent to a *non-recursive context-sensitive grammar*
 generating a language, where no term (i.e. fragment) occurs more than once in any
 sequence in the language.
 
