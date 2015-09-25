@@ -65,16 +65,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.97702646"
-     inkscape:cx="425.87675"
-     inkscape:cy="379.40742"
+     inkscape:cx="608.06219"
+     inkscape:cy="215.64522"
      inkscape:current-layer="layer1"
      id="namedview2989"
      showgrid="false"
-     inkscape:window-width="1440"
-     inkscape:window-height="852"
-     inkscape:window-x="254"
-     inkscape:window-y="1102"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="1704"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata2991">
     <rdf:RDF>
@@ -93,7 +93,10 @@
      id="layer1">
     <g
        id="g4248"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#00ff00;fill-opacity:1;stroke:#000000"
@@ -119,7 +122,10 @@
     </g>
     <g
        id="g4256"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,39.814864,646.81633)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -145,7 +151,10 @@
     </g>
     <g
        id="g4235"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#ff0000;fill-opacity:1;stroke:#000000"
@@ -171,7 +180,10 @@
     </g>
     <g
        id="g4264"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,178.70677,646.91039)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -197,7 +209,10 @@
     </g>
     <g
        id="g4240"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#ff0000;fill-opacity:1;stroke:#000000"
@@ -222,15 +237,21 @@
            style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans">Metal</tspan></text>
     </g>
     <rect
-       y="367.58517"
+       y="455.58517"
        x="191.78705"
        height="114.32963"
        width="792.22101"
        id="rect3965"
-       style="fill:none;stroke:#000000;stroke-width:1.64973414" />
+       style="fill:none;stroke:#000000;stroke-width:1.64973414"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <g
        id="g4168"
-       transform="translate(123.85068,0)">
+       transform="translate(123.85068,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,309.41083,647.9339)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -261,7 +282,10 @@
     </g>
     <g
        id="g4162"
-       transform="translate(123.09412,0)">
+       transform="translate(123.09412,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#00ff00;fill-opacity:1;stroke:#000000"
@@ -292,7 +316,10 @@
     </g>
     <g
        id="g4179"
-       transform="translate(110.33752,0)">
+       transform="translate(110.33752,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,457.41083,647.9339)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -318,7 +345,10 @@
     </g>
     <g
        id="g4212"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#ff0000;fill-opacity:1;stroke:#000000"
@@ -349,7 +379,10 @@
     </g>
     <g
        id="g4218"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,593.92176,647.9339)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -380,7 +413,10 @@
     </g>
     <g
        id="g4224"
-       transform="translate(114,0)">
+       transform="translate(114,88)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#ff0000;fill-opacity:1;stroke:#000000"
@@ -416,7 +452,10 @@
            y="351.06522" /></flowRegion><flowPara
          id="flowPara4086"></flowPara></flowRoot>    <g
        id="g4269"
-       transform="translate(114,-125.10115)">
+       transform="translate(114,-125.10115)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/partiallyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,-29.023514,646.81633)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -442,7 +481,10 @@
     </g>
     <g
        id="g4277"
-       transform="translate(114,-125.10115)">
+       transform="translate(114,-125.10115)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/partiallyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#00ff00;fill-opacity:1;stroke:#000000"
@@ -468,7 +510,10 @@
     </g>
     <g
        id="g4285"
-       transform="translate(114,-125.10115)">
+       transform="translate(114,-125.10115)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/partiallyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,111.39784,646.81633)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -494,7 +539,10 @@
     </g>
     <g
        id="g4293"
-       transform="translate(114,-125.10115)">
+       transform="translate(114,-125.10115)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/partiallyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#00ff00;fill-opacity:1;stroke:#000000"
@@ -520,7 +568,10 @@
     </g>
     <g
        id="g4301"
-       transform="translate(114,-125.10115)">
+       transform="translate(114,-125.10115)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/partiallyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          transform="matrix(1,0,0,-1,247.9502,647.9339)"
          d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
@@ -550,38 +601,53 @@
        height="90.069206"
        width="369.48846"
        id="rect4309"
-       style="fill:none;stroke:#000000" />
+       style="fill:none;stroke:#000000"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/partiallyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.8610236;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Arrow2Lend)"
-       d="m 657.48579,397.12333 c 35.82298,-36.47278 62.43434,-0.75985 62.43434,-0.75985"
+       d="m 657.48579,485.12333 c 35.82298,-36.47278 62.43434,-0.75985 62.43434,-0.75985"
        id="path4311"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <text
        xml:space="preserve"
        style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
        x="671.815"
-       y="396.09979"
+       y="484.09979"
        id="text5131"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
          sodipodi:role="line"
          id="tspan5133"
          x="671.815"
-         y="396.09979"
+         y="484.09979"
          style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans">creates</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path5135"
-       d="m 867.48579,397.12333 c 35.82298,-36.47278 62.43434,-0.75985 62.43434,-0.75985"
-       style="fill:none;stroke:#000000;stroke-width:0.8610236;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:3.44409442, 3.44409442;stroke-dashoffset:0;marker-end:url(#Arrow2Lend)" />
+       d="m 867.48579,485.12333 c 35.82298,-36.47278 62.43434,-0.75985 62.43434,-0.75985"
+       style="fill:none;stroke:#000000;stroke-width:0.8610236;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:3.44409442, 3.44409442;stroke-dashoffset:0;marker-end:url(#Arrow2Lend)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <text
        sodipodi:linespacing="125%"
        id="text5137"
-       y="396.09979"
+       y="484.09979"
        x="881.815"
        style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/joinedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
          style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans"
-         y="396.09979"
+         y="484.09979"
          x="881.815"
          id="tspan5139"
          sodipodi:role="line">creates</tspan></text>
@@ -608,8 +674,11 @@
            x="67.551903"
            y="254.85492" /></flowRegion><flowPara
          id="flowPara5155"></flowPara></flowRoot>    <g
-       transform="translate(114,-247.10115)"
-       id="g5173">
+       transform="translate(114,-225.10115)"
+       id="g5173"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#ff0000;fill-opacity:1;stroke:#000000"
@@ -634,7 +703,7 @@
            style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans">Cylinder</tspan></text>
     </g>
     <path
-       transform="matrix(1,0,0,-1,84.976486,399.71518)"
+       transform="matrix(1,0,0,-1,84.976486,421.71518)"
        d="m 172.97382,231.82587 a 17.911489,17.911489 0 1 1 -35.82298,0 17.911489,17.911489 0 1 1 35.82298,0 z"
        sodipodi:ry="17.911489"
        sodipodi:rx="17.911489"
@@ -642,16 +711,22 @@
        sodipodi:cx="155.06233"
        id="path5159"
        style="fill:#ff0000;fill-opacity:1;stroke:#000000"
-       sodipodi:type="arc" />
+       sodipodi:type="arc"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <text
        sodipodi:linespacing="125%"
        id="text5161"
-       y="204.73582"
+       y="226.73582"
        x="239.28082"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
-         y="204.73582"
+         y="226.73582"
          x="239.28082"
          id="tspan5163"
          sodipodi:role="line">Thing</tspan></text>
@@ -664,16 +739,22 @@
        sodipodi:rx="17.911489"
        sodipodi:ry="17.911489"
        d="m 172.97382,231.82587 a 17.911489,17.911489 0 1 1 -35.82298,0 17.911489,17.911489 0 1 1 35.82298,0 z"
-       transform="matrix(1,0,0,-1,153.81486,399.71518)" />
+       transform="matrix(1,0,0,-1,153.81486,421.71518)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <text
        sodipodi:linespacing="125%"
        id="text5169"
-       y="204.73582"
+       y="226.73582"
        x="309.01273"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
          id="tspan5171"
-         y="204.73582"
+         y="226.73582"
          x="309.01273"
          sodipodi:role="line"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans">Rectangle</tspan></text>
@@ -686,22 +767,31 @@
        sodipodi:rx="17.911489"
        sodipodi:ry="17.911489"
        d="m 172.97382,231.82587 a 17.911489,17.911489 0 1 1 -35.82298,0 17.911489,17.911489 0 1 1 35.82298,0 z"
-       transform="matrix(1,0,0,-1,292.70677,399.80924)" />
+       transform="matrix(1,0,0,-1,292.70677,421.80924)"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
     <text
        sodipodi:linespacing="125%"
        id="text5185"
-       y="204.24364"
+       y="226.24364"
        x="445.38467"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
-         y="204.24364"
+         y="226.24364"
          x="445.38467"
          id="tspan5187"
          sodipodi:role="line">Paper</tspan></text>
     <g
-       transform="translate(114,-247.10115)"
-       id="g5189">
+       transform="translate(114,-225.10115)"
+       id="g5189"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
       <path
          sodipodi:type="arc"
          style="fill:#ff0000;fill-opacity:1;stroke:#000000"
@@ -731,6 +821,162 @@
        width="369.48846"
        height="90.069206"
        x="191.78705"
-       y="128.48404" />
+       y="150.48404"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/unitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
+    <g
+       transform="translate(114,-25.10115)"
+       id="g5274"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
+      <path
+         sodipodi:type="arc"
+         style="fill:#00ff00;fill-opacity:1;stroke:#000000"
+         id="path5276"
+         sodipodi:cx="155.06233"
+         sodipodi:cy="231.82587"
+         sodipodi:rx="17.911489"
+         sodipodi:ry="17.911489"
+         d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
+         transform="matrix(1,0,0,-1,-29.023514,646.81633)" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="125.28082"
+         y="451.83698"
+         id="text5278"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5280"
+           x="125.28082"
+           y="451.83698"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans">Thing</tspan></text>
+    </g>
+    <g
+       transform="translate(114,-25.10115)"
+       id="g5282"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
+      <path
+         transform="matrix(1,0,0,-1,39.814864,646.81633)"
+         d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
+         sodipodi:ry="17.911489"
+         sodipodi:rx="17.911489"
+         sodipodi:cy="231.82587"
+         sodipodi:cx="155.06233"
+         id="path5284"
+         style="fill:#00ff00;fill-opacity:1;stroke:#000000"
+         sodipodi:type="arc" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="195.01273"
+         y="451.83698"
+         id="text5286"
+         sodipodi:linespacing="125%"><tspan
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
+           sodipodi:role="line"
+           x="195.01273"
+           y="451.83698"
+           id="tspan5288">Rectangle</tspan></text>
+    </g>
+    <path
+       transform="matrix(1,0,0,-1,225.39784,621.71518)"
+       d="m 172.97382,231.82587 a 17.911489,17.911489 0 1 1 -35.82298,0 17.911489,17.911489 0 1 1 35.82298,0 z"
+       sodipodi:ry="17.911489"
+       sodipodi:rx="17.911489"
+       sodipodi:cy="231.82587"
+       sodipodi:cx="155.06233"
+       id="path5292"
+       style="fill:#00ff00;fill-opacity:1;stroke:#000000"
+       sodipodi:type="arc"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text5294"
+       y="426.73584"
+       x="378.19464"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       xml:space="preserve"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
+         y="426.73584"
+         x="378.19464"
+         id="tspan5296"
+         sodipodi:role="line">Cylinder</tspan></text>
+    <g
+       transform="translate(114,-25.10115)"
+       id="g5298"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864">
+      <path
+         transform="matrix(1,0,0,-1,178.70677,646.91039)"
+         d="m 172.97382,231.82587 c 0,9.89224 -8.01925,17.91149 -17.91149,17.91149 -9.89224,0 -17.91149,-8.01925 -17.91149,-17.91149 0,-9.89225 8.01925,-17.91149 17.91149,-17.91149 9.89224,0 17.91149,8.01924 17.91149,17.91149 z"
+         sodipodi:ry="17.911489"
+         sodipodi:rx="17.911489"
+         sodipodi:cy="231.82587"
+         sodipodi:cx="155.06233"
+         id="path5300"
+         style="fill:#00ff00;fill-opacity:1;stroke:#000000"
+         sodipodi:type="arc" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="331.38467"
+         y="451.34479"
+         id="text5302"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5304"
+           x="331.38467"
+           y="451.34479"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans">Paper</tspan></text>
+    </g>
+    <path
+       transform="matrix(1,0,0,-1,361.9502,622.83275)"
+       d="m 172.97382,231.82587 a 17.911489,17.911489 0 1 1 -35.82298,0 17.911489,17.911489 0 1 1 35.82298,0 z"
+       sodipodi:ry="17.911489"
+       sodipodi:rx="17.911489"
+       sodipodi:cy="231.82587"
+       sodipodi:cx="155.06233"
+       id="path5308"
+       style="fill:#00ff00;fill-opacity:1;stroke:#000000"
+       sodipodi:type="arc"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text5310"
+       y="426.73584"
+       x="514.67517"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       xml:space="preserve"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864"><tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
+         y="426.73584"
+         x="514.67517"
+         id="tspan5312"
+         sodipodi:role="line">Metal</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000"
+       id="rect5314"
+       width="369.48846"
+       height="90.069206"
+       x="191.78705"
+       y="350.48407"
+       inkscape:export-filename="/Users/zslajchrt/IdeaProjects/git/zslajchrt.github.io/resources/fullyInitializedProxies.png"
+       inkscape:export-xdpi="68.275864"
+       inkscape:export-ydpi="68.275864" />
   </g>
 </svg>
